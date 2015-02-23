@@ -31,7 +31,25 @@ public class ovc_controller {
     public String handleIndexGet() {
         return "index"; // forward to view index.jsp
                                    }
+    @RequestMapping("/ovc_home.htm")
+    public String handleovchome() {
+        return "ovc_home"; // forward to view index.jsp
+                                   }  
 
+ @RequestMapping("/logout.htm")
+    public String handlelogoutGet() {
+        return "logout"; // forward to view index.jsp
+                                   }    
+   @RequestMapping("/wizardtest.htm")
+    public String handlewtGet() {
+        return "wizardtest"; // forward to view index.jsp
+                                   }  
+    
+    @RequestMapping("/dataentry.htm")
+    public String handledataentryGet() {
+        return "dataentry"; // forward to view index.jsp
+                                   }
+    
     
     @RequestMapping("*")
 @ResponseBody
