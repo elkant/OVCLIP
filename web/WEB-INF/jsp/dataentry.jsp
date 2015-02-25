@@ -12,8 +12,14 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/all-1424208788.css' />" />
-        <link rel="stylesheet" href="<c:url value="/menu/ovc lip user menu_files/css3menu1/style.css" />" /> 
-              	<link rel="shortcut icon" href="<c:url value="/resources/images/favicon.png" />" type="image/x-icon"/>
+        <link rel="stylesheet" type="text/css" href="<c:url value='/menu/ovc lip user menu_files/css3menu1/style.css' />" /> 
+        <link rel="stylesheet" type="text/css" href="<c:url value='/resources/js/css/start/jquery-ui-1.10.3.custom.css' />" />
+      
+        
+<!--         <link href="js/css/blitzer/jquery-ui-1.10.4.custom.css" rel="stylesheet"/>
+        <script src="js/js/jquery-ui-1.10.4.custom.js"></script>-->
+        
+        <link rel="shortcut icon" href="<c:url value="/resources/images/favicon.png" />" type="image/x-icon"/>
         <title>Dat Entry Form</title> 
  
 
@@ -37,7 +43,7 @@
         <div class="container">
             
       
-			<h4 style="text-align: center;background: orange;">Adding A System User</h4>
+			<h4 style="text-align: center;background: orange;">Data Entry</h4>
                        
             <div class="theme-changer">
                 <div class="theme-inner">
@@ -101,7 +107,7 @@
         
         <form id="wizard-example-5" action="#">
             <fieldset>
-                <legend></legend>
+                <legend id="ab"></legend>
                 <div class="row">
                     
                
@@ -123,10 +129,24 @@
     <script type="text/javascript" src='<c:url value="/resources/js/jquery-1.9.1.js" />'></script>
     <script type="text/javascript" src="<c:url value='/resources/js/all-1424208788.js' />"></script>
     <script type="text/javascript" src="<c:url value='/resources/js/bootstrap.js' />"></script>
-
+    <script type="text/javascript" src="<c:url value='/resources/js/js/jquery-ui-1.10.3.custom.js' />" /></script>
 <script>
-$(window).load(function(){
-    $("#wizard-example-5").stepFormWizard({
+//$(window).load(function(){
+//    
+//});
+
+$(function () {
+    
+    $('.loading').show();
+    $.ajax({
+                    url:'loadform1',                         
+                    type:'post',  
+                    dataType: 'html',  
+                    success: function(data) {
+                       document.getElementById("wizard-example-5").innerHTML=data; 
+                       
+                       $("#wizard-example-5").stepFormWizard({      
+        
     height: 'auto',
     nextBtn: $('<a class="next-btn sf-right sf-btn" href="#">FORWARD</a>'),
     prevBtn: $('<a class="prev-btn sf-left sf-btn" href="#">BACK</a>'),
@@ -146,27 +166,22 @@ $(window).load(function(){
             return $('form', wizard).parsley().validate('block' + i);
         }
         
+        
+        
+        
     });
-});
 
-function loaddata(){
-    
-    $('.loading').show();
-    $.ajax({
-                    url:'loadform1',                         
-                    type:'post',  
-                    dataType: 'html',  
-                    success: function(data) {
-                       document.getElementById("wizard-example-5").innerHTML=data; 
+                     $("#ass_date").datepicker({changeMonth: true, changeYear: true, yearRange: '2008:2015', dateFormat: 'dd-M-yy',maxDate: new Date()});
+     
                         $('.loading').hide();
                                             }
                         
         });
 
-}
+});
 
 
-loaddata();
+//loaddata();
 
 </script>
 </body>

@@ -3,7 +3,7 @@ ul#css3menu1,ul#css3menu1 ul{
         list-style:none;
         padding:0;
         background-color:#7D7D7D;
-        background-image:url("mainbk.png");
+        background-image:url("/mainbk.png");
         background-repeat:repeat;
         border-width:1px;
         border-style:solid;
@@ -13,7 +13,7 @@ ul#css3menu1,ul#css3menu1 ul{
         border-radius:21px;}
 ul#css3menu1 ul{
    
-	display:none;position:absolute;left:0;top:100%;background-color:#DDDDDD;background-image:url("subbk.png");border-radius:10px;-moz-border-radius:10px;-webkit-border-radius:10px;padding:0;}
+	display:none;position:absolute;left:0;top:100%;background-color:#DDDDDD;background-image:url("/subbk.png");border-radius:10px;-moz-border-radius:10px;-webkit-border-radius:10px;padding:0;}
 ul#css3menu1 li:hover>*{
 	display:block;}
 ul#css3menu1 li{
@@ -25,7 +25,7 @@ ul#css3menu1{
         z-index:999;
         position:relative;display:inline-block;zoom:1;padding:4px 4px 4px 0;
 	*display:inline;
-width:950px; 
+width:1180px; 
 height:45px;
 }
 * html ul#css3menu1 li a{

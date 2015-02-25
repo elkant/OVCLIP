@@ -68,20 +68,22 @@ $( "#datepicker" ).datepicker();
     </head>
     <body>
         
+        <div container>
         
-        
-		<div class="wrapper">
-                     <% if(session.getAttribute("level")!=null){
+<div class="header" style="margin-left: 250px;">
+    <br/>
+            <% if(session.getAttribute("level")!=null){
                          if(session.getAttribute("level").equals("2")){ 
             %>
 <%@include file="../../menu/ovc lip user menu.html"%>
 
 <%} else{%>
 <%@include file="../../menu/ovc lip user menu.html"%>
-<%}}%>
-                    
-                  <br/>
-                   <br/>
+<%}}%>                  
+</div>
+        
+		<div class="wrapper">
+                 
 			<h4 style="text-align: center;background: orange;">Adding A System User</h4>
 			
 			
@@ -220,5 +222,6 @@ $( "#datepicker" ).datepicker();
 		<script type="text/javascript">
 			
         </script>
+        </div>
     </body>
 </html>
