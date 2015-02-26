@@ -49,13 +49,14 @@
                 <div class="theme-inner">
                     <div class="headtext">
                          
-                        THEMES
+                        AGGREGATE PERCENTAGE
                     </div>
                     <div class="btn-group-vertical">
-                        <a  href="dataentry.htm?t=sea" class="bt-sea btn btn-default">DeepSea</a>
+<!--                    <a  href="dataentry.htm?t=sea" class="bt-sea btn btn-default">DeepSea</a>
                         <a  href="dataentry.htm?t=sky" class="bt-sky btn btn-default">NightSky</a>
                         <a  href="dataentry.htm?t=simple" class="bt-simple btn btn-default">Simple</a>
-                        <a  href="dataentry.htm?t=circle" class="bt-circle btn btn-default">Circle</a>
+                        <a  href="dataentry.htm?t=circle" class="bt-circle btn btn-default">Circle</a>-->
+                        <a href="#" class="bt-circle btn btn-default"><span id="agg_percentage" style="font-size: 30px">0%</span></a>
                     </div>
                 </div>
             </div>
@@ -64,7 +65,7 @@
                     position: fixed;
                     z-index: 9999;
                     top: 55px;;
-                    right: 0;;
+                    left: 0;;
                 }
                 .theme-changer .headtext {
                     font-size: 14px;
@@ -152,7 +153,7 @@ $(function () {
     prevBtn: $('<a class="prev-btn sf-left sf-btn" href="#">BACK</a>'),
     finishBtn: $('<a class="finish-btn sf-right sf-btn" href="#">DONE</a>'),
     onFinish: function(i, wizard) {
-        if($('form', wizard).parsley().validate()==true){
+        if($('form',wizard).parsley().validate()==true){
         var form = $('form', wizard).serialize();
         $.getJSON('savedata', form, function(data) {
             wizard.html(data.html);
@@ -182,6 +183,137 @@ $(function () {
 
 
 //loaddata();
+
+
+
+
+
+function loadsites(cboid)
+{
+    //load a list of site sbelonging to the selected cbo. the same should happen for the staff.
+    
+    
+}
+
+//=========ADDITION FUNCTIONS THAT SHOW THE PERCENTAGE PER DOMAIN
+ var elementi=[];
+    var elementivalues=[];
+function domaintotal(val,ele,mark,domain){
+ //create two arrays. one to store sent elements and another to store the value.   
+ //add the value together    
+    var submitedvalue=val.value;
+    var elementname=ele;
+    var marks=mark;
+    var domainid=domain;
+   
+    //alert(submitedvalue+" "+ele+" "+mark+" "+domain);
+    //if value is a yes , then mark is +ve 1, 
+    //if value is a no, a mark is -ve 1
+    //if value is a blank, a mark is 0
+    
+    var markstosent=0;
+         if(submitedvalue==='Yes'){
+        
+          markstosent=""+marks;
+                                   }
+    else if(submitedvalue==='No')  {
+        
+          markstosent="-"+marks;
+        
+                                    }
+    else   {
+          markstosent="-"+marks;                    
+                                     
+            }
+    
+    
+    //check the value that was previuosly added so as to know how to handle a case of editing
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //if editing , then you need to load the 2 arrays here with values from the database per domain and question.
+    
+    //    ;) I just hope the array will be fast while searching
+    
+    if(elementi.indexOf(ele)===-1){
+        
+        
+            
+           // alert(elementi);
+        
+        
+        //alert(elementi.indexOf(ele));
+        elementi.push(ele);
+        elementivalues.push(submitedvalue);
+        //now call the functions that do the updating of the totals.
+        //nb Dont update the totals if the selected value is a No..
+        if(submitedvalue==='Yes'){
+         domainsum(markstosent,domainid);
+         totalsum(markstosent);
+     }
+        
+        
+        
+                                }
+    else {
+     //get the index of the element, then update the value that was there previously...  
+     var pos= elementi.indexOf(ele);
+     //if the current option/value and the previous one are differing, then do a subtraction
+     
+     if (elementivalues[pos]===submitedvalue||(elementivalues[pos]===""&&submitedvalue==="No")||(elementivalues[pos]==="No"&&submitedvalue==="")){
+         //then dont do anything
+         
+     }
+          else {
+              //replace with new value
+          elementivalues[pos]=submitedvalue; 
+          //expect a change in here
+           domainsum(markstosent,domainid);
+           totalsum(markstosent);   
+               }
+        
+         }
+    
+    
+    
+    
+    
+                                       }
+        
+    
+    
+   function domainsum(marks,doma){
+     var newvalue=marks;                                      
+    var curvalue=document.getElementById("domaininput"+doma).value; 
+     if( curvalue===''){
+         
+         curvalue=0;
+         
+                        }
+   var ttl=  parseInt(newvalue)+parseInt(curvalue);  
+    //set the input text value and the display purpose variable too.                
+    document.getElementById("domaininput"+doma).value=ttl;
+    document.getElementById("domain"+doma).innerHTML=ttl+"%";                         
+        
+        
+                             }
+                             
+                             
+                             
+    function totalsum(marks){
+     var newvalue=marks;    
+     var curvalue=document.getElementById("totalsum").value; 
+     if( curvalue===''){
+         
+         curvalue=0;
+         
+                        }
+      var ttl=  parseInt(newvalue)+parseInt(curvalue );               
+    document.getElementById("totalsum").value=ttl;
+    document.getElementById("agg_percentage").innerHTML=ttl+"%";
+        
+    }                         
+
 
 </script>
 </body>

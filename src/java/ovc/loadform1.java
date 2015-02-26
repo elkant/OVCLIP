@@ -58,7 +58,7 @@ public class loadform1 extends HttpServlet {
                     + "<legend> Section A: Background Information </legend>"
                     + "<div class='row'>"
                     + "<div class='col-lg-6'>"
-                    + ""
+                    + "<input type='hidden' name='totalsum' id='totalsum'>"
                     + "<div class=\"form-group\">\n"
                     + "<label for=\"exampleInputPassword6\">Assesment Type</label>\n"
                     + "<select class=\"form-control\" name=\"asses_type\" id='asses_type' data-parsley-group=\"block0\" required>\n"
@@ -128,6 +128,7 @@ public class loadform1 extends HttpServlet {
             String tableheader = "<tr><th>SN</th><th>Assesment Question</th><th>Response</th><th>Comment</th></tr>";
             String middletable = "";
              String legendheader="";
+             
             while (conn.rs.next()) {
             //create a new page
                 
@@ -137,11 +138,12 @@ public class loadform1 extends HttpServlet {
                     //dont create a new page/fieldset
                     createnewpage = false;
                     //add the form elements in here
-                    middletable += "<tr><td><b>" + conn.rs.getString("quest_no") + "</b></td><td>" + conn.rs.getString("question") + "</td>";
-                    String elemname = "element" + conn.rs.getString("questionid") + "#" + conn.rs.getString("response_type");
-                    middletable += "<td style='width:100px;'>"+elementcreator(elemname) + "</td>"
+                    middletable += "<tr><td><b>" + conn.rs.getString("quest_no") + "</b></td><td style='width:500px;'>" + conn.rs.getString("question") + "</td>";
+                    String elemname = "element_" + conn.rs.getString("questionid") + "#" + conn.rs.getString("response_type");
+                    String marks=conn.rs.getString("marks");
+                    middletable += "<td style='width:100px;'>"+elementcreator(elemname,marks,initdomain) + "</td>"
                             + "<td><div class=\"form-group\">"
-                            + "<tetaxtarea cols='25' rows='3'  class=\"form-control\" name=\"comment" + conn.rs.getString("questionid") + "\" id=\"comment" + conn.rs.getString("questionid") + "\"  >"
+                            + "<textarea cols='25' rows='3'  class=\"form-control\" name=\"comment" + conn.rs.getString("questionid") + "\" id=\"comment" + conn.rs.getString("questionid") + "\"  >"
                             + "</textarea>"
                             + "</div></td>"
                             + "</tr>";
@@ -158,24 +160,26 @@ public class loadform1 extends HttpServlet {
                 //create a new page by closing what exists 
                         
  domaintable="<fieldset> "
-         + "<legend>"+legendheader+"</legend> <table border='1' style='width:1030px;margin:6px;margin-right:2px;'><tr><th colspan='4'><b>Domain: "+legendheader+"</b></th></tr>"
-                            + ""+tableheader+middletable+"</table></fieldset>";
+         + "<legend>"+legendheader+" <span style='padding:2px;color:white;background:#46b8da;font-size:25px;' id='domain"+initdomain+"'>0</span></legend><input type='text' name='domaininput"+initdomain+"' id='domaininput"+initdomain+"'/>  <table border='1' style='width:1030px;margin:6px;margin-right:2px;'><tr><th colspan='4'><b>Domain: "+legendheader+"</b></th></tr>"
+               + ""+tableheader+middletable+"</table></fieldset>";
                  formedform+=domaintable;
                  //reset the middle table
                  middletable="";
-                        System.out.println("Domain "+legendheader+" TABLE "+domaintable);
+                 System.out.println("Domain "+legendheader+" TABLE "+domaintable);
                     }
 
                 }
    //change the legend header after a table copy has been created             
- if(conn.rs.getString("quest_no").equalsIgnoreCase("Q1")){
+                if(conn.rs.getString("quest_no").equalsIgnoreCase("Q1")){
                 legendheader=conn.rs.getString("domain_name");
                 initdomain=conn.rs.getString("domain_id");
                 middletable += "<tr><td><b>" + conn.rs.getString("quest_no") + "</b></td><td>" + conn.rs.getString("question") + "</td>";
-                    String elemname = "element" + conn.rs.getString("questionid") + "#" + conn.rs.getString("response_type");
-                    middletable += "<td style='width:100px;'>"+elementcreator(elemname) + "</td>"
+                    String elemname = "element_" + conn.rs.getString("questionid") + "#" + conn.rs.getString("response_type");
+                   String marks=conn.rs.getString("marks");
+                   
+                    middletable += "<td style='width:100px;'>"+elementcreator(elemname,marks,initdomain) + "</td>"
                             + "<td><div class=\"form-group\">"
-                            + "<tetaxtarea cols='25' rows='3'  class=\"form-control\" name=\"comment" + conn.rs.getString("questionid") + "\" id=\"comment" + conn.rs.getString("questionid") + "\"  >"
+                            + "<textarea cols='25' rows='3'  class=\"form-control\" name=\"comment" + conn.rs.getString("questionid") + "\" id=\"comment" + conn.rs.getString("questionid") + "\"  >"
                             + "</textarea>"
                             + "</div></td>"
                             + "</tr>";
@@ -184,7 +188,7 @@ public class loadform1 extends HttpServlet {
                                                           }
                 count++;
             }//end of while loop
-            domaintable="<fieldset> <legend>"+legendheader+"</legend> <table border='1' style='width:1030px;margin:6px;margin-right:2px;'><tr><th colspan='4'><b>Domain: "+legendheader+"</b></th></tr>"
+            domaintable="<fieldset> <legend>"+legendheader+"  <span style='color:red;background:#46b8da;font-size:25px;' id='domain"+initdomain+"'>0</span> </legend><input type='text' name='domaininput"+initdomain+"' id='domaininput"+initdomain+"'> <table border='1' style='width:1030px;margin:6px;margin-right:2px;'><tr><th colspan='4'><b>Domain: "+legendheader+"</b></th></tr>"
                             + ""+tableheader+middletable+"</table></fieldset>";
                  formedform+=domaintable;
                  //reset the middle table
@@ -244,7 +248,7 @@ public class loadform1 extends HttpServlet {
     }// </editor-fold>
 
     //This function creates 
-    public static String elementcreator(String restype) {
+    public static String elementcreator(String restype,String marks,String domainid) {
 
         String createdelem = "";
 
@@ -269,9 +273,9 @@ public class loadform1 extends HttpServlet {
                 options += "<option value='" + opts[a] + "'>" + opts[a] + "</option>";
 
             }
-
+           // System.out.println(" ~~~~~~"+elemarr[0]);
             createdelem = "<div class=\"form-group\">"
-                    + "<select  class=\"form-control\" name='" + elemarr[0] + "' id='" + elemarr[0] + "' data-parsley-group=\"block0\" >\n"
+                    + "<select onchange=\"domaintotal(this,'"+elemarr[0]+"','"+marks+"','"+domainid+"');\"  class=\"form-control\" name='" + elemarr[0] + "' id='" + elemarr[0] + "' data-parsley-group=\"block0\" >\n"
                     + "" + options
                     + "</select>"
                     + "</div>";
