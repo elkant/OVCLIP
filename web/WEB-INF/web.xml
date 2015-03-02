@@ -36,6 +36,10 @@
         <servlet-name>loadform1</servlet-name>
         <servlet-class>ovc.loadform1</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>saveStaff</servlet-name>
+        <servlet-class>ovc.saveStaff</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>springapp</servlet-name>
         <url-pattern>*.htm</url-pattern>
@@ -67,6 +71,10 @@
     <servlet-mapping>
         <servlet-name>loadform1</servlet-name>
         <url-pattern>/loadform1</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>saveStaff</servlet-name>
+        <url-pattern>/saveStaff</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -87,7 +87,7 @@ public class loadform1 extends HttpServlet {
                     + "<label for=\"exampleInputPassword6\">LIP/CBO Staff Present</label>\n"
                     + "<select class=\"form-control\" name=\"staffpresent\" id='staffpresent' data-parsley-group=\"block0\" required>\n"
                     + "" + staff
-                    + "</select><a href='addstaff.htm'>+ staff </a>  "
+                    + "</select> "
                     + "</div>"
                     + ""
                     + "</div>"
@@ -98,7 +98,7 @@ public class loadform1 extends HttpServlet {
                     + "<label for=\"exampleInputPassword6\">SuperVision Team Leader</label>\n"
                     + "<select class=\"form-control\" name=\"teamleader\" id='teamleader' data-parsley-group=\"block0\" required>\n"
                     + "" + staff
-                    + "</select> <a href='addstaff.htm'>+ staff </a> "
+                    + "</select>"
                     + "</div>"
                     + ""
                     + "<div class='form-group'>"
@@ -111,7 +111,7 @@ public class loadform1 extends HttpServlet {
                     + "<label for=\"exampleInputPassword6\">Other Team members</label>\n"
                     + "<select multiple class=\"form-control\" name=\"teammembers\" id='teammembers' data-parsley-group=\"block0\" required>\n"
                     + "" + staff
-                    + "</select><a href='addstaff.htm'>+ staff </a> "
+                    + "</select>"
                     + "</div>"
                     + ""
                     + "</div>"
@@ -160,7 +160,7 @@ public class loadform1 extends HttpServlet {
                 //create a new page by closing what exists 
                         
  domaintable="<fieldset> "
-         + "<legend>"+legendheader+" <span style='padding:2px;color:white;background:#46b8da;font-size:25px;' id='domain"+initdomain+"'>0</span></legend><input type='text' name='domaininput"+initdomain+"' id='domaininput"+initdomain+"'/>  <table border='1' style='width:1030px;margin:6px;margin-right:2px;'><tr><th colspan='4'><b>Domain: "+legendheader+"</b></th></tr>"
+         + "<legend>"+legendheader+" <span style='padding:2px;color:red;font-size:25px;' id='domain"+initdomain+"'></span></legend><input type='hidden' name='domaininput"+initdomain+"' id='domaininput"+initdomain+"'/>  <table border='1' style='width:1030px;margin:6px;margin-right:2px;'><tr><th colspan='4'><b>Domain: "+legendheader+"</b></th></tr>"
                + ""+tableheader+middletable+"</table></fieldset>";
                  formedform+=domaintable;
                  //reset the middle table
@@ -188,7 +188,7 @@ public class loadform1 extends HttpServlet {
                                                           }
                 count++;
             }//end of while loop
-            domaintable="<fieldset> <legend>"+legendheader+"  <span style='color:red;background:#46b8da;font-size:25px;' id='domain"+initdomain+"'>0</span> </legend><input type='text' name='domaininput"+initdomain+"' id='domaininput"+initdomain+"'> <table border='1' style='width:1030px;margin:6px;margin-right:2px;'><tr><th colspan='4'><b>Domain: "+legendheader+"</b></th></tr>"
+            domaintable="<fieldset> <legend>"+legendheader+"  <span style='color:red;font-size:25px;' id='domain"+initdomain+"'></span> </legend><input type='hidden' name='domaininput"+initdomain+"' id='domaininput"+initdomain+"'> <table border='1' style='width:1030px;margin:6px;margin-right:2px;'><tr><th colspan='4'><b>Domain: "+legendheader+"</b></th></tr>"
                             + ""+tableheader+middletable+"</table></fieldset>";
                  formedform+=domaintable;
                  //reset the middle table

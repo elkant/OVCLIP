@@ -13,4 +13,19 @@
  * @author      https://twitter.com/nghuuphuoc
  * @copyright   (c) 2013 - 2014 Nguyen Huu Phuoc
  * @license     MIT
+                                                                                                                                                                                                        
+                                                                                                                                                                                                        
  */.bv-form .help-block{margin-bottom:0}.bv-form .tooltip-inner{text-align:left}.nav-tabs li.bv-tab-success>a{color:#3c763d}.nav-tabs li.bv-tab-error>a{color:#a94442}input.parsley-success,select.parsley-success,textarea.parsley-success{color:#468847;background-color:#dff0d8;border:1px solid #d6e9c6}input.parsley-error,select.parsley-error,textarea.parsley-error{color:#b94a48;background-color:#f2dede;border:1px solid #eed3d7}.parsley-errors-list{margin:8px 0 3px 0;padding:0;list-style-type:none;font-size:.9em;line-height:.9em;opacity:0;-moz-opacity:0;-webkit-opacity:0;color:#a00;transition:all .3s ease-in;-o-transition:all .3s ease-in;-ms-transition:all .3s ease-in;-moz-transition:all .3s ease-in;-webkit-transition:all .3s ease-in}.parsley-errors-list.filled{opacity:1}
+ .cont{
+    
+ background: -moz-linear-gradient(center top , #ffffff, #eeeeee 1px, #ffffff 25px) repeat scroll 0 0 rgba(0, 0, 0, 0);   
+//border-color:  #7d7d7d;
+ border:1px solid #7d7d7d;
+ border-style: ridge; 
+ border-width: thin;
+ margin-left: 250px;
+  margin-right: 250px;
+    
+    
+    
+}

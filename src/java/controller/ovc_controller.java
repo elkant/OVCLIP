@@ -39,7 +39,13 @@ public class ovc_controller {
  @RequestMapping("/logout.htm")
     public String handlelogoutGet() {
         return "logout"; // forward to view index.jsp
-                                   }    
+                                   } 
+    
+    @RequestMapping("/addstaff.htm")
+    public String handleaddstaffGet() {
+        return "addstaff"; // forward to view index.jsp
+                                   }
+    
    @RequestMapping("/wizardtest.htm")
     public String handlewtGet() {
         return "wizardtest"; // forward to view index.jsp

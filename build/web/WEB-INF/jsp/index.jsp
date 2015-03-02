@@ -19,8 +19,10 @@
 			Cufon.replace('.back');
 		</script>
     </head>
-    <body>
-		<div class="wrapper">
+    <body >
+        <div class="cont">
+        
+		<div class="wrapper" >
                   
 			<h1><span>OVC LIP SUPERVISION SYSTEM</span></h1>
 			<br/>
@@ -187,5 +189,6 @@
 							 });	
 			});
         </script>
+        </div>
     </body>
 </html>
