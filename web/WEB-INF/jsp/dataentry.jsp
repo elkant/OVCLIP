@@ -163,24 +163,30 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
 %>
 
 
-                    <div id="modal" class="popupContainer" style="display:none;">
+                    <div id="modal" class="popupContainer" style="display:none;width:500px;">
                         <header class="popupHeader">
+                          
                             <span class="header_title">Add Staff</span>
-                            <span class="modal_close"><i class="fa fa-times"></i></span>
+                            <span class="modal_close"><img src="<c:url value="/resources/images/close.png" />" width="24px"></i></span>
                         </header>
 
-                        <section class="popupBody">
+                        <section class="popupBody" style="width:550px;">
                             <div class="add_staff">
-                                <form name="addStaff" id="addStaff" action='saveform'>
+                                <form name="addStaff" id="addStaff" action='saveform' style="width:350px;">
                                     <table>
-                                        <tr><td>First Name</td><td><input class="form-control" type="text" name="firstname"></td></td>
-                                        <tr><td>Middle Name</td><td><input type="text" name="firstname"></td></td>
-                                        <tr><td>Phone Number</td><td><input onkeypress=" return numbers(event);" type="text" name="firstname"></td></td>
-                                        <tr><td>Category</td><td><select name="position" id="position"><%=opts%></select></td></td>
-                                        <div id="extra1" style="visibility: collapse;">
-                                        <tr><td>Cbo</td><td><select  name="staffcbo" id="staffcbo" ><%=cbolists%></select></td></td>
-                                        <tr><td>Site</td><td><select name="sitecbo" id="sitecbo"></select></td></td>
-                                    </div>
+                                        <tr><td>First Name</td><td><input class="form-control" type="text" id="fname" name="fname"></td></td>
+                                        <tr><td>Last Name</td><td><input class="form-control" type="text" id="mname" name="mname"></td></td>
+                                        <tr><td>Phone Number</td><td><input class="form-control" onkeypress=" return numbers(event);" type="text" id="phone" name="phone"></td></td>
+                                        <tr><td>Category</td><td><select class="form-control" name="position" id="position"><%=opts%></select></td></td>
+                                      
+                                        <tr><td>Cbo</td><td><select class="form-control" onchange="loadsites();"  name="staffcbo" id="staffcbo" ><%=cbolists%></select></td></td>
+                                        <tr><td>Site</td><td><select class="form-control" name="sitecbo" id="sitecbo"></select></td></td>
+                                        <tr><td>  <input type="reset" value="clear"></td><td >
+                                            
+                      <input type="text" value="Save" id="generate1" class ='generate1' onclick="savestaff();" readonly style=" cursor:pointer;margin-left: 50px; text-transform:uppercase ; height: 50px; width:140px;text-align:center ; color:white ;background:coral; border-style:ridge ;" />
+                        
+                                                        
+                                            </td><td><p id="msg"></p></td></tr>
                                     </table>   
 
 
@@ -256,10 +262,21 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
 
 
 
-            function loadsites(cboid)
+            function loadsites1(cboid)
             {
-                //load a list of site sbelonging to the selected cbo. the same should happen for the staff.
-
+                       var cboname=document.getElementById("lip").value;
+               
+         $.ajax({
+                    url: "loadsites?cbo="+cboname,
+                    type: 'post',
+                    dataType: 'html',
+                    success: function (data) {
+                        
+                    document.getElementById("site").innerHTML=data;    
+                        
+                    }
+                });
+        
 
             }
 
@@ -411,6 +428,125 @@ return true;
             //		
             //
             //	})
+            
+            
+            function loadsites(){
+                var cboname=document.getElementById("staffcbo").value;
+               
+         $.ajax({
+                    url: "loadsites?cbo="+cboname,
+                    type: 'post',
+                    dataType: 'html',
+                    success: function (data) {
+                        
+                    document.getElementById("sitecbo").innerHTML=data;    
+                        
+                    }
+                });
+        
+                
+            }
+            
+            function savestaff(){
+                var fname=document.getElementById("fname").value;
+                var mname=document.getElementById("mname").value;
+                var phone=document.getElementById("phone").value;
+                var site=document.getElementById("sitecbo").value;
+                
+                if(fname===''){
+                  showerror(fname);  
+                  noerror(fname);
+                  showalert("first name");
+                             }
+                else if(mname===''){
+                    showerror(mname);  
+                  noerror(mname);
+                  showalert("Last name");                    
+                    
+                                    }
+                  else if(phone===''){
+                      
+                  showerror(phone);  
+                  noerror(phone);
+                  showalert("Phone Number");                    
+                    
+                                    }
+                
+                 else if(site===''){                      
+                  showerror(site);  
+                  noerror(site);
+                  showselectalert("Site");                  
+                    
+                                    }
+                                    else {
+                                        
+                                        
+                                  $.ajax({
+                    url: "saveStaff?fname="+fname+"&mname="+mname+"&phone="+phone+"&category="+site,
+                    type: 'post',
+                    dataType: 'html',
+                    success: function (data) {
+                        //now reload the staff list
+                  document.getElementById("msg").innerHTML=data;
+                  loadmembers();
+                    
+                
+                        
+                                          }
+                                          });       
+                                        
+                                        
+                                        
+                                    }
+                
+            }
+            
+           
+            
+            function showerror(elem){
+                
+                        $("#"+elem).css("border-color","#FF0000");
+                        $("#"+elem).css("background-color","#FFFFFF");             
+                        $("#"+elem).slideToggle("slow",function() {});
+                        $("#"+elem).slideToggle("slow",function() {});  
+                                     }
+            
+             function noerror(elem){
+                
+                        $("#"+elem).css("border-color","#000000");
+                        $("#"+elem).css("background-color","#FFFFFF");             
+                                    }
+                                    
+             function showalert(name){
+                 
+                                   alert("Enter "+name);   
+                                        
+                                     }
+                                    
+           function showselectalert(name){
+               
+                                   alert("Enter "+name);     
+                                         
+                                         }
+                                         
+                                         function loadmembers(){
+                                             
+                                          $.ajax({
+                    url: "loadStaff",
+                    type: 'post',
+                    dataType: 'html',
+                    success: function (data) {
+                        
+                        document.getElementById("staffpresent").innerHTML=data;
+                        document.getElementById("teammembers").innerHTML=data;
+                        document.getElementById("teamleader").innerHTML=data;
+                        
+                        
+                    }});   
+                                             
+                                             
+                                         }
+            
         </script>
 
 

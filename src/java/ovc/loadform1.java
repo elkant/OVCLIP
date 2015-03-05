@@ -69,7 +69,7 @@ public class loadform1 extends HttpServlet {
                     + ""
                     + "<div class=\"form-group\">\n"
                     + "<label for=\"exampleInputPassword6\">Name of LIP/CBO</label>\n"
-                    + "<select class=\"form-control\" onchange='loadsites(this);' name=\"lip\" id='lip' data-parsley-group=\"block0\" required>\n"
+                    + "<select class=\"form-control\" onchange='loadsites1();' name=\"lip\" id='lip' data-parsley-group=\"block0\" required>\n"
                     + "" + lip
                     + "</select>\n"
                     + "</div>"
@@ -165,7 +165,7 @@ public class loadform1 extends HttpServlet {
                  formedform+=domaintable;
                  //reset the middle table
                  middletable="";
-                 System.out.println("Domain "+legendheader+" TABLE "+domaintable);
+                // System.out.println("Domain "+legendheader+" TABLE "+domaintable);
                     }
 
                 }

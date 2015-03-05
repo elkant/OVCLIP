@@ -40,6 +40,14 @@
         <servlet-name>saveStaff</servlet-name>
         <servlet-class>ovc.saveStaff</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>loadsites</servlet-name>
+        <servlet-class>ajax.loadsites</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>loadStaff</servlet-name>
+        <servlet-class>ovc.loadStaff</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>springapp</servlet-name>
         <url-pattern>*.htm</url-pattern>
@@ -75,6 +83,14 @@
     <servlet-mapping>
         <servlet-name>saveStaff</servlet-name>
         <url-pattern>/saveStaff</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>loadsites</servlet-name>
+        <url-pattern>/loadsites</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>loadStaff</servlet-name>
+        <url-pattern>/loadStaff</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
