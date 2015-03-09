@@ -53,11 +53,22 @@ public class loadform1 extends HttpServlet {
                 staff += "<option value='" + conn.rs0.getString(1) + "'>" + conn.rs0.getString(2) + " " + conn.rs0.getString(3) + " (" + conn.rs0.getString(4) + ") " + "</option>";
 
             }
+            
+             //get the max no of elements 
+            
+            String maxelem="select MAX(questionid) from questions";
+            int no_of_elements=0;
+            conn.rs=conn.st.executeQuery(maxelem);
+            while(conn.rs.next()){
+            no_of_elements=conn.rs.getInt(1);
+            
+            }
+            
 
            formedform="<fieldset>"
                     + "<legend> Section A: Background Information </legend>"
                     + "<div class='row'>"
-                    + "<div class='col-lg-6'>"
+                    + "<div class='col-lg-6'> <input type='hidden' value='"+no_of_elements+"' name='no_of_elements' id='no_of_elements'>"
                     + "<input type='hidden' name='totalsum' id='totalsum'>"
                     + "<div class=\"form-group\">\n"
                     + "<label for=\"exampleInputPassword6\">Assesment Type</label>\n"
@@ -77,7 +88,7 @@ public class loadform1 extends HttpServlet {
                     + ""
                     + "<div class=\"form-group\">"
                     + "<label for=\"exampleInputPassword6\">Site Visited</label>\n"
-                    + "<select class=\"form-control\" name=\"site\" id='site' data-parsley-group=\"block0\" >\n"
+                    + "<select class=\"form-control\" name=\"site\" id='site' onchange='checkupdate();' data-parsley-group=\"block0\" >\n"
                     + "<option value=''>Select Site</option>"
                     + "</select>"
                     + "</div>"
@@ -103,7 +114,7 @@ public class loadform1 extends HttpServlet {
                     + ""
                     + "<div class='form-group'>"
                     + "<label for='exampleInputPassword6'>Date of Assesment</label>"
-                    + "<input type='text' class='form-control' name='ass_date' id='ass_date' >"
+                    + "<input type='text' onchange='checkupdate();' class='form-control' name='ass_date' id='ass_date' >"
                     + "</div>"
                     + ""
                     + ""
@@ -121,6 +132,7 @@ public class loadform1 extends HttpServlet {
             boolean createnewpage = true;
             String initdomain = "0";
 
+           
             String getdata = "select * from questions join domains on questions.domain_id=domains.domain_id order by questionid asc";
             conn.rs = conn.st.executeQuery(getdata);
             int count = 0;
@@ -133,10 +145,10 @@ public class loadform1 extends HttpServlet {
             //create a new page
                   String functionname="";
                     String affectedelem=conn.rs.getString("affected_question");
-                       System.out.println("~~"+conn.rs.getString("affected_question"));
+                      // System.out.println("~~"+conn.rs.getString("affected_question"));
                    if(affectedelem!=null){
                      
-                    functionname="disableurl('"+affectedelem+"',this);";
+                    functionname="disableurl('"+affectedelem+"',this,'"+conn.rs.getString("domain_id")+"');";
                                           }
                 if (conn.rs.getString("domain_id").equals(initdomain)) {
                    // System.out.println(conn.rs.getString("domain_id")+"=="+initdomain);
@@ -170,7 +182,7 @@ public class loadform1 extends HttpServlet {
                 //create a new page by closing what exists 
                         
          domaintable="<fieldset> "
-         + "<legend>"+legendheader+" <span style='padding:2px;color:red;font-size:25px;' id='domain"+initdomain+"'></span></legend><input type='hidden' name='domaininput"+initdomain+"' id='domaininput"+initdomain+"'/>  <table border='1' style='width:1030px;margin:6px;margin-right:2px;'><tr><th colspan='4'><b>Domain: "+legendheader+"</b></th></tr>"
+         + "<legend>"+legendheader+" <span style='padding:2px;color:red;font-size:25px;' id='domain"+initdomain+"'></span></legend><input type='text' name='domaininput"+initdomain+"' id='domaininput"+initdomain+"'/>  <table border='1' style='width:1030px;margin:6px;margin-right:2px;'><tr><th colspan='4'><b>Domain: "+legendheader+"</b></th></tr>"
                + ""+tableheader+middletable+"</table></fieldset>";
                  formedform+=domaintable;
                  //reset the middle table

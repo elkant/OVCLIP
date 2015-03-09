@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+    <display-name>OLSS</display-name>
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>/WEB-INF/applicationContext.xml</param-value>
@@ -48,6 +49,18 @@
         <servlet-name>loadStaff</servlet-name>
         <servlet-class>ovc.loadStaff</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>checkform</servlet-name>
+        <servlet-class>ovc.checkformexistance</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>isupdatable</servlet-name>
+        <servlet-class>ovc.isupdatable</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>loadformdata</servlet-name>
+        <servlet-class>ovc.loadformdata</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>springapp</servlet-name>
         <url-pattern>*.htm</url-pattern>
@@ -92,10 +105,20 @@
         <servlet-name>loadStaff</servlet-name>
         <url-pattern>/loadStaff</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>checkform</servlet-name>
+        <url-pattern>/checkform</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>isupdatable</servlet-name>
+        <url-pattern>/isupdatable</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>loadformdata</servlet-name>
+        <url-pattern>/loadformdata</url-pattern>
+    </servlet-mapping>
     <session-config>
-        <session-timeout>
-            30
-        </session-timeout>
+        <session-timeout>900000</session-timeout>
     </session-config>
     <welcome-file-list>
         <welcome-file>redirect.jsp</welcome-file>

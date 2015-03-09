@@ -172,7 +172,7 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
 
                         <section class="popupBody" style="width:550px;">
                             <div class="add_staff">
-                                <form name="addStaff" id="addStaff" action='saveform' style="width:350px;">
+                                <form name="addStaff" id="addStaff" action='savedata' style="width:350px;">
                                     <table>
                                         <tr><td>First Name</td><td><input class="form-control" type="text" id="fname" name="fname"></td></td>
                                         <tr><td>Last Name</td><td><input class="form-control" type="text" id="mname" name="mname"></td></td>
@@ -232,6 +232,7 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
                                     var form = $('form', wizard).serialize();
                                     $.getJSON('savedata', form, function (data) {
                                         wizard.html(data.html);
+                                       location.reload();
                                     });
                                 }
                                 else {
@@ -247,7 +248,7 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
 
                         });
 
-                        $("#ass_date").datepicker({changeMonth: true, changeYear: true, yearRange: '2008:2015', dateFormat: 'dd-M-yy', maxDate: new Date()});
+                        $("#ass_date").datepicker({changeMonth: true, changeYear: true, yearRange: '2008:2015', dateFormat: 'yy-mm-dd', maxDate: new Date()});
 
                         $('.loading').hide();
                     }
@@ -366,7 +367,94 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
 
             }
 
+//=====================================================================================
+//
+//
+  function staticdomaintotal(val, ele, mark, domain) {
+                //create two arrays. one to store sent elements and another to store the value.   
+                //add the value together    
+                var submitedvalue = val;
+                var elementname = ele;
+                var marks = mark;
+                var domainid =domain;
 
+                //alert(submitedvalue+" "+ele+" "+mark+" "+domain);
+                //if value is a yes , then mark is +ve 1, 
+                //if value is a no, a mark is -ve 1
+                //if value is a blank, a mark is 0
+
+                var markstosent = 0;
+                if (submitedvalue === 'Yes') {
+
+                    markstosent = "" + marks;
+                }
+                else if (submitedvalue === 'No') {
+
+                    markstosent = "-" + marks;
+
+                }
+                else {
+                    markstosent = "-" + marks;
+
+                }
+
+
+                //check the value that was previuosly added so as to know how to handle a case of editing
+                //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                //if editing , then you need to load the 2 arrays here with values from the database per domain and question.
+
+                //    ;) I just hope the array will be fast while searching
+
+                if (elementi.indexOf(ele) === -1) {
+
+
+
+                    // alert(elementi);
+
+
+                    //alert(elementi.indexOf(ele));
+                    elementi.push(ele);
+                    elementivalues.push(submitedvalue);
+                    //now call the functions that do the updating of the totals.
+                    //nb Dont update the totals if the selected value is a No..
+                    if (submitedvalue === 'Yes') {
+                        domainsum(markstosent, domainid);
+                        totalsum(markstosent);
+                    }
+
+
+
+                }
+                else {
+                    //get the index of the element, then update the value that was there previously...  
+                    var pos = elementi.indexOf(ele);
+                    //if the current option/value and the previous one are differing, then do a subtraction
+
+                    if (elementivalues[pos] === submitedvalue || (elementivalues[pos] === "" && submitedvalue === "No") || (elementivalues[pos] === "No" && submitedvalue === "")) {
+                        //then dont do anything
+
+                    }
+                    else {
+                        //replace with new value
+                        elementivalues[pos] = submitedvalue;
+                        //expect a change in here
+                        domainsum(markstosent, domainid);
+                        totalsum(markstosent);
+                    }
+
+                }
+
+
+
+
+
+            }
+//
+//
+//
+//=====================================================================================
 
             function domainsum(marks, doma) {
                 var newvalue = marks;
@@ -401,19 +489,19 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
             }
 
 
-function disableurl(ids,val){
+function disableurl(ids,val,domain){
  
 var res=ids.split("#"); 
 
 var idnos=res[1].split("_");
 
-
-
  if(val.value==="Yes"){
   //enable the elements  
    for(a=0;a<idnos.length;a++){
-   var curelem="element_"+idnos[a];;
+   var curelem="element_"+idnos[a];
+   
    document.getElementById(curelem).disabled =false;
+   
      }
             
                       }
@@ -422,8 +510,20 @@ else if(val.value===res[0]){
     
        for(a=0;a<idnos.length;a++){
    var curelem="element_"+idnos[a];
+   
+
+  //deduct a value from the domain if the values were yes
+  
+  if(document.getElementById(curelem).value==='Yes'){
+     
+                    //assuming the mark will be one
+                    
+  staticdomaintotal('','element_'+idnos[a],'1',domain);
+  }
+   document.getElementById(curelem).value="";
   
    document.getElementById(curelem).disabled =true;
+   
                                  }
                           }
                           
@@ -584,6 +684,98 @@ return true;
                                              
                                              
                                          }
+                                         
+      //a function that checks whether entered data can be updated based on the date and site
+                                         
+         function checkupdate(){
+         
+             var dat=document.getElementById("ass_date").value;
+             var site=document.getElementById("site").value;
+             var quarters="";
+             var year="";
+             var cbo=document.getElementById("lip").value;
+             if(site!==""&&dat!==""){
+            var fulldates=dat.split("-");
+                
+if(fulldates[1]==="10"||fulldates[1]==="11"||fulldates[1]==="12"){ quarters="1";}
+else if(fulldates[1]==="01"||fulldates[1]==="02"||fulldates[1]==="03"){ quarters="2";}
+else if(fulldates[1]==="04"||fulldates[1]==="05"||fulldates[1]==="06"){ quarters="3";}
+else if(fulldates[1]==="07"||fulldates[1]==="08"||fulldates[1]==="09"){ quarters="4";}
+else{quarters="0";}
+year=fulldates[0];
+//now call an ajax function whose return
+                 $.ajax({
+                    url: "isupdatable?site="+site+"&period="+quarters+"&year="+year,
+                    type: 'post',
+                    dataType: 'text',
+                    success: function (data) {
+                     var da=data.trim();   
+                     if(da==="update"){
+                         
+                         //initialize an update ajax to load data for that element
+                       // alert("load existing data asap");
+                       $('.loading').show(); 
+                        
+            $.ajax({
+                    url: "loadformdata?site="+site+"&period="+quarters+"&year="+year+"&cbo="+cbo,
+                    type: 'post',
+                    dataType: 'text',
+                    success: function (data) {
+                      document.getElementsByClassName("sf-nav-wrap").innerHTML=""; 
+                      document.getElementById("wizard-example-5").innerHTML=data;  
+                       $("#wizard-example-5").stepFormWizard({
+                            height: 'auto',
+                            nextBtn: $('<a class="next-btn sf-right sf-btn" href="#">NEXT</a>'),
+                            prevBtn: $('<a class="prev-btn sf-left sf-btn" href="#">PREVIOUS</a>'),
+                            finishBtn: $('<a class="finish-btn sf-right sf-btn" href="#">SAVE</a>'),
+                            onFinish: function (i, wizard) {
+                                if ($('form', wizard).parsley().validate() == true) {
+                                    var form = $('form', wizard).serialize();
+                                    $.getJSON('updatedata', form, function (data) {
+                                        wizard.html(data.html);
+                                       location.reload();
+                                    });
+                                }
+                                else {
+                                    return false;
+                                }
+                            },
+                            onNext: function (i, wizard) {
+                                return $('form', wizard).parsley().validate('block' + i);
+                            }
+
+
+
+
+                        });
+
+                        $("#ass_date").datepicker({changeMonth: true, changeYear: true, yearRange: '2008:2015', dateFormat: 'yy-mm-dd', maxDate: new Date()});
+
+                        $('.loading').hide();
+                      
+                       
+                        
+                    }         
+            
+            });
+                       
+                     }  
+                     else
+                     {
+                         
+                         
+                     }
+                        
+                        
+                    }
+            
+        });
+
+                 
+             }
+         }
+             
+                                        
             
         </script>
 
