@@ -83,10 +83,14 @@
 							<span class="error">This is an error</span>
 						</div>
 						<div>
-							<label>Password: <a href="forgot_password.html" rel="forgot_password" class="forgot linkform">Forgot your password?</a></label>
+							<label>Password: 
+                                                            
+                                                            <!--<a href="forgot_password.html" rel="forgot_password" class="forgot linkform">Forgot your password?</a>-->
+                                                        
+                                                        </label>
 							<input type="password" name="pass" />
 							<span class="error">This is an error</span>
-						</div>
+						      </div>
 						<div class="bottom">
 							<!--<div class="remember"><input type="checkbox" /><span>Keep me logged in</span></div>-->
 							<input type="submit" value="Login"></input>

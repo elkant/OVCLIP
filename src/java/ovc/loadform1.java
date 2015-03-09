@@ -96,7 +96,7 @@ public class loadform1 extends HttpServlet {
                     + ""
                     + "<div class=\"form-group\">\n"
                     + "<label for=\"exampleInputPassword6\">SuperVision Team Leader</label>\n"
-                    + "<select class=\"form-control\" name=\"teamleader\" id='teamleader' data-parsley-group=\"block0\" required>\n"
+                    + "<select  class=\"form-control\" name=\"teamleader\" id='teamleader' data-parsley-group=\"block0\" required>\n"
                     + "" + staff
                     + "</select>"
                     + "</div>"
@@ -121,31 +121,41 @@ public class loadform1 extends HttpServlet {
             boolean createnewpage = true;
             String initdomain = "0";
 
-            String getdata = "select * from question join domains on question.domain_id=domains.domain_id order by questionid asc";
+            String getdata = "select * from questions join domains on questions.domain_id=domains.domain_id order by questionid asc";
             conn.rs = conn.st.executeQuery(getdata);
             int count = 0;
             String domaintable="";
-            String tableheader = "<tr><th>SN</th><th>Assesment Question</th><th>Response</th><th>Comment</th></tr>";
+            String tableheader = "<tr><th>SN</th><th>Assesment Questions</th><th>Response</th><th>Comment</th></tr>";
             String middletable = "";
              String legendheader="";
              
             while (conn.rs.next()) {
             //create a new page
-                
+                  String functionname="";
+                    String affectedelem=conn.rs.getString("affected_question");
+                       System.out.println("~~"+conn.rs.getString("affected_question"));
+                   if(affectedelem!=null){
+                     
+                    functionname="disableurl('"+affectedelem+"',this);";
+                                          }
                 if (conn.rs.getString("domain_id").equals(initdomain)) {
                    // System.out.println(conn.rs.getString("domain_id")+"=="+initdomain);
                     
                     //dont create a new page/fieldset
                     createnewpage = false;
                     //add the form elements in here
-                    middletable += "<tr><td><b>" + conn.rs.getString("quest_no") + "</b></td><td style='width:500px;'>" + conn.rs.getString("question") + "</td>";
+                    middletable += "<tr><td><b>" + conn.rs.getString("sn") + "</b></td><td style='width:500px;'>" + conn.rs.getString("question") + "</td>";
                     String elemname = "element_" + conn.rs.getString("questionid") + "#" + conn.rs.getString("response_type");
                     String marks=conn.rs.getString("marks");
-                    middletable += "<td style='width:100px;'>"+elementcreator(elemname,marks,initdomain) + "</td>"
-                            + "<td><div class=\"form-group\">"
-                            + "<textarea cols='25' rows='3'  class=\"form-control\" name=\"comment" + conn.rs.getString("questionid") + "\" id=\"comment" + conn.rs.getString("questionid") + "\"  >"
-                            + "</textarea>"
-                            + "</div></td>"
+                    
+                  
+                    
+                  
+                   
+                    middletable += "<td style='width:100px;'>"+elementcreator(functionname,elemname,marks,initdomain) + "</td>"
+                           
+                            + "<td style='width:500px;'>" + conn.rs.getString("comment") + "</td>"
+                            
                             + "</tr>";
 
                 } else {
@@ -159,7 +169,7 @@ public class loadform1 extends HttpServlet {
                                     } else {
                 //create a new page by closing what exists 
                         
- domaintable="<fieldset> "
+         domaintable="<fieldset> "
          + "<legend>"+legendheader+" <span style='padding:2px;color:red;font-size:25px;' id='domain"+initdomain+"'></span></legend><input type='hidden' name='domaininput"+initdomain+"' id='domaininput"+initdomain+"'/>  <table border='1' style='width:1030px;margin:6px;margin-right:2px;'><tr><th colspan='4'><b>Domain: "+legendheader+"</b></th></tr>"
                + ""+tableheader+middletable+"</table></fieldset>";
                  formedform+=domaintable;
@@ -173,23 +183,21 @@ public class loadform1 extends HttpServlet {
                 if(conn.rs.getString("quest_no").equalsIgnoreCase("Q1")){
                 legendheader=conn.rs.getString("domain_name");
                 initdomain=conn.rs.getString("domain_id");
-                middletable += "<tr><td><b>" + conn.rs.getString("quest_no") + "</b></td><td>" + conn.rs.getString("question") + "</td>";
-                    String elemname = "element_" + conn.rs.getString("questionid") + "#" + conn.rs.getString("response_type");
-                   String marks=conn.rs.getString("marks");
+                middletable += "<tr><td><b>" + conn.rs.getString("sn") + "</b></td><td>" + conn.rs.getString("question") + "</td>";
+                String elemname = "element_" + conn.rs.getString("questionid") + "#" + conn.rs.getString("response_type");
+                String marks=conn.rs.getString("marks");
                    
-                    middletable += "<td style='width:100px;'>"+elementcreator(elemname,marks,initdomain) + "</td>"
-                            + "<td><div class=\"form-group\">"
-                            + "<textarea cols='25' rows='3'  class=\"form-control\" name=\"comment" + conn.rs.getString("questionid") + "\" id=\"comment" + conn.rs.getString("questionid") + "\"  >"
-                            + "</textarea>"
-                            + "</div></td>"
+                middletable +="<td style='width:100px;'>"+elementcreator(functionname,elemname,marks,initdomain) + "</td>"
+                            + "<td style='width:500px;'>" + conn.rs.getString("comment") + "</td>"
                             + "</tr>";
                 
                 
                                                           }
                 count++;
             }//end of while loop
+            
             domaintable="<fieldset> <legend>"+legendheader+"  <span style='color:red;font-size:25px;' id='domain"+initdomain+"'></span> </legend><input type='hidden' name='domaininput"+initdomain+"' id='domaininput"+initdomain+"'> <table border='1' style='width:1030px;margin:6px;margin-right:2px;'><tr><th colspan='4'><b>Domain: "+legendheader+"</b></th></tr>"
-                            + ""+tableheader+middletable+"</table></fieldset>";
+            + ""+tableheader+middletable+"</table></fieldset>";
                  formedform+=domaintable;
                  //reset the middle table
                  
@@ -248,7 +256,7 @@ public class loadform1 extends HttpServlet {
     }// </editor-fold>
 
     //This function creates 
-    public static String elementcreator(String restype,String marks,String domainid) {
+    public static String elementcreator(String functionname,String restype,String marks,String domainid) {
 
         String createdelem = "";
 
@@ -272,10 +280,10 @@ public class loadform1 extends HttpServlet {
             for (int a = 0; a < opts.length; a++) {
                 options += "<option value='" + opts[a] + "'>" + opts[a] + "</option>";
 
-            }
+                                                 }
            // System.out.println(" ~~~~~~"+elemarr[0]);
             createdelem = "<div class=\"form-group\">"
-                    + "<select onchange=\"domaintotal(this,'"+elemarr[0]+"','"+marks+"','"+domainid+"');\"  class=\"form-control\" name='" + elemarr[0] + "' id='" + elemarr[0] + "' data-parsley-group=\"block0\" >\n"
+                    + "<select onchange=\"domaintotal(this,'"+elemarr[0]+"','"+marks+"','"+domainid+"');"+functionname+"\"  class=\"form-control\" name='" + elemarr[0] + "' id='" + elemarr[0] + "' data-parsley-group=\"block0\" >\n"
                     + "" + options
                     + "</select>"
                     + "</div>";

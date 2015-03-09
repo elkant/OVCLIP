@@ -181,9 +181,9 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
                                       
                                         <tr><td>Cbo</td><td><select class="form-control" onchange="loadsites();"  name="staffcbo" id="staffcbo" ><%=cbolists%></select></td></td>
                                         <tr><td>Site</td><td><select class="form-control" name="sitecbo" id="sitecbo"></select></td></td>
-                                        <tr><td>  <input type="reset" value="clear"></td><td >
+                                        <tr><td>  <input type="reset" style="height:36px;width:100px;" value="reset fields"></td><td >
                                             
-                      <input type="text" value="Save" id="generate1" class ='generate1' onclick="savestaff();" readonly style=" cursor:pointer;margin-left: 50px; text-transform:uppercase ; height: 50px; width:140px;text-align:center ; color:white ;background:coral; border-style:ridge ;" />
+                                        <input type="text" value="Save" id="generate1" class ='generate1' onclick="savestaff();" readonly style=" cursor:pointer;margin-left: 50px; text-transform:uppercase ; height: 50px; width:140px;text-align:center ; color:white ;background:coral; border-style:ridge ;" />
                         
                                                         
                                             </td><td><p id="msg"></p></td></tr>
@@ -202,9 +202,10 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
             <script type="text/javascript" src='<c:url value="/resources/js/jquery-1.9.1.js" />'></script>
             <script type="text/javascript" src="<c:url value='/resources/js/all-1424208788.js' />"></script>
             <script type="text/javascript" src="<c:url value='/resources/js/bootstrap.js' />"></script>
+            <script type="text/javascript" src="<c:url value='/resources/js/parsley.js' />"></script>
             <script type="text/javascript" src="<c:url value='/resources/js/js/jquery-ui-1.10.3.custom.js' />" /></script>
-        <!--<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>-->
-        <script type="text/javascript" src="<c:url value='/resources/js/jquery.leanModal.min.js' />" ></script>
+            <!--<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>-->
+            <script type="text/javascript" src="<c:url value='/resources/js/jquery.leanModal.min.js' />" ></script>
 
         <script>
             //$(window).load(function(){
@@ -381,7 +382,7 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
                 document.getElementById("domain" + doma).innerHTML = ttl + "%";
 
 
-            }
+                                           }
 
 
 
@@ -400,6 +401,43 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
             }
 
 
+function disableurl(ids,val){
+ 
+var res=ids.split("#"); 
+
+var idnos=res[1].split("_");
+
+
+
+ if(val.value==="Yes"){
+  //enable the elements  
+   for(a=0;a<idnos.length;a++){
+   var curelem="element_"+idnos[a];;
+   document.getElementById(curelem).disabled =false;
+     }
+            
+                      }
+else if(val.value===res[0]){
+    //No
+    
+       for(a=0;a<idnos.length;a++){
+   var curelem="element_"+idnos[a];
+  
+   document.getElementById(curelem).disabled =true;
+                                 }
+                          }
+                          
+     if(val.value===""){
+    //enable the elements      
+       for(a=0;a<idnos.length;a++){
+   var curelem="element_"+idnos[a];
+   document.getElementById(curelem).disabled =true;
+                                   }   
+         
+                        }
+                        
+                        
+                        }
         </script>
 
   <script type="text/javascript" language="en">
