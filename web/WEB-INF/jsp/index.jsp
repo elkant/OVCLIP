@@ -1,3 +1,5 @@
+<%@page import="java.util.Calendar"%>
+<%@page import="database.dbConn"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -9,10 +11,22 @@
        	<link rel="shortcut icon" href="<c:url value="/resources/images/favicon.png" />" type="image/x-icon"/>
         <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/newstyle.css"/>" />
         <script type="text/javascript" src="<c:url value="/resources/js/jquery-1.9.1.js"/>"></script>
-           
-                  <script src="<c:url value="/resources/js/cufon-yui.js" />" type="text/javascript"></script>
-                  <script src="<c:url value="/resources/js/ChunkFive_400.font.js" />" type="text/javascript"></script>
-		<script type="text/javascript">
+         <script type="text/javascript" src="<c:url value='/resources/js/noty/jquery.noty.js' />"></script>
+            <script type="text/javascript" src="<c:url value='/resources/js/noty/layouts/top.js' />"></script>
+            <script type="text/javascript" src="<c:url value='/resources/js/noty/layouts/center.js' />"></script>
+            <script type="text/javascript" src="<c:url value='/resources/js/noty/themes/default.js' />"></script>
+            <!--tooltip-->
+            <link href="<c:url value='resources/js/css/start/jquery-ui-1.10.3.custom.css' />" rel="stylesheet"/>
+	
+            <script src="<c:url value='resources/js/js/jquery-ui-1.10.3.custom.js' />"></script>
+            
+            
+        <script src="<c:url value="/resources/js/cufon-yui.js" />" type="text/javascript"></script>
+        <script src="<c:url value="/resources/js/ChunkFive_400.font.js" />" type="text/javascript"></script>
+	
+            
+        
+        <script type="text/javascript">
 			Cufon.replace('h1',{textShadow: '1px 1px #fff'});
 			Cufon.replace('h2',{textShadow: '1px 1px #fff'});
 			Cufon.replace('h3',{textShadow: '1px 1px #000'});
@@ -20,6 +34,24 @@
 		</script>
     </head>
     <body >
+        
+           <%
+                            if (session.getAttribute("error_login") != null)  { %>
+                                <script type="text/javascript"> 
+                    
+                    var n = noty({text: '<%=session.getAttribute("error_login")%>',
+                        layout: 'center',
+                        type: 'Error', 
+                         timeout: 1800});
+                    
+                </script> <%
+                
+                session.removeAttribute("error_login");
+                            }
+
+                        %>
+        
+        
         <div class="cont">
         
 		<div class="wrapper" >
@@ -75,7 +107,7 @@
 							<div class="clear"></div>
 						</div>
 					</form>
-					<form class="login active" action="login">
+					<form class="login active" action="login" style="width:400px;">
 						<h3>Login</h3>
 						<div>
 							<label>Username:</label>
@@ -111,10 +143,35 @@
 							<a href="register.jsp.html" rel="register" class="linkform">You don't have an account? Register here</a>
 							<div class="clear"></div>
 						</div>
+                                                
+                                               
 					</form>
 				</div>
+                            <div class="clear"></div>
+                            <br/>
+                            <br/>
+                             <h3 align="center"> <img src="<c:url value='resources/images/aphia_logo.png' />" alt="logo" height="86px" width="270px"/></h3>
+                                                
 				<div class="clear"></div>
 			</div>
+                             <br/>
+                             <br/>
+                             
+                             <%
+               Calendar cal = Calendar.getInstance();
+               int year= cal.get(Calendar.YEAR); 
+                                 
+              dbConn conn= new dbConn();
+              conn.rs=conn.st.executeQuery("select version_name , date from version");          
+              while(conn.rs.next()){
+%>
+                             
+                             <div class="footer"><h2 style="text-align: center;"> &copy <a href="#" title="<%=conn.rs.getString(1)%> compiled on <%=conn.rs.getString(2)%>">OVC LIP SUPERVISION SYSTEM</a> Aphia Plus | USAID <%=year%> </h2> </div>
+                             <% } 
+                               conn.rs.close();
+conn.st.close();
+
+                             %>
 				</div>
 		
 

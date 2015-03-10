@@ -61,6 +61,10 @@
         <servlet-name>loadformdata</servlet-name>
         <servlet-class>ovc.loadformdata</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>updatedata</servlet-name>
+        <servlet-class>ovc.updatedata</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>springapp</servlet-name>
         <url-pattern>*.htm</url-pattern>
@@ -116,6 +120,10 @@
     <servlet-mapping>
         <servlet-name>loadformdata</servlet-name>
         <url-pattern>/loadformdata</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>updatedata</servlet-name>
+        <url-pattern>/updatedata</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>900000</session-timeout>

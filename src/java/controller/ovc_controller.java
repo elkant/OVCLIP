@@ -45,6 +45,21 @@ public class ovc_controller {
     public String handleaddstaffGet() {
         return "addstaff"; // forward to view index.jsp
                                    }
+  
+        @RequestMapping("/filterreports.htm")
+    public String handlefrGet() {
+        return "filterreports"; // forward to view index.jsp
+                                   }
+        @RequestMapping("/basicreport.htm")
+    public String handlebrGet() {
+        return "basicreport"; // forward to view index.jsp
+                                   }
+    
+    
+        @RequestMapping("/webcharts.htm")
+    public String handlewcGet() {
+        return "webcharts"; // forward to view index.jsp
+                                   }
     
    @RequestMapping("/wizardtest.htm")
     public String handlewtGet() {

@@ -182,7 +182,7 @@ public class loadform1 extends HttpServlet {
                 //create a new page by closing what exists 
                         
          domaintable="<fieldset> "
-         + "<legend>"+legendheader+" <span style='padding:2px;color:red;font-size:25px;' id='domain"+initdomain+"'></span></legend><input type='text' name='domaininput"+initdomain+"' id='domaininput"+initdomain+"'/>  <table border='1' style='width:1030px;margin:6px;margin-right:2px;'><tr><th colspan='4'><b>Domain: "+legendheader+"</b></th></tr>"
+         + "<legend>"+legendheader+" <span style='padding:2px;color:red;font-size:25px;' id='domain"+initdomain+"'></span></legend><input type='hidden' name='domaininput"+initdomain+"' id='domaininput"+initdomain+"'/>  <table border='1' style='width:1030px;margin:6px;margin-right:2px;'><tr><th colspan='4'><b>Domain: "+legendheader+"</b></th></tr>"
                + ""+tableheader+middletable+"</table></fieldset>";
                  formedform+=domaintable;
                  //reset the middle table

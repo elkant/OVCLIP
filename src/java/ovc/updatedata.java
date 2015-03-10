@@ -24,7 +24,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author MANUEL
  */
-public class savedata extends HttpServlet {
+public class updatedata extends HttpServlet {
 
    HttpSession session=null; 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -45,7 +45,9 @@ public class savedata extends HttpServlet {
          String no_of_elements="0";   
          //initialize objects of classes
          String totalsum="";
-         gen g=new gen();
+         
+         String backgroundid="";
+        // gen g=new gen();
          
          String msg="<font color='green'> data saved Succesfully </font>";
          
@@ -54,7 +56,7 @@ public class savedata extends HttpServlet {
          
          
         String markstableid="";
-        markstableid=g.uniqueid().trim();
+        //markstableid=g.uniqueid().trim();
         
         String userid="";
          
@@ -73,6 +75,7 @@ public class savedata extends HttpServlet {
          teammembers=request.getParameterValues("teammembers");
          ass_date=request.getParameter("ass_date");
          totalsum=request.getParameter("totalsum");
+         backgroundid=request.getParameter("backgroundid");
          String fulldates[]=ass_date.split("-");
          
          //fulldates[0]=Year
@@ -117,38 +120,34 @@ else{quarters="0";}
          
          //first check whether the data exists in the two main tables for a given quarter and site
          
-         String checkexistance="select * from domain_totals where site='"+site+"' and period='"+quarters+"' and year='"+year+"' limit 1";
-         
-         conn.rs=conn.st.executeQuery(checkexistance);
-         if(conn.rs.next()){
-         //do an update of all the values for the three tables
-         msg="<font color='green'> data updated Succesfully </font>"; 
-         
-         
-         
-         }
-         else {
+        
          //do an insert instead of update
-             msg="<font color='green'> data saved Succesfully </font>";
+             msg="<font color='green'> data updated Succesfully </font>";
         
          
          if(1==1){
          
-         String bacgroundinfor="insert into backgroundinfor (backgroundid,cbo,site,staff_present,supervisor,ass_date,other_team_members,marks_table_id,year,period,ass_type,totalsum) values "
-                 + "(?,?,?,?,?,?,?,?,?,?,?,?)";
+                  Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String mdate;
+
+                    Date mydate = new Date();
+                    mdate = formatter.format(mydate); 
+             
+         String bacgroundinfor="update backgroundinfor set cbo=?,site=?,staff_present=?,supervisor=?,ass_date=?,other_team_members=?,year=?,period=?,ass_type=?,totalsum=?,timestamp=? where backgroundid='"+backgroundid+"' ";
+             
          conn.pst2=conn.conne.prepareStatement(bacgroundinfor);
-          conn.pst2.setString(1,g.uniqueid().trim()); 
-          conn.pst2.setString(2,lip); 
-          conn.pst2.setString(3,site); 
-          conn.pst2.setString(4,staffpresent); 
-          conn.pst2.setString(5,teamleader); 
-          conn.pst2.setString(6,ass_date); 
-          conn.pst2.setString(7,temabmembersstring); 
-          conn.pst2.setString(8,markstableid); 
-          conn.pst2.setString(9,year); 
-          conn.pst2.setString(10,quarters); 
-          conn.pst2.setString(11,asses_type); 
-          conn.pst2.setString(12,totalsum); 
+          
+          conn.pst2.setString(1,lip); 
+          conn.pst2.setString(2,site); 
+          conn.pst2.setString(3,staffpresent); 
+          conn.pst2.setString(4,teamleader); 
+          conn.pst2.setString(5,ass_date); 
+          conn.pst2.setString(6,temabmembersstring);         
+          conn.pst2.setString(7,year); 
+          conn.pst2.setString(8,quarters); 
+          conn.pst2.setString(9,asses_type); 
+          conn.pst2.setString(10,totalsum); 
+          conn.pst2.setString(11,mdate); 
           conn.pst2.executeUpdate(); 
          
          }
@@ -171,6 +170,7 @@ else{quarters="0";}
              if(request.getParameter("domaininput"+c)!=null){
              
                  String domainvalue=request.getParameter("domaininput"+c);
+                 String domaintableid=request.getParameter("domaintableid"+c);
                  String domainid=""+c;
                         Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     String mdate;
@@ -178,21 +178,20 @@ else{quarters="0";}
                     Date mydate = new Date();
                     mdate = formatter.format(mydate); 
                  
-                 String insert="insert into domain_totals (tableid,domainid,value,aggregate_sum,period,month,syncdate,userid,date,marks_table_id,site,year) values "
-                         + "(?,?,?,?,?,?,?,?,?,?,?,?)";
+                 String insert="update domain_totals set value=?,aggregate_sum=?,period=?,month=?,userid=?,date=?,site=?,year=?,timestamp=? where tableid='"+domaintableid+"' ";
+                       
              conn.pst2=conn.conne.prepareStatement(insert);
-             conn.pst2.setString(1,g.uniqueid().trim());
-             conn.pst2.setString(2,domainid); 
-             conn.pst2.setString(3,domainvalue); 
-             conn.pst2.setString(4,totalsum); 
-             conn.pst2.setString(5,quarters); 
-             conn.pst2.setString(6,month); 
-             conn.pst2.setString(7,mdate); 
-             conn.pst2.setString(8,userid); 
-             conn.pst2.setString(9,ass_date); 
-             conn.pst2.setString(10,markstableid); 
-             conn.pst2.setString(11,site); 
-             conn.pst2.setString(12,year); 
+    
+              
+             conn.pst2.setString(1,domainvalue); 
+             conn.pst2.setString(2,totalsum); 
+             conn.pst2.setString(3,quarters); 
+             conn.pst2.setString(4,month);            
+             conn.pst2.setString(5,userid); 
+             conn.pst2.setString(6,ass_date); 
+             conn.pst2.setString(7,site); 
+             conn.pst2.setString(8,year); 
+             conn.pst2.setString(9,mdate); 
              conn.pst2.executeUpdate();    
              
              }
@@ -222,23 +221,23 @@ else{quarters="0";}
             
             
          String val=request.getParameter("element_"+b);
-         
+         String marktableid=request.getParameter("qidelement_"+b);
          String element="element_"+b;
          String questionid=""+b;
-        String insert="insert into marks (marks_id,quest_id,answer,period,userid,date,year,month,syncdate,site_id,marks_table_id) value "
-                + "(?,?,?,?,?,?,?,?,?,?,?)"; 
+        String insert="update marks set answer=?,period=?,userid=?,date=?,year=?,month=?,timestamp=?,site_id=? where marks_id='"+marktableid+"'";
+ 
          conn.pst2=conn.conne.prepareStatement(insert);
-             conn.pst2.setString(1,g.uniqueid().trim());
-             conn.pst2.setString(2,questionid);
-             conn.pst2.setString(3,val);
-             conn.pst2.setString(4,quarters);
-             conn.pst2.setString(5,userid);
-             conn.pst2.setString(6,ass_date);
-             conn.pst2.setString(7,year);
-             conn.pst2.setString(8,month);
-             conn.pst2.setString(9,mdate);
-             conn.pst2.setString(10,site);
-             conn.pst2.setString(11,markstableid);
+        
+             
+             conn.pst2.setString(1,val);
+             conn.pst2.setString(2,quarters);
+             conn.pst2.setString(3,userid);
+             conn.pst2.setString(4,ass_date);
+             conn.pst2.setString(5,year);
+             conn.pst2.setString(6,month);
+             conn.pst2.setString(7,mdate);
+             conn.pst2.setString(8,site);
+            
          
              conn.pst2.executeUpdate();
              
@@ -250,8 +249,8 @@ else{quarters="0";}
         
         }
          
-        }
-            System.out.println(msg);
+       
+           
         
             out.println(msg);
         } catch (SQLException ex) {

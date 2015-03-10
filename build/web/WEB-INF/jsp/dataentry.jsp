@@ -92,7 +92,7 @@
 
             <br/>
             <br/>
-            <div class="container">
+            <div class="container" id="container1">
 
 
                 <h4 style="text-align: center;background: orange;">Data Entry</h4>
@@ -120,22 +120,20 @@
 
                     <img src="<c:url value="/resources/images/loading.gif" />" class="loading" style="display:none;" /> 
 
-                    <div class="row">
+                    <img src="<c:url value="/resources/images/wait2.gif" />" class="loading1" style="display:none;" /> 
+
+                    
+                    <div class="row" id="rw">
                         <div class="col-md-12">
 
 
-                            <form id="wizard-example-5" action="#">
+                            <form id="wizard-example-5" action="">
                                 <fieldset>
                                     <legend id="ab"></legend>
                                     <div class="row">
-
-
-
-                                    </div>
+                                      </div>
                                 </fieldset>
-
-
-                            </form>
+                              </form>
                         </div>
                     </div>
 
@@ -172,15 +170,15 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
 
                         <section class="popupBody" style="width:550px;">
                             <div class="add_staff">
-                                <form name="addStaff" id="addStaff" action='savedata' style="width:350px;">
+                                <form name="addStaff" id="addStaff" action='saveStaff' style="width:350px;">
                                     <table>
                                         <tr><td>First Name</td><td><input class="form-control" type="text" id="fname" name="fname"></td></td>
                                         <tr><td>Last Name</td><td><input class="form-control" type="text" id="mname" name="mname"></td></td>
                                         <tr><td>Phone Number</td><td><input class="form-control" onkeypress=" return numbers(event);" type="text" id="phone" name="phone"></td></td>
-                                        <tr><td>Category</td><td><select class="form-control" name="position" id="position"><%=opts%></select></td></td>
+                                        <tr><td>Category</td><td><select onchange="togglesites();" class="form-control" name="position" id="position"><%=opts%></select></td></td>
                                       
-                                        <tr><td>Cbo</td><td><select class="form-control" onchange="loadsites();"  name="staffcbo" id="staffcbo" ><%=cbolists%></select></td></td>
-                                        <tr><td>Site</td><td><select class="form-control" name="sitecbo" id="sitecbo"></select></td></td>
+                                        <tr><td><span id="cbolabel">Cbo</span></td><td><select class="form-control" onchange="loadsites();"  name="staffcbo" id="staffcbo" ><%=cbolists%></select></td></td>
+                                        <tr><td><span id="sitelabel">Site</span></td><td><select class="form-control" name="sitecbo" id="sitecbo"></select></td></td>
                                         <tr><td>  <input type="reset" style="height:36px;width:100px;" value="reset fields"></td><td >
                                             
                                         <input type="text" value="Save" id="generate1" class ='generate1' onclick="savestaff();" readonly style=" cursor:pointer;margin-left: 50px; text-transform:uppercase ; height: 50px; width:140px;text-align:center ; color:white ;background:coral; border-style:ridge ;" />
@@ -207,6 +205,15 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
             <!--<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>-->
             <script type="text/javascript" src="<c:url value='/resources/js/jquery.leanModal.min.js' />" ></script>
 
+            
+            <script type="text/javascript" src="<c:url value='/resources/js/noty/jquery.noty.js' />"></script>
+            <script type="text/javascript" src="<c:url value='/resources/js/noty/layouts/top.js' />"></script>
+            <script type="text/javascript" src="<c:url value='/resources/js/noty/layouts/center.js' />"></script>
+            <script type="text/javascript" src="<c:url value='/resources/js/noty/themes/default.js' />"></script>
+            
+            
+            
+            
         <script>
             //$(window).load(function(){
             //    
@@ -222,18 +229,56 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
                     success: function (data) {
                         document.getElementById("wizard-example-5").innerHTML = data;
 
-                        $("#wizard-example-5").stepFormWizard({
-                            height: 'auto',
+                      var rfr=  $("#wizard-example-5").stepFormWizard({
+                            height: '500px',
+                            theme:'circle',
                             nextBtn: $('<a class="next-btn sf-right sf-btn" href="#">NEXT</a>'),
                             prevBtn: $('<a class="prev-btn sf-left sf-btn" href="#">PREVIOUS</a>'),
                             finishBtn: $('<a class="finish-btn sf-right sf-btn" href="#">SAVE</a>'),
                             onFinish: function (i, wizard) {
                                 if ($('form', wizard).parsley().validate() == true) {
                                     var form = $('form', wizard).serialize();
-                                    $.getJSON('savedata', form, function (data) {
-                                        wizard.html(data.html);
-                                       location.reload();
-                                    });
+           //$.getJSON('savedata', form, function (data) {wizard.html(data.html);});
+                                    $('.loading1').show();
+                                   //__________________________________________
+                                   
+                                   $.ajax({
+  type: 'POST',
+  url: 'savedata',
+  data:form,
+  dataType: 'text',
+  success: function(data) {
+      
+       $('.loading1').hide();
+    //alert(data);
+              var n = noty({text:"<h3>"+data+"</h3>",
+                        layout: 'center',
+                        type: 'Success',
+                        timeout: 2800,
+         animation: {
+        open: {height: 'toggle'}, // jQuery animate function property object
+        close: {height: 'toggle'}, // jQuery animate function property object
+        easing: 'swing', // easing
+        speed: 500 // opening & closing animation speed
+    },
+    callback: {
+   
+        afterShow: function() {
+            location.reload();
+            
+        }
+    }
+    
+        }); 
+    
+  },
+  error: function() {
+    alert('Error occured');
+  }
+});
+                                   //__________________________________________
+                                   
+            //return true;
                                 }
                                 else {
                                     return false;
@@ -285,6 +330,19 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
             //=========ADDITION FUNCTIONS THAT SHOW THE PERCENTAGE PER DOMAIN
             var elementi = [];
             var elementivalues = [];
+            
+    //create a function to push elements only after loading an update form
+    function pushelements(allele,allsubmitedvalue){
+        
+        elementi=allele.split("%");
+        elementivalues=allsubmitedvalue.split("%");
+        
+      //elementi.push(ele);
+                    //elementivalues.push(submitedvalue);  
+        
+    }        
+            
+            
             function domaintotal(val, ele, mark, domain) {
                 //create two arrays. one to store sent elements and another to store the value.   
                 //add the value together    
@@ -299,11 +357,11 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
                 //if value is a blank, a mark is 0
 
                 var markstosent = 0;
-                if (submitedvalue === 'Yes') {
+                if (submitedvalue ==='Yes') {
 
                     markstosent = "" + marks;
                 }
-                else if (submitedvalue === 'No') {
+                else if (submitedvalue ==='No') {
 
                     markstosent = "-" + marks;
 
@@ -610,12 +668,12 @@ return true;
                     
                                     }
                 
-                 else if(site===''){                      
-                  showerror(site);  
-                  noerror(site);
-                  showselectalert("Site");                  
-                    
-                                    }
+//                 else if(site===''){                      
+//                  showerror(site);  
+//                  noerror(site);
+//                  showselectalert("Site");                  
+//                    
+//                                    }
                                     else {
                                         
                                         
@@ -625,7 +683,27 @@ return true;
                     dataType: 'html',
                     success: function (data) {
                         //now reload the staff list
-                  document.getElementById("msg").innerHTML=data;
+                  //document.getElementById("msg").innerHTML=data;
+                    var n = noty({text:"<h3>"+data+"</h3>",
+                        layout: 'center',
+                        type: 'Success',
+                        timeout: 2800,
+         animation: {
+        open: {height: 'toggle'}, // jQuery animate function property object
+        close: {height: 'toggle'}, // jQuery animate function property object
+        easing: 'swing', // easing
+        speed: 500 // opening & closing animation speed
+    },
+    callback: {
+   
+        afterShow: function() {
+            
+         document.getElementById("addStaff").reset();   
+        }
+    }
+    
+        });
+                  
                   loadmembers();
                     
                 
@@ -678,7 +756,7 @@ return true;
                         document.getElementById("staffpresent").innerHTML=data;
                         document.getElementById("teammembers").innerHTML=data;
                         document.getElementById("teamleader").innerHTML=data;
-                        
+                     
                         
                     }});   
                                              
@@ -711,7 +789,41 @@ year=fulldates[0];
                     success: function (data) {
                      var da=data.trim();   
                      if(da==="update"){
+                       
+                    loadupdateform(site,quarters,year,cbo); 
+                     }  
+                     else
+                     {
                          
+                         
+                     }
+                        
+                        
+                    }
+            
+        });
+
+                 
+             }
+         }
+             
+      
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    //function
+    
+    function loadupdateform(site,quarters,year,cbo){
+        
+          
                          //initialize an update ajax to load data for that element
                        // alert("load existing data asap");
                        $('.loading').show(); 
@@ -721,20 +833,80 @@ year=fulldates[0];
                     type: 'post',
                     dataType: 'text',
                     success: function (data) {
-                      document.getElementsByClassName("sf-nav-wrap").innerHTML=""; 
-                      document.getElementById("wizard-example-5").innerHTML=data;  
+                      //document.getElementsByClassName("sf-wizard").innerHTML=""; 
+                     $('#rw').html("<div class='col-md-12'><form id='wizard-example-5' action=''><fieldset><legend id='ab'></legend><div class='row'></div></fieldset></form></div>");
+                    // $("#container1").load(
+                      document.getElementById("wizard-example-5").innerHTML=data; 
+                      document.getElementById("agg_percentage").innerHTML=document.getElementById("totalsum").value+"%";
+                     //variables that help in preloading
+                      var alle=document.getElementById("allelements").value;
+                      var alleval=document.getElementById("allelementsvalue").value;
+                      pushelements(alle,alleval);
+                      
+                      
                        $("#wizard-example-5").stepFormWizard({
-                            height: 'auto',
+                            height: '500px',
+                            theme:'circle',
                             nextBtn: $('<a class="next-btn sf-right sf-btn" href="#">NEXT</a>'),
                             prevBtn: $('<a class="prev-btn sf-left sf-btn" href="#">PREVIOUS</a>'),
-                            finishBtn: $('<a class="finish-btn sf-right sf-btn" href="#">SAVE</a>'),
+                            finishBtn: $('<a class="finish-btn sf-right sf-btn" href="#">UPDATE</a>'),
                             onFinish: function (i, wizard) {
                                 if ($('form', wizard).parsley().validate() == true) {
                                     var form = $('form', wizard).serialize();
-                                    $.getJSON('updatedata', form, function (data) {
-                                        wizard.html(data.html);
-                                       location.reload();
-                                    });
+                                    
+                                   // $.getJSON('updatedata', form, function (data) {wizard.html(data.html);});
+                                    
+                                    
+                                    
+                                    
+           //=================================================================================
+           
+            
+            $('.loading1').show();
+                                   //__________________________________________
+                                   
+                                   $.ajax({
+  type: 'POST',
+  url: 'updatedata',
+  data:form,
+  dataType: 'text',
+  success: function(data) {
+      
+       $('.loading1').hide();
+    //alert(data);
+              var n = noty({text:"<h3>"+data+"</h3>",
+                        layout: 'center',
+                        type: 'Success',
+                        timeout: 2800,
+         animation: {
+        open: {height: 'toggle'}, // jQuery animate function property object
+        close: {height: 'toggle'}, // jQuery animate function property object
+        easing: 'swing', // easing
+        speed: 500 // opening & closing animation speed
+    },
+    callback: {
+   
+        afterShow: function() {
+            location.reload();
+            
+        }
+    }
+    
+        }); 
+    
+  },
+  error: function() {
+    alert('Error occured');
+  }
+});
+                                   //__________________________________________
+                                   
+            
+            
+           //=================================================================================                         
+                                    
+                                    
+                                    
                                 }
                                 else {
                                     return false;
@@ -758,24 +930,37 @@ year=fulldates[0];
                     }         
             
             });
-                       
-                     }  
-                     else
-                     {
-                         
-                         
-                     }
-                        
-                        
-                    }
-            
-        });
-
-                 
-             }
-         }
+        
+        
+    }
+    
+    
+    function togglesites(){
+        
+         if(document.getElementById("position").value=='2'){
              
-                                        
+             document.getElementById("cbolabel").innerHTML='Cbo';
+             document.getElementById("staffcbo").style.display='block';
+             
+             document.getElementById("sitelabel").innerHTML='Site';
+             document.getElementById("sitecbo").style.display='block';
+             
+         }
+         else{
+             document.getElementById("staffcbo").value="";
+             document.getElementById("cbolabel").innerHTML='';
+             document.getElementById("staffcbo").style.display='none';
+             
+             document.getElementById("sitelabel").innerHTML='';
+             document.getElementById("staffcbo").value="";
+             document.getElementById("sitecbo").style.display='none';
+             
+         }
+        
+        
+        
+        
+    }
             
         </script>
 

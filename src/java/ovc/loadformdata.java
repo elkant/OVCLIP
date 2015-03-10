@@ -22,18 +22,24 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class loadformdata extends HttpServlet {
 
+     private static String allelements="";
+           private static String allelementsvalues="";
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
             response.setContentType("text/html;charset=UTF-8");
 
+             allelements="";
+             allelementsvalues="";
             
             String fyear="";
             String fsite="";
             String fcbo="";
             String fperiod="";
            String datevalue="";
-            
+           String backgroundinforid="";
+           //this will hold a string of element names and values for preloading purpose
+          
             
             
            
@@ -52,12 +58,18 @@ public class loadformdata extends HttpServlet {
             String otherteamstaff = "<option value=''>Select Staff Name</option>";
             String domainvalue = "";
             String domaintableid = "";
+            String totalsum="";
             dbConn conn = new dbConn();
 
-            String backginfor=" select * from backgroundinfor where site='"+fsite+"' and period='"+fperiod+"' and year='"+fyear+"' ";
+            String backginfor="select * from backgroundinfor where site='"+fsite+"' and period='"+fperiod+"' and year='"+fyear+"' ";
             conn.rs_6=conn.st_6.executeQuery(backginfor);
             while(conn.rs_6.next()){
+             
+                backgroundinforid=conn.rs_6.getString("backgroundid");
                 
+    //total sum
+                
+    totalsum=conn.rs_6.getString("totalsum");
                //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~assesment type 
               datevalue=conn.rs_6.getString("ass_date");
              String getass = "select * from asses_type";
@@ -169,8 +181,8 @@ public class loadformdata extends HttpServlet {
            formedform="<fieldset>"
                     + "<legend> Section A: Background Information </legend>"
                     + "<div class='row'>"
-                    + "<div class='col-lg-6'> <input type='hidden' value='"+no_of_elements+"' name='no_of_elements' id='no_of_elements'>"
-                    + "<input type='hidden' name='totalsum' id='totalsum'>"
+                    + "<div class='col-lg-6'> <input type='hidden' name='backgroundid' value='"+backgroundinforid+"' id='backgroundid' /><input type='hidden' value='"+no_of_elements+"' name='no_of_elements' id='no_of_elements'>"
+                    + "<input type='hidden' value='"+totalsum +"' name='totalsum' id='totalsum'>"
                     + "<div class=\"form-group\">\n"
                     + "<label for=\"exampleInputPassword6\">Assesment Type</label>\n"
                     + "<select class=\"form-control\" name=\"asses_type\" id='asses_type' data-parsley-group=\"block0\" required>\n"
@@ -248,7 +260,7 @@ public class loadformdata extends HttpServlet {
                   String functionname="";
                     String affectedelem=conn.rs.getString("affected_question");
                     
-                       String getquestval="select * from marks where  site='"+fsite+"' and quest_id='"+conn.rs.getString("questionid")+"' and year='"+fyear+"' and period='"+fperiod+"'";
+                       String getquestval="select * from marks where  site_id='"+fsite+"' and quest_id='"+conn.rs.getString("questionid")+"' and year='"+fyear+"' and period='"+fperiod+"'";
                   conn.rs_6=conn.st_6.executeQuery(getquestval);
                   while(conn.rs_6.next()){
                   questionvalue=conn.rs_6.getString("answer");
@@ -293,7 +305,7 @@ public class loadformdata extends HttpServlet {
             
                         
          domaintable="<fieldset> "
-         + "<legend>"+legendheader+" <span style='padding:2px;color:red;font-size:25px;' id='domain"+initdomain+"'></span></legend><input type='text' name='domaininput"+initdomain+"' value='"+domainvalue+"' id='domaininput"+initdomain+"'/><input type='text' name='domaintableid"+initdomain+"' value='"+domaintableid+"' id='domaintableid"+initdomain+"'/>  <table border='1' style='width:1030px;margin:6px;margin-right:2px;'><tr><th colspan='4'><b>Domain: "+legendheader+"</b></th></tr>"
+         + "<legend>"+legendheader+" <span style='padding:2px;color:red;font-size:25px;' id='domain"+initdomain+"'>"+domainvalue+"%</span></legend><input type='hidden' name='domaininput"+initdomain+"' value='"+domainvalue+"' id='domaininput"+initdomain+"'/><input type='hidden' name='domaintableid"+initdomain+"' value='"+domaintableid+"' id='domaintableid"+initdomain+"'/>  <table border='1' style='width:1030px;margin:6px;margin-right:2px;'><tr><th colspan='4'><b>Domain: "+legendheader+"</b></th></tr>"
                + ""+tableheader+middletable+"</table></fieldset>";
                  formedform+=domaintable;
                  //reset the middle table
@@ -328,7 +340,13 @@ public class loadformdata extends HttpServlet {
                 count++;
             }//end of while loop
             
-            domaintable="<fieldset> <legend>"+legendheader+"  <span style='color:red;font-size:25px;' id='domain"+initdomain+"'></span> </legend><input type='text' value='"+domainvalue+"' name='domaininput"+initdomain+"' id='domaininput"+initdomain+"'> <input type='text' name='domaintableid"+initdomain+"' value='"+domaintableid+"' id='domaintableid"+initdomain+"'/> <table border='1' style='width:1030px;margin:6px;margin-right:2px;'><tr><th colspan='4'><b>Domain: "+legendheader+"</b></th></tr>"
+            domaintable="<fieldset> <legend>"+legendheader+"  <span style='color:red;font-size:25px;' id='domain"+initdomain+"'>"+domainvalue+"%</span> </legend>"
+                    + "<input type='hidden' value='"+domainvalue+"' name='domaininput"+initdomain+"' id='domaininput"+initdomain+"'> "
+                    + "<input type='hidden' name='domaintableid"+initdomain+"' value='"+domaintableid+"' id='domaintableid"+initdomain+"'/>"
+                    + "<input type='hidden' name='allelements' value='"+allelements+"' id='allelements'/>"
+                    + "<input type='hidden' name='allelementsvalue' value='"+allelementsvalues+"' id='allelementsvalue'/>"
+                    + "<table border='1' style='width:1030px;margin:6px;margin-right:2px;'>"
+                    + "<tr><th colspan='4'><b>Domain: "+legendheader+"</b></th></tr>"
             + ""+tableheader+middletable+"</table></fieldset>";
                  formedform+=domaintable;
                  //reset the middle table
@@ -341,7 +359,7 @@ public class loadformdata extends HttpServlet {
                 /* TODO output your page here. You may use following sample code. */
 
                 out.println(formedform);
-                System.out.println("" + formedform);
+               // System.out.println("" + formedform);
             }
         } catch (SQLException ex) {
             Logger.getLogger(loadform1.class.getName()).log(Level.SEVERE, null, ex);
@@ -398,6 +416,9 @@ public class loadformdata extends HttpServlet {
         //index 1 is type
         //index 2 is options => this should be split further using _ delimiter
         //for now we are dealing with input and select elements 
+        allelements+=elemarr[0]+"%";
+        allelementsvalues+=qvalue+"%";
+        
         if (elemarr[1].equalsIgnoreCase("input")) {
 
             createdelem = "<div class='form-group'>"
@@ -423,11 +444,10 @@ public class loadformdata extends HttpServlet {
             createdelem = "<div class=\"form-group\">"
                     + "<select onchange=\"domaintotal(this,'"+elemarr[0]+"','"+marks+"','"+domainid+"');"+functionname+"\"  class=\"form-control\" name='" + elemarr[0] + "' id='" + elemarr[0] + "' data-parsley-group=\"block0\" >\n"
                     + "" + options
-                    + "</select><input type='text' value='"+qtableid+"' name='questiontableid"+ elemarr[0]+"' id='questiontableid"+ elemarr[0]+"'>"
+                    + "</select><input type='hidden' value='"+qtableid+"' name='qid"+ elemarr[0]+"' id='qid"+ elemarr[0]+"'>"
                     + "</div>";
 
         }//select
-
         return createdelem;
     }
 

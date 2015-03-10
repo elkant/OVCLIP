@@ -70,7 +70,7 @@ $( "#datepicker" ).datepicker();
         
         <div class="cont">
         
-<div class="header" style="margin-left: 2px;margin-right: 2px;">
+<div class="header" style="margin-left: 10%;margin-right: 2px;">
     <br/>
             <% if(session.getAttribute("level")!=null){
                          if(session.getAttribute("level").equals("2")){ 

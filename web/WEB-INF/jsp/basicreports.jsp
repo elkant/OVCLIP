@@ -157,21 +157,8 @@
                              <br/>
                              <br/>
                              
-                             <%
-               Calendar cal = Calendar.getInstance();
-               int year= cal.get(Calendar.YEAR); 
-                                 
-              dbConn conn= new dbConn();
-              conn.rs=conn.st.executeQuery("select version_name , date from version");          
-              while(conn.rs.next()){
-%>
-                             
-                             <div class="footer"><h2 style="text-align: center;"> &copy <a href="#" title="<%=conn.rs.getString(1)%> compiled on <%=conn.rs.getString(2)%>">OVC LIP SUPERVISION SYSTEM</a> Aphia Plus | USAID <%=year%> </h2> </div>
-                             <% } 
-                               conn.rs.close();
-conn.st.close();
-
-                             %>
+      
+                          
 				</div>
 		
 

@@ -6,7 +6,7 @@
 <!DOCTYPE html">
 <html>
     <head>
-        <title>OVC LIP</title>
+        <title>Select Reports</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
        	<link rel="shortcut icon" href="<c:url value="/resources/images/favicon.png" />" type="image/x-icon"/>
         <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/newstyle.css"/>" />
@@ -56,59 +56,14 @@
         
 		<div class="wrapper" >
                   
-			<h1><span>OVC LIP SUPERVISION SYSTEM</span></h1>
+			<h2><span>OVC LIP SUPERVISION Reports</span></h2>
 			<br/>
 			<br/>
 			<div class="content">
 				<div id="form_wrapper" class="form_wrapper">
-					<form class="register">
-						<h3>Register</h3>
-						<div class="column">
-							<div>
-								<label>First Name:</label>
-								<input type="text" />
-								<span class="error">This is an error</span>
-							</div>
-							<div>
-								<label>Last Name:</label>
-								<input type="text" />
-								<span class="error">This is an error</span>
-							</div>
-							<div>
-								<label>Website:</label>
-								<input type="text" value="http://"/>
-								<span class="error">This is an error</span>
-							</div>
-						</div>
-						<div class="column">
-							<div>
-								<label>Username:</label>
-								<input type="text"/>
-								<span class="error">This is an error</span>
-							</div>
-							<div>
-								<label>Email:</label>
-								<input type="text" />
-								<span class="error">This is an error</span>
-							</div>
-							<div>
-								<label>Password:</label>
-								<input type="password" />
-								<span class="error">This is an error</span>
-							</div>
-						</div>
-						<div class="bottom">
-							<div class="remember">
-								<input type="checkbox" />
-								<span>Send me updates</span>
-							</div>
-							<input type="submit" value="Register" />
-							<a href="index.html" rel="login" class="linkform">You have an account already? Log in here</a>
-							<div class="clear"></div>
-						</div>
-					</form>
-					<form class="login active" action="login" style="width:400px;">
-						<h3>Login</h3>
+					
+					<form class="login active" action="loadData" style="width:400px;">
+						<h3>Specify Report </h3>
 						<div>
 							<label>Username:</label>
 							<input type="text" name="uname" required />
@@ -157,21 +112,8 @@
                              <br/>
                              <br/>
                              
-                             <%
-               Calendar cal = Calendar.getInstance();
-               int year= cal.get(Calendar.YEAR); 
-                                 
-              dbConn conn= new dbConn();
-              conn.rs=conn.st.executeQuery("select version_name , date from version");          
-              while(conn.rs.next()){
-%>
-                             
-                             <div class="footer"><h2 style="text-align: center;"> &copy <a href="#" title="<%=conn.rs.getString(1)%> compiled on <%=conn.rs.getString(2)%>">OVC LIP SUPERVISION SYSTEM</a> Aphia Plus | USAID <%=year%> </h2> </div>
-                             <% } 
-                               conn.rs.close();
-conn.st.close();
-
-                             %>
+      
+                          
 				</div>
 		
 
