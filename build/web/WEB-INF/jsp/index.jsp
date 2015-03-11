@@ -117,7 +117,7 @@
 						<div>
 							<label>Password: 
                                                             
-                                                            <!--<a href="forgot_password.html" rel="forgot_password" class="forgot linkform">Forgot your password?</a>-->
+                                                        <!--<a href="forgot_password.html" rel="forgot_password" class="forgot linkform">Forgot your password?</a>-->
                                                         
                                                         </label>
 							<input type="password" name="pass" />

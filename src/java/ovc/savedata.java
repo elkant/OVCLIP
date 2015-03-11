@@ -166,7 +166,7 @@ else{quarters="0";}
          }
          
          //now save the values per domain
-         for(int c=1;c<maxdomain;c++){
+         for(int c=1;c<=maxdomain;c++){
          
              if(request.getParameter("domaininput"+c)!=null){
              

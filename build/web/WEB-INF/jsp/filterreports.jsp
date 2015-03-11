@@ -19,7 +19,8 @@
             <link href="<c:url value='resources/js/css/start/jquery-ui-1.10.3.custom.css' />" rel="stylesheet"/>
 	
             <script src="<c:url value='resources/js/js/jquery-ui-1.10.3.custom.js' />"></script>
-            
+             <link rel="stylesheet" href="<c:url value="/menu/ovc lip user menu_files/css3menu1/style.css" />" /> 
+       
             
         <script src="<c:url value="/resources/js/cufon-yui.js" />" type="text/javascript"></script>
         <script src="<c:url value="/resources/js/ChunkFive_400.font.js" />" type="text/javascript"></script>
@@ -31,6 +32,60 @@
 			Cufon.replace('h2',{textShadow: '1px 1px #fff'});
 			Cufon.replace('h3',{textShadow: '1px 1px #000'});
 			Cufon.replace('.back');
+    
+    
+     function loadcbos()
+            {
+                      // var cboname=document.getElementById("lip").value;
+               
+         $.ajax({
+                    url: "loadcbos",
+                    type: 'post',
+                    dataType: 'html',
+                    success: function (data) {
+                        
+                    document.getElementById("staffcbo").innerHTML=data;    
+                     document.getElementById("formid").reset();     
+                    }
+                });
+        
+
+            }
+    
+    
+                   loadcbos();
+    
+    
+    
+                         function loadsites(cboid)
+            {
+                       var cboname=document.getElementById("staffcbo").value;
+               
+         $.ajax({
+                    url: "loadsites?cbo="+cboname,
+                    type: 'post',
+                    dataType: 'html',
+                    success: function (data) {
+                        
+                    document.getElementById("sitecbo").innerHTML=data;    
+                        
+                    }
+                });
+        
+
+            }
+
+              
+    function changeAction() {
+
+                var curaction = document.getElementById("reporttype").value;
+
+                document.getElementById("formid").action = curaction;
+
+
+            }
+    
+                        
 		</script>
     </head>
     <body >
@@ -53,60 +108,93 @@
         
         
         <div class="cont">
-        
+                
+<div class="header" style="margin-left: 10%;margin-right: 2px;">
+    <br/>
+            <% if(session.getAttribute("level")!=null){
+                         if(session.getAttribute("level").equals("2")){ 
+            %>
+<%@include file="../../menu/ovc lip user menu.html"%>
+
+<%} else{%>
+<%@include file="../../menu/ovc lip user menu.html"%>
+<%}}%>                  
+</div>
 		<div class="wrapper" >
                   
-			<h2><span>OVC LIP SUPERVISION Reports</span></h2>
+			<h2 style="text-align: center;"><span>OVC LIP SUPERVISION Reports</span></h2>
 			<br/>
 			<br/>
 			<div class="content">
 				<div id="form_wrapper" class="form_wrapper">
 					
-					<form class="login active" action="loadData" style="width:400px;">
-						<h3>Specify Report </h3>
-						<div>
-							<label>Username:</label>
-							<input type="text" name="uname" required />
-							<span class="error">This is an error</span>
-						</div>
-						<div>
-							<label>Password: 
-                                                            
-                                                            <!--<a href="forgot_password.html" rel="forgot_password" class="forgot linkform">Forgot your password?</a>-->
-                                                        
-                                                        </label>
-							<input type="password" name="pass" />
-							<span class="error">This is an error</span>
-						      </div>
+					<form class="login active" action="#" id="formid" style="width:500px;">
+						<h3>Select all the requirements </h3>
+				
+                                        
+                                        <div class="column">  
+                                        
+                                           <%  Calendar cal = Calendar.getInstance();
+               int year= cal.get(Calendar.YEAR); 
+               String years="<option value=''>Select Year</option>";
+                                           for(int a=year;a>=2012;a--){
+                                       
+                                           years+="<option value="+a+">"+a+"</option>";
+                                            }%>
+                                         <div>
+                                        <label><b>Year</b><font color="red">*</font></label>
+                                        <select class="form-control"  name="year" id="year" > 
+                                            <%=years%>
+                                        </select>
+                                        </div>  
+                                            
+                                            <div>
+                                        <label><b>Quarter</b><font color="red">*</font></label>
+                                        <select required class="form-control"  name="period" id="period" >
+                                            <option value="">Select Period</option>
+                                            <option value="1">Oct-Dec</option>
+                                            <option value="2">Jan-Mar</option>
+                                            <option value="3">Apr-Jun</option>
+                                            <option value="4">Jul-Sep</option>
+                                            
+                                        </select></td></td>
+                                        </div> 
+                                        
+                                         <div>
+                                      <label><b>Report Type</b><font color="red">*</font></label>
+                                      <select required class="form-control" name="reporttype"  onchange="changeAction();" id="reporttype">
+                                            <option value="#">Select Report</option>
+                                            <option value="basicreports">Basic Report</option>
+                                            <option value="webcharts.htm">Webcharts</option>
+                                                    
+                                        </select>
+                                        </div>
+                                        
+                                        </div>
+                                        <div class="column">  
+                                        <div>
+                                        <label><b>Cbo</b><font color="red">*</font></label>
+                                       <select required class="form-control" onchange="loadsites();"  name="staffcbo" id="staffcbo" ></select></td></td>
+                                        </div>
+                                        <div>
+                                        <label><b>Site</b><font color="red">*</font></label>
+                                        <select required class="form-control" name="sitecbo" id="sitecbo"></select>
+                                        </div>                                            
+                                       
+                                     </div>
 						<div class="bottom">
 							<!--<div class="remember"><input type="checkbox" /><span>Keep me logged in</span></div>-->
-							<input type="submit" value="Login"></input>
+							<input type="submit" value="Generate"></input>
 							<!--<a href="register.jsp.html" rel="register" class="linkform">You don't have an account yet? Register here</a>-->
 							<div class="clear"></div>
 						</div>
 					</form>
-					<form class="forgot_password">
-						<h3>Forgot Password</h3>
-						<div>
-							<label>Username or Email:</label>
-							<input type="text" />
-							<span class="error">This is an error</span>
-						</div>
-						<div class="bottom">
-							<input type="submit" value="Send reminder"></input>
-							<a href="index.html" rel="login" class="linkform">Suddenly remembered? Log in here</a>
-							<a href="register.jsp.html" rel="register" class="linkform">You don't have an account? Register here</a>
-							<div class="clear"></div>
-						</div>
-                                                
-                                               
-					</form>
+					
 				</div>
                             <div class="clear"></div>
                             <br/>
                             <br/>
-                             <h3 align="center"> <img src="<c:url value='resources/images/aphia_logo.png' />" alt="logo" height="86px" width="270px"/></h3>
-                                                
+                                            
 				<div class="clear"></div>
 			</div>
                              <br/>

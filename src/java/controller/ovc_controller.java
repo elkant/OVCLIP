@@ -61,6 +61,22 @@ public class ovc_controller {
         return "webcharts"; // forward to view index.jsp
                                    }
     
+        @RequestMapping("/backup.htm")
+    public String handlebuGet() {
+        return "backup"; // forward to view index.jsp
+                                   }
+    
+           @RequestMapping("/merge.htm")
+    public String handlemdGet() {
+        return "merge"; // forward to view index.jsp
+                                   }
+    
+           @RequestMapping("/editstaff.htm")
+    public String handleesGet() {
+        return "editstaff"; // forward to view index.jsp
+                                   }
+    
+    
    @RequestMapping("/wizardtest.htm")
     public String handlewtGet() {
         return "wizardtest"; // forward to view index.jsp
