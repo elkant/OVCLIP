@@ -75,8 +75,8 @@
 
 
 
-        <div class="cont" style="width:1228px;">    
-            <div style="font-size: 17px; margin-left: 20px;">
+        <div class="cont" style="width:1420px;">    
+            <div style="font-size: 17px; margin-left: 10%;">
 
                 <% if (session.getAttribute("level") != null) {
                         if (session.getAttribute("level").equals("2")) {
@@ -230,7 +230,7 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
                         document.getElementById("wizard-example-5").innerHTML = data;
 
                       var rfr=  $("#wizard-example-5").stepFormWizard({
-                            height: '500px',
+                            height: 'auto',
                             theme:'circle',
                             nextBtn: $('<a class="next-btn sf-right sf-btn" href="#">NEXT</a>'),
                             prevBtn: $('<a class="prev-btn sf-left sf-btn" href="#">PREVIOUS</a>'),
@@ -341,6 +341,10 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
                     //elementivalues.push(submitedvalue);  
         
     }        
+    function N(num, places) { 
+      return +(Math.round(num + "e+" + places)  + "e-" + places);
+                       
+                            }
             
             
             function domaintotal(val, ele, mark, domain) {
@@ -348,7 +352,7 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
                 //add the value together    
                 var submitedvalue = val.value;
                 var elementname = ele;
-                var marks = mark;
+                var marks = N(mark,4);
                 var domainid = domain;
 
                 //alert(submitedvalue+" "+ele+" "+mark+" "+domain);
@@ -394,7 +398,7 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
                     //nb Dont update the totals if the selected value is a No..
                     if (submitedvalue === 'Yes') {
                         domainsum(markstosent, domainid);
-                        totalsum(markstosent);
+                        //totalsum(markstosent);
                     }
 
 
@@ -414,7 +418,7 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
                         elementivalues[pos] = submitedvalue;
                         //expect a change in here
                         domainsum(markstosent, domainid);
-                        totalsum(markstosent);
+                        //totalsum(markstosent);
                     }
 
                 }
@@ -433,7 +437,7 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
                 //add the value together    
                 var submitedvalue = val;
                 var elementname = ele;
-                var marks = mark;
+               var marks = N(mark,4);
                 var domainid =domain;
 
                 //alert(submitedvalue+" "+ele+" "+mark+" "+domain);
@@ -479,7 +483,7 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
                     //nb Dont update the totals if the selected value is a No..
                     if (submitedvalue === 'Yes') {
                         domainsum(markstosent, domainid);
-                        totalsum(markstosent);
+                       // totalsum(markstosent);
                     }
 
 
@@ -499,7 +503,7 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
                         elementivalues[pos] = submitedvalue;
                         //expect a change in here
                         domainsum(markstosent, domainid);
-                        totalsum(markstosent);
+                        //totalsum(markstosent);
                     }
 
                 }
@@ -515,6 +519,7 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
 //=====================================================================================
 
             function domainsum(marks, doma) {
+                
                 var newvalue = marks;
                 var curvalue = document.getElementById("domaininput" + doma).value;
                 if (curvalue === '') {
@@ -522,30 +527,61 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
                     curvalue = 0;
 
                 }
-                var ttl = parseInt(newvalue) + parseInt(curvalue);
+                //alert(newvalue+" "+curvalue)
+                var ttl = parseFloat(newvalue) + parseFloat(curvalue);
+               // alert(newvalue+" "+curvalue+" = "+ttl);
                 //set the input text value and the display purpose variable too.                
-                document.getElementById("domaininput" + doma).value = ttl;
-                document.getElementById("domain" + doma).innerHTML = ttl + "%";
-
+                document.getElementById("domaininput" + doma).value = N(ttl,4);
+                
+                
+                var percttl=ttl*100;
+                percttl=N(percttl,0);
+                document.getElementById("domain" + doma).innerHTML = percttl + "%";
+                    totalsum();
 
                                            }
 
 
 
-            function totalsum(marks) {
-                var newvalue = marks;
-                var curvalue = document.getElementById("totalsum").value;
-                if (curvalue === '') {
-
-                    curvalue = 0;
-
-                }
-                var ttl = parseInt(newvalue) + parseInt(curvalue);
-                document.getElementById("totalsum").value = ttl;
-                document.getElementById("agg_percentage").innerHTML = ttl + "%";
-
-            }
-
+//            function totalsum(marks) {
+//                var newvalue = marks;
+//                var curvalue = document.getElementById("totalsum").value;
+//                if (curvalue === '') {
+//
+//                    curvalue = 0;
+//
+//                }
+//                var ttl = parseFloat(newvalue) + parseFloat(curvalue);
+//                  document.getElementById("totalsum").value = ttl;
+//                var perct=ttl*100;
+//                perct=N(perct,0);
+//                perct=perct/12;
+//              perct=N(perct,0)
+//                document.getElementById("agg_percentage").innerHTML = perct + "%";
+//
+//            }
+function totalsum(){
+    var ttl=0;
+    for (d=1;d<=12;d++){
+      var nv=document.getElementById("domaininput" + d).value.trim();
+      
+     if(nv!==""){
+         ttl=parseFloat(ttl)+parseFloat(nv);
+           }   
+       
+    }
+     //now devide by 12
+        ttl=ttl/12;
+        ttl=ttl*100;
+        
+       
+  document.getElementById("totalsum").value = ttl;
+  //round off to one decimal place
+  ttl=N(ttl,1);
+  
+  document.getElementById("agg_percentage").innerHTML =ttl + "%";
+    
+}
 
 function disableurl(ids,val,domain){
  
@@ -961,7 +997,20 @@ year=fulldates[0];
         
         
     }
-            
+        
+    
+$(document).keyup(function(event){
+
+if((event.which== 13) && ($(event.target)[0]!=$("textarea")[0])) {
+console.log("dont submit");
+    }
+    else{
+    console.log("submit");
+    }
+
+});
+    
+    
         </script>
 
 

@@ -8,6 +8,8 @@ package ovc;
 import database.dbConn;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,6 +40,8 @@ public class loadformdata extends HttpServlet {
             String fperiod="";
            String datevalue="";
            String backgroundinforid="";
+           String strengthsvalue="";
+           String constraintsvalue="";
            //this will hold a string of element names and values for preloading purpose
           
             
@@ -57,6 +61,7 @@ public class loadformdata extends HttpServlet {
             String superviserstaff = "<option value=''>Select Staff Name</option>";
             String otherteamstaff = "<option value=''>Select Staff Name</option>";
             String domainvalue = "";
+            double domainval=0;
             String domaintableid = "";
             String totalsum="";
             dbConn conn = new dbConn();
@@ -66,6 +71,12 @@ public class loadformdata extends HttpServlet {
             while(conn.rs_6.next()){
              
                 backgroundinforid=conn.rs_6.getString("backgroundid");
+                if(conn.rs_6.getString("strengths")!=null){
+                strengthsvalue=conn.rs_6.getString("strengths");
+                }
+                 if(conn.rs_6.getString("constraints")!=null){
+                constraintsvalue=conn.rs_6.getString("constraints");
+                   }
                 
     //total sum
                 
@@ -255,6 +266,7 @@ public class loadformdata extends HttpServlet {
             String legendheader="";
             String questionvalue=""; 
             String questiontableid=""; 
+            String commentvalue="";
             while (conn.rs.next()) {
             //create a new page
                   String functionname="";
@@ -265,6 +277,9 @@ public class loadformdata extends HttpServlet {
                   while(conn.rs_6.next()){
                   questionvalue=conn.rs_6.getString("answer");
                   questiontableid=conn.rs_6.getString("marks_id");
+                  if(conn.rs_6.getString("comment")!=null){
+                  commentvalue=conn.rs_6.getString("comment");
+                  }
                   
                   }
                     
@@ -279,18 +294,19 @@ public class loadformdata extends HttpServlet {
                     //dont create a new page/fieldset
                     createnewpage = false;
                     //add the form elements in here
-                    middletable += "<tr><td><b>" + conn.rs.getString("sn") + "</b></td><td style='width:500px;'>" + conn.rs.getString("question") + "</td>";
+                    middletable += "<tr><td><b>" + conn.rs.getString("sn") + "</b></td><td style='width:500px;'> <h4 style='color:black;'> <b>" + conn.rs.getString("question") +"</b>.</h4> <font color='red'><h4 >"+conn.rs.getString("comment")+"</h4></font> </td>";
                     String elemname = "element_" + conn.rs.getString("questionid") + "#" + conn.rs.getString("response_type");
                     String marks=conn.rs.getString("marks");
                     
-                  
+                  String totalperdomain=conn.rs.getString("total");
+                    float dcmlmark=(float)conn.rs.getInt("marks")/conn.rs.getInt("total");
                  
                    
-                    middletable += "<td style='width:100px;'>"+elementcreator(questionvalue,questiontableid,functionname,elemname,marks,initdomain) + "</td>"
+                    middletable += "<td style='width:100px;'>"+elementcreator(questionvalue,questiontableid,functionname,elemname,""+dcmlmark,initdomain) + "</td>"
                            
-                            + "<td style='width:500px;'>" + conn.rs.getString("comment") + "</td>"
-                            
-                            + "</tr>";
+                            + "<td style='width:500px;'> <textarea cols='25' rows='2'  class='form-control' name=\"comment"+conn.rs.getString("questionid") + "\" id=\"comment"+ conn.rs.getString("questionid") + "\"  >"+commentvalue+"</textarea>" 
+                        + "</td>"
+                        + "</tr>";
 
                 } else {
                     //create a new page
@@ -305,7 +321,7 @@ public class loadformdata extends HttpServlet {
             
                         
          domaintable="<fieldset> "
-         + "<legend>"+legendheader+" <span style='padding:2px;color:red;font-size:25px;' id='domain"+initdomain+"'>"+domainvalue+"%</span></legend><input type='hidden' name='domaininput"+initdomain+"' value='"+domainvalue+"' id='domaininput"+initdomain+"'/><input type='hidden' name='domaintableid"+initdomain+"' value='"+domaintableid+"' id='domaintableid"+initdomain+"'/>  <table border='1' style='width:1030px;margin:6px;margin-right:2px;'><tr><th colspan='4'><b>Domain: "+legendheader+"</b></th></tr>"
+         + "<legend>"+legendheader+" <span style='padding:2px;color:red;font-size:25px;' id='domain"+initdomain+"'>"+domainval+"%</span></legend><input type='hidden' name='domaininput"+initdomain+"' value='"+domainvalue+"' id='domaininput"+initdomain+"'/><input type='hidden' name='domaintableid"+initdomain+"' value='"+domaintableid+"' id='domaintableid"+initdomain+"'/>  <table border='1' style='width:1030px;margin:6px;margin-right:2px;'><tr><th colspan='4'><b>Domain: "+legendheader+"</b></th></tr>"
                + ""+tableheader+middletable+"</table></fieldset>";
                  formedform+=domaintable;
                  //reset the middle table
@@ -324,21 +340,37 @@ public class loadformdata extends HttpServlet {
                     while(conn.rs_6.next()){
                     
                     domainvalue=conn.rs_6.getString("value");
+                    
+                     domainval=Float.parseFloat(domainvalue);
+                 domainval=domainval*100;
+                 BigDecimal bd=new BigDecimal(domainval).setScale(0,RoundingMode.HALF_EVEN);
+                    //domainval=bd.doubleValue();
+                    domainval=Math.round(domainval);
                     domaintableid=conn.rs_6.getString("tableid");
                     }
                 
-                middletable += "<tr><td><b>" + conn.rs.getString("sn") + "</b></td><td>" + conn.rs.getString("question") + "</td>";
+                    
+                middletable += "<tr><td><b>" + conn.rs.getString("sn") + "</b></td><td> <h4 style='color:black;'> <b>" + conn.rs.getString("question") +"</b>.</h4> <font color='red'><h4 >"+conn.rs.getString("comment")+"</h4></font> </td>";
                 String elemname = "element_" + conn.rs.getString("questionid") + "#" + conn.rs.getString("response_type");
                 String marks=conn.rs.getString("marks");
-                   
-                middletable +="<td style='width:100px;'>"+elementcreator(questionvalue,questiontableid,functionname,elemname,marks,initdomain) + "</td>"
-                            + "<td style='width:500px;'>" + conn.rs.getString("comment") + "</td>"
+                 String totalperdomain=conn.rs.getString("total");
+                 float dcmlmark=(float)conn.rs.getInt("marks")/conn.rs.getInt("total"); 
+                 
+                middletable +="<td style='width:100px;'>"+elementcreator(questionvalue,questiontableid,functionname,elemname,""+dcmlmark,initdomain) + "</td>"
+                            + "<td style='width:500px;'> <textarea cols='25' rows='2'  class='form-control' name=\"comment" + conn.rs.getString("questionid") + "\" id=\"comment"+ conn.rs.getString("questionid") + "\"  >"+commentvalue+"</textarea>" 
+                            + "</td>"
                             + "</tr>";
                 
                 
                                                           }
                 count++;
             }//end of while loop
+           
+              String extraqstn="<tr><td colspan='4'><h3 style='text-align:center;color:black;'>What has worked well in the areas observed</h3></td></tr>";
+             extraqstn+="<tr><td colspan='4'><textarea cols='25' rows='2'  class='form-control' name='strengths' id='strengths'  >"+strengthsvalue+"</textarea></td></tr>";
+            extraqstn+="<tr><td colspan='4'><h3 style='text-align:center;color:black;'>Critical Constraints affecting quality programming and data management</h3></td></tr>";
+            extraqstn+="<tr><td colspan='4'><textarea cols='25' rows='2'  class='form-control' name='constraints' id='constraints'  >"+constraintsvalue+"</textarea></td></tr>";
+            
             
             domaintable="<fieldset> <legend>"+legendheader+"  <span style='color:red;font-size:25px;' id='domain"+initdomain+"'>"+domainvalue+"%</span> </legend>"
                     + "<input type='hidden' value='"+domainvalue+"' name='domaininput"+initdomain+"' id='domaininput"+initdomain+"'> "
@@ -347,7 +379,7 @@ public class loadformdata extends HttpServlet {
                     + "<input type='hidden' name='allelementsvalue' value='"+allelementsvalues+"' id='allelementsvalue'/>"
                     + "<table border='1' style='width:1030px;margin:6px;margin-right:2px;'>"
                     + "<tr><th colspan='4'><b>Domain: "+legendheader+"</b></th></tr>"
-            + ""+tableheader+middletable+"</table></fieldset>";
+            + ""+tableheader+middletable+extraqstn+"</table></fieldset>";
                  formedform+=domaintable;
                  //reset the middle table
                  

@@ -77,7 +77,10 @@ public class updatedata extends HttpServlet {
          totalsum=request.getParameter("totalsum");
          backgroundid=request.getParameter("backgroundid");
          String fulldates[]=ass_date.split("-");
-         
+         String constraint="";
+         String strength="";
+         strength=request.getParameter("strengths");
+         constraint=request.getParameter("constraints");
          //fulldates[0]=Year
          //fulldates[1]=Month
          //fulldates[2]=date
@@ -133,7 +136,7 @@ else{quarters="0";}
                     Date mydate = new Date();
                     mdate = formatter.format(mydate); 
              
-         String bacgroundinfor="update backgroundinfor set cbo=?,site=?,staff_present=?,supervisor=?,ass_date=?,other_team_members=?,year=?,period=?,ass_type=?,totalsum=?,timestamp=? where backgroundid='"+backgroundid+"' ";
+         String bacgroundinfor="update backgroundinfor set cbo=?,site=?,staff_present=?,supervisor=?,ass_date=?,other_team_members=?,year=?,period=?,ass_type=?,totalsum=?,timestamp=?,strengths=?,constraints=? where backgroundid='"+backgroundid+"' ";
              
          conn.pst2=conn.conne.prepareStatement(bacgroundinfor);
           
@@ -148,6 +151,8 @@ else{quarters="0";}
           conn.pst2.setString(9,asses_type); 
           conn.pst2.setString(10,totalsum); 
           conn.pst2.setString(11,mdate); 
+          conn.pst2.setString(12,strength); 
+          conn.pst2.setString(13,constraint); 
           conn.pst2.executeUpdate(); 
          
          }
@@ -165,7 +170,7 @@ else{quarters="0";}
          }
          
          //now save the values per domain
-         for(int c=1;c<maxdomain;c++){
+         for(int c=1;c<=maxdomain;c++){
          
              if(request.getParameter("domaininput"+c)!=null){
              
@@ -205,7 +210,7 @@ else{quarters="0";}
          
          int totalelements=Integer.parseInt(no_of_elements);
          
-        for(int b=1;b<totalelements;b++) 
+        for(int b=1;b<=totalelements;b++) 
         {
         
        
@@ -221,10 +226,11 @@ else{quarters="0";}
             
             
          String val=request.getParameter("element_"+b);
+         String comment=request.getParameter("comment"+b);
          String marktableid=request.getParameter("qidelement_"+b);
          String element="element_"+b;
          String questionid=""+b;
-        String insert="update marks set answer=?,period=?,userid=?,date=?,year=?,month=?,timestamp=?,site_id=? where marks_id='"+marktableid+"'";
+        String insert="update marks set answer=?,period=?,userid=?,date=?,year=?,month=?,timestamp=?,site_id=? ,comment=? where marks_id='"+marktableid+"'";
  
          conn.pst2=conn.conne.prepareStatement(insert);
         
@@ -237,10 +243,10 @@ else{quarters="0";}
              conn.pst2.setString(6,month);
              conn.pst2.setString(7,mdate);
              conn.pst2.setString(8,site);
-            
+             conn.pst2.setString(9,comment);          
          
              conn.pst2.executeUpdate();
-             
+            System.out.println("^^^^^^^^^^^^^^^^^"+comment);
         }
         else
         {

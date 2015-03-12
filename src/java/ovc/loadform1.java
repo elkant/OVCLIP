@@ -156,19 +156,21 @@ public class loadform1 extends HttpServlet {
                     //dont create a new page/fieldset
                     createnewpage = false;
                     //add the form elements in here
-                    middletable += "<tr><td><b>" + conn.rs.getString("sn") + "</b></td><td style='width:500px;'>" + conn.rs.getString("question") + "</td>";
+                    middletable += "<tr><td><b>" + conn.rs.getString("sn") + "</b></td><td style='width:500px;'><h4 style='color:black;'> <b>" + conn.rs.getString("question") +"</b>.</h4> <br/> <font color='red'><h4 >"+conn.rs.getString("comment")+"</h4></font> </td>";
                     String elemname = "element_" + conn.rs.getString("questionid") + "#" + conn.rs.getString("response_type");
                     String marks=conn.rs.getString("marks");
-                    
+                    String totalperdomain=conn.rs.getString("total");
+                    float dcmlmark=(float)conn.rs.getInt("marks")/conn.rs.getInt("total");
                   
-                    
+                     //System.out.println(conn.rs.getInt("marks")+"/"+conn.rs.getInt("total")+" = "+dcmlmark);      
+                
                   
                    
-                    middletable += "<td style='width:100px;'>"+elementcreator(functionname,elemname,marks,initdomain) + "</td>"
+                    middletable += "<td style='width:100px;'>"+elementcreator(functionname,elemname,""+dcmlmark,initdomain) + "</td>"
                            
-                            + "<td style='width:500px;'>" + conn.rs.getString("comment") + "</td>"
-                            
-                            + "</tr>";
+                            + "<td style='width:500px;'> <textarea cols='25' rows='2'  class='form-control' name=\"comment" + conn.rs.getString("questionid") + "\" id=\"comment"+ conn.rs.getString("questionid") + "\"  ></textarea>" 
+                        + "</td>"
+                        + "</tr>";
 
                 } else {
                     //create a new page
@@ -195,21 +197,31 @@ public class loadform1 extends HttpServlet {
                 if(conn.rs.getString("quest_no").equalsIgnoreCase("Q1")){
                 legendheader=conn.rs.getString("domain_name");
                 initdomain=conn.rs.getString("domain_id");
-                middletable += "<tr><td><b>" + conn.rs.getString("sn") + "</b></td><td>" + conn.rs.getString("question") + "</td>";
+                middletable += "<tr><td><b>" + conn.rs.getString("sn") + "</b></td><td><h4 style='color:black;'>  <b>" + conn.rs.getString("question") +"</b></h4><font color='red'>.<h4> "+ conn.rs.getString("comment")+"</h4></font></td>";
                 String elemname = "element_" + conn.rs.getString("questionid") + "#" + conn.rs.getString("response_type");
                 String marks=conn.rs.getString("marks");
+                 String totalperdomain=conn.rs.getString("total");
+                 float dcmlmark=(float)conn.rs.getInt("marks")/conn.rs.getInt("total");
+                    System.out.println(conn.rs.getInt("marks")+"/"+conn.rs.getInt("total")+" = "+dcmlmark);      
                    
-                middletable +="<td style='width:100px;'>"+elementcreator(functionname,elemname,marks,initdomain) + "</td>"
-                            + "<td style='width:500px;'>" + conn.rs.getString("comment") + "</td>"
-                            + "</tr>";
+                middletable +="<td style='width:100px;'>"+elementcreator(functionname,elemname,""+dcmlmark,initdomain) + "</td>"
+                             + "<td style='width:500px;'> <textarea cols='25' rows='2'  class='form-control' name=\"comment" + conn.rs.getString("questionid") + "\" id=\"comment"+ conn.rs.getString("questionid") + "\"  ></textarea>" 
+                        + "</td>"
+                        + "</tr>";
                 
                 
                                                           }
                 count++;
             }//end of while loop
+            //create the last extra questions
+            
+            String extraqstn="<tr><td colspan='4'><h3 style='text-align:center;color:black;'>What has worked well in the areas observed</h3></th></tr>";
+             extraqstn+="<tr><td colspan='4'><textarea cols='25' rows='2'  class='form-control' name='strengths' id='strengths'  ></textarea></td></tr>";
+            extraqstn+="<tr><th colspan='4'><h3 style='text-align:center;color:black;'>Critical Constraints affecting quality programming and data management</h3></th></tr>";
+            extraqstn+="<tr><td colspan='4'><textarea cols='25' rows='2'  class='form-control' name='constraints' id='constraints'  ></textarea></td></tr>";
             
             domaintable="<fieldset> <legend>"+legendheader+"  <span style='color:red;font-size:25px;' id='domain"+initdomain+"'></span> </legend><input type='hidden' name='domaininput"+initdomain+"' id='domaininput"+initdomain+"'> <table border='1' style='width:1030px;margin:6px;margin-right:2px;'><tr><th colspan='4'><b>Domain: "+legendheader+"</b></th></tr>"
-            + ""+tableheader+middletable+"</table></fieldset>";
+            + ""+tableheader+middletable+extraqstn+"</table></fieldset>";
                  formedform+=domaintable;
                  //reset the middle table
                  

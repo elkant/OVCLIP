@@ -43,6 +43,10 @@ public class savedata extends HttpServlet {
          String ass_date="";   
          String [] teammembers=null;  
          String no_of_elements="0";   
+         String constraint="";
+         String strength="";
+         strength=request.getParameter("strengths");
+         constraint=request.getParameter("constraints");
          //initialize objects of classes
          String totalsum="";
          gen g=new gen();
@@ -134,8 +138,8 @@ else{quarters="0";}
          
          if(1==1){
          
-         String bacgroundinfor="insert into backgroundinfor (backgroundid,cbo,site,staff_present,supervisor,ass_date,other_team_members,marks_table_id,year,period,ass_type,totalsum) values "
-                 + "(?,?,?,?,?,?,?,?,?,?,?,?)";
+         String bacgroundinfor="insert into backgroundinfor (backgroundid,cbo,site,staff_present,supervisor,ass_date,other_team_members,marks_table_id,year,period,ass_type,totalsum,strengths,constraints) values "
+                 + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
          conn.pst2=conn.conne.prepareStatement(bacgroundinfor);
           conn.pst2.setString(1,g.uniqueid().trim()); 
           conn.pst2.setString(2,lip); 
@@ -149,6 +153,8 @@ else{quarters="0";}
           conn.pst2.setString(10,quarters); 
           conn.pst2.setString(11,asses_type); 
           conn.pst2.setString(12,totalsum); 
+          conn.pst2.setString(13,strength); 
+          conn.pst2.setString(14,constraint); 
           conn.pst2.executeUpdate(); 
          
          }
@@ -171,6 +177,10 @@ else{quarters="0";}
              if(request.getParameter("domaininput"+c)!=null){
              
                  String domainvalue=request.getParameter("domaininput"+c);
+                 
+                 
+                 
+                 
                  String domainid=""+c;
                         Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     String mdate;
@@ -206,7 +216,7 @@ else{quarters="0";}
          
          int totalelements=Integer.parseInt(no_of_elements);
          
-        for(int b=1;b<totalelements;b++) 
+        for(int b=1;b<=totalelements;b++) 
         {
         
        
@@ -222,11 +232,12 @@ else{quarters="0";}
             
             
          String val=request.getParameter("element_"+b);
-         
+           String comment=request.getParameter("comment"+b);
          String element="element_"+b;
          String questionid=""+b;
-        String insert="insert into marks (marks_id,quest_id,answer,period,userid,date,year,month,syncdate,site_id,marks_table_id) value "
-                + "(?,?,?,?,?,?,?,?,?,?,?)"; 
+       
+        String insert="insert into marks (marks_id,quest_id,answer,period,userid,date,year,month,syncdate,site_id,marks_table_id,comment) value "
+                + "(?,?,?,?,?,?,?,?,?,?,?,?)"; 
          conn.pst2=conn.conne.prepareStatement(insert);
              conn.pst2.setString(1,g.uniqueid().trim());
              conn.pst2.setString(2,questionid);
@@ -239,7 +250,7 @@ else{quarters="0";}
              conn.pst2.setString(9,mdate);
              conn.pst2.setString(10,site);
              conn.pst2.setString(11,markstableid);
-         
+             conn.pst2.setString(12,comment);         
              conn.pst2.executeUpdate();
              
         }
