@@ -72,7 +72,7 @@ public class savedata extends HttpServlet {
          asses_type=request.getParameter("asses_type");
          lip=request.getParameter("lip");
          site=request.getParameter("site");
-         staffpresent=request.getParameter("staffpresent");
+         staffpresent=request.getParameter("staffpresent").toUpperCase();
          teamleader=request.getParameter("teamleader");
          teammembers=request.getParameterValues("teammembers");
          ass_date=request.getParameter("ass_date");

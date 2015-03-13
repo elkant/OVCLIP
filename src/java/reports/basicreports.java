@@ -10,6 +10,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -264,14 +265,17 @@ public class basicreports extends HttpServlet {
             //create header two
             HSSFRow header2=shet2.createRow(1);
              header2.setHeightInPoints(28);
-            HSSFCell cel2=header2.createCell(0);
-            cel2.setCellValue("OVC LIP SUPPORT SUPERVISION DASH BOARD");
-            cel2.setCellStyle(style);
+             HSSFCell cel2=null;
              for(int b=1;b<=5;b++){
              cel2=header.createCell(b);
             cel2.setCellValue("");
             cel2.setCellStyle(style);
             }
+             
+             cel2=header2.createCell(0);
+            cel2.setCellValue("OVC LIP SUPPORT SUPERVISION DASH BOARD");
+            cel2.setCellStyle(style);
+             
             
             shet2.addMergedRegion(new CellRangeAddress(1,1,0,5));
             
@@ -303,12 +307,18 @@ public class basicreports extends HttpServlet {
             String supervisor="";
             String dateofvisit="";
             
+            String strengths="";
+            String constraints="";
+            
             String loadbasicdetails="select * from backgroundinfor join staff on backgroundinfor.supervisor=staff.staff_id where "+mywhere+" ";
             System.out.println(loadbasicdetails);
             conn.rs=conn.st.executeQuery(loadbasicdetails);
             while(conn.rs.next()){
             supervisor=conn.rs.getString("fname")+" "+conn.rs.getString("mname");
             dateofvisit=conn.rs.getString("ass_date");
+            strengths=conn.rs.getString("strengths");
+            constraints=conn.rs.getString("constraints");
+            
             }
             
             
@@ -403,17 +413,153 @@ public class basicreports extends HttpServlet {
              rwcount++;
                 }
                
-                
+             
+               String valu[]={conn.rs.getString("domain_name"),"","","","",""}; 
                 
               rwx=shet2.createRow(rwcount);
-             for(int t=0;t<1;t++){
+             for(int t=0;t<valu.length;t++){
             celx=rwx.createCell(t);
-            celx.setCellValue(""+conn.rs.getString("domain_name"));
+            celx.setCellValue(""+valu[t]);
             celx.setCellStyle(dnamestyle);   
                                  }
+              shet2.addMergedRegion(new CellRangeAddress(rwcount,rwcount,4,5));
+             //get the value of percentange achievement per domian
+             //multiply by 100
+             //round off
+             float domainvalue=conn.rs.getFloat("domainvalue");
+             
+                 domainvalue=domainvalue*100;
+                 //BigDecimal bd=new BigDecimal(domainvalue).setScale(0,RoundingMode.HALF_EVEN);
+                    //domainval=bd.doubleValue();
+             domainvalue=Math.round(domainvalue);
+             
+             //determine the cell to print data on
+             if(domainvalue>=75){
+             
+             celx=rwx.createCell(1);
+            celx.setCellValue(""+domainvalue+"%");
+            celx.setCellStyle(lg);   
+             
+             }
+             else if(domainvalue>=60 && domainvalue<75){
+              celx=rwx.createCell(2);
+            celx.setCellValue(""+domainvalue+"%");
+            celx.setCellStyle(Y);  
+             
+             }
+             else if(domainvalue<60){
+             
+              celx=rwx.createCell(3);
+            celx.setCellValue(""+domainvalue+"%");
+            celx.setCellStyle(R);  
+             }
+             
              
              rwcount++;   
                                  } 
+            
+            ///=========================end of while loop 
+            
+            
+            
+            
+            
+            
+            
+           //====================STRENGTHS=========================== 
+          HSSFRow secb=shet2.createRow(rwcount);
+          
+           //for purpose of merging
+            for(int b=1;b<=5;b++){
+             cel1=secb.createCell(b);
+            cel1.setCellValue("");
+            cel1.setCellStyle(style);
+                                 }
+          
+            HSSFCell t=secb.createCell(0);
+            t.setCellValue("What has worked well and key areas of strengths observed");
+            t.setCellStyle(style);    
+              shet2.addMergedRegion(new CellRangeAddress(rwcount,rwcount,0,5)); 
+           
+              rwcount++;
+             
+            HSSFRow str=shet2.createRow(rwcount);
+            
+               for(int b=1;b<=5;b++){
+             cel1=str.createCell(b);
+            cel1.setCellValue("");
+            cel1.setCellStyle(innerdata_style2);
+                                 }
+            
+            HSSFCell t1=str.createCell(0);
+            t1.setCellValue(""+strengths);
+            t1.setCellStyle(innerdata_style2);    
+            shet2.addMergedRegion(new CellRangeAddress(rwcount,rwcount,0,5));  
+            //for purpose of merging
+         
+               str.setHeightInPoints(50); 
+             rwcount++;
+             
+             
+             
+             
+             
+             
+             
+            //=======Contraints
+             HSSFRow sec3=shet2.createRow(rwcount);
+             
+            //for purpose of merging
+            for(int b=1;b<=5;b++){
+             cel1=sec3.createCell(b);
+            cel1.setCellValue("");
+            cel1.setCellStyle(style);
+                                 }
+             
+            HSSFCell t2=sec3.createCell(0);
+            t2.setCellValue("Critical consraints affecting quality programming and data management");
+            t2.setCellStyle(style);    
+              shet2.addMergedRegion(new CellRangeAddress(rwcount,rwcount,0,5)); 
+            
+              rwcount++;
+             
+            HSSFRow str2=shet2.createRow(rwcount);
+            
+            for(int b=1;b<=5;b++){
+             cel1=str.createCell(b);
+            cel1.setCellValue("");
+            cel1.setCellStyle(innerdata_style2);
+                                 }
+            
+            
+            HSSFCell t4=str2.createCell(0);
+            t4.setCellValue(""+constraints);
+            t4.setCellStyle(innerdata_style2);    
+            shet2.addMergedRegion(new CellRangeAddress(rwcount,rwcount,0,5));   
+            str2.setHeightInPoints(50); 
+              
+            rwcount++;
+            //a line of codes
+            String codes[]={"LG - Meets Expectations (>=75%); "," Y- Needs Improvement (60%- 74%);","R - Needs Urgent Attention (<=59%);"};
+            HSSFRow rwl=shet2.createRow(rwcount);
+            HSSFCell ce=rwl.createCell(0);
+            ce.setCellValue("CODES");
+            ce.setCellStyle(innerdata_style2);
+             for(int b=0;b<codes.length;b++){
+              ce=rwl.createCell(b+1);
+            ce.setCellValue(""+codes[b]);
+            if(b==1){
+            ce.setCellStyle(lg);
+            }
+            else if(b==2){
+                
+            ce.setCellStyle(Y);
+            }
+             else {
+             ce.setCellStyle(R);
+                   }
+                                 }
+            
             //write it as an excel attachment
             sitename=sitename.replace(" ", "_");
             sitename=sitename.replace("'", "");

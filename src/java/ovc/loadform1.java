@@ -96,9 +96,9 @@ public class loadform1 extends HttpServlet {
                     + ""
                     + "<div class=\"form-group\">\n"
                     + "<label for=\"exampleInputPassword6\">LIP/CBO Staff Present</label>\n"
-                    + "<select class=\"form-control\" name=\"staffpresent\" id='staffpresent' data-parsley-group=\"block0\" required>\n"
-                    + "" + staff
-                    + "</select> "
+                    + "<Textarea rows='2' cols='25' class=\"form-control\" name=\"staffpresent\" id='staffpresent' data-parsley-group=\"block0\" required>\n"
+                    + "" 
+                    + "</TextArea> "
                     + "</div>"
                     + ""
                     + "</div>"
@@ -306,9 +306,10 @@ public class loadform1 extends HttpServlet {
 
                                                  }
            // System.out.println(" ~~~~~~"+elemarr[0]);
-            createdelem = "<div class=\"form-group\">"
-                    + "<select onchange=\"domaintotal(this,'"+elemarr[0]+"','"+marks+"','"+domainid+"');"+functionname+"\"  class=\"form-control\" name='" + elemarr[0] + "' id='" + elemarr[0] + "' data-parsley-group=\"block0\" >\n"
-                    + "" + options
+            int blockid=Integer.parseInt(domainid);
+            createdelem = " <div class=\"form-group\">"
+                    + "<select onchange=\"domaintotal(this,'"+elemarr[0]+"','"+marks+"','"+domainid+"');"+functionname+"\" class=\"form-control\" name='" + elemarr[0] + "' id='" + elemarr[0] + "'   >\n"
+                    + "" + options  //data-parsley-group=\"block"+domainid+"\" required
                     + "</select>"
                     + "</div>";
 

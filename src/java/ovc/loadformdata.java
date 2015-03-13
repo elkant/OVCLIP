@@ -57,7 +57,7 @@ public class loadformdata extends HttpServlet {
             String asses = "<option value=''>Select Assesment</option>";
             String lip = "<option value=''>Select LIP/CBO</option>";
             String staff = "<option value=''>Select Staff Name</option>";
-            String cbostaff = "<option value=''>Select Staff Name</option>";
+            String cbostaff = "";
             String superviserstaff = "<option value=''>Select Staff Name</option>";
             String otherteamstaff = "<option value=''>Select Staff Name</option>";
             String domainvalue = "";
@@ -97,19 +97,13 @@ public class loadformdata extends HttpServlet {
             
             
             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~staff~~~~~~~~~~~~~~~
-            
+             //---------cbo staff
+                cbostaff=conn.rs_6.getString("staff_present");
             
              String getstaff = "select * from staff";
             conn.rs0 = conn.st0.executeQuery(getstaff);
             while (conn.rs0.next()) {
-                //---------cbo staff
-                if(conn.rs0.getString(1).equals(conn.rs_6.getString("staff_present"))){
-                cbostaff += "<option selected value='" + conn.rs0.getString(1) + "'>" + conn.rs0.getString(2) + " " + conn.rs0.getString(3) + " (" + conn.rs0.getString(4) + ") " + "</option>";
-                }
-                else {
-                cbostaff += "<option value='" + conn.rs0.getString(1) + "'>" + conn.rs0.getString(2) + " " + conn.rs0.getString(3) + " (" + conn.rs0.getString(4) + ") " + "</option>";
-                
-                }
+               
                //------------Supervisor
                 if(conn.rs0.getString(1).equals(conn.rs_6.getString("supervisor"))){
                 superviserstaff += "<option selected value='" + conn.rs0.getString(1) + "'>" + conn.rs0.getString(2) + " " + conn.rs0.getString(3) + " (" + conn.rs0.getString(4) + ") " + "</option>";
@@ -220,9 +214,9 @@ public class loadformdata extends HttpServlet {
                     + ""
                     + "<div class=\"form-group\">\n"
                     + "<label for=\"exampleInputPassword6\">LIP/CBO Staff Present</label>\n"
-                    + "<select class=\"form-control\" name=\"staffpresent\" id='staffpresent' data-parsley-group=\"block0\" required>\n"
+                    + "<textarea cols='25' rows ='2' class=\"form-control\" name=\"staffpresent\" id='staffpresent' data-parsley-group=\"block0\" required>\n"
                     + "" + cbostaff
-                    + "</select> "
+                    + "</textarea> "
                     + "</div>"
                     + ""
                     + "</div>"
@@ -372,7 +366,7 @@ public class loadformdata extends HttpServlet {
             extraqstn+="<tr><td colspan='4'><textarea cols='25' rows='2'  class='form-control' name='constraints' id='constraints'  >"+constraintsvalue+"</textarea></td></tr>";
             
             
-            domaintable="<fieldset> <legend>"+legendheader+"  <span style='color:red;font-size:25px;' id='domain"+initdomain+"'>"+domainvalue+"%</span> </legend>"
+            domaintable="<fieldset> <legend>"+legendheader+"  <span style='color:red;font-size:25px;' id='domain"+initdomain+"'>"+domainval+"%</span> </legend>"
                     + "<input type='hidden' value='"+domainvalue+"' name='domaininput"+initdomain+"' id='domaininput"+initdomain+"'> "
                     + "<input type='hidden' name='domaintableid"+initdomain+"' value='"+domaintableid+"' id='domaintableid"+initdomain+"'/>"
                     + "<input type='hidden' name='allelements' value='"+allelements+"' id='allelements'/>"
@@ -448,8 +442,8 @@ public class loadformdata extends HttpServlet {
         //index 1 is type
         //index 2 is options => this should be split further using _ delimiter
         //for now we are dealing with input and select elements 
-        allelements+=elemarr[0]+"%";
-        allelementsvalues+=qvalue+"%";
+        allelements+=elemarr[0]+"~";
+        allelementsvalues+=qvalue+"~";
         
         if (elemarr[1].equalsIgnoreCase("input")) {
 
@@ -474,8 +468,8 @@ public class loadformdata extends HttpServlet {
                                                  }
            // System.out.println(" ~~~~~~"+elemarr[0]);
             createdelem = "<div class=\"form-group\">"
-                    + "<select onchange=\"domaintotal(this,'"+elemarr[0]+"','"+marks+"','"+domainid+"');"+functionname+"\"  class=\"form-control\" name='" + elemarr[0] + "' id='" + elemarr[0] + "' data-parsley-group=\"block0\" >\n"
-                    + "" + options
+                    + "<select onchange=\"domaintotal(this,'"+elemarr[0]+"','"+marks+"','"+domainid+"');"+functionname+"\"  class=\"form-control\" name='" + elemarr[0] + "' id='" + elemarr[0] + "'  >\n"
+                    + "" + options  //data-parsley-group=\"block"+domainid+"\"
                     + "</select><input type='hidden' value='"+qtableid+"' name='qid"+ elemarr[0]+"' id='qid"+ elemarr[0]+"'>"
                     + "</div>";
 

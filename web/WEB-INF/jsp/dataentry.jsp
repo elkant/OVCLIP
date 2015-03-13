@@ -127,7 +127,7 @@
                         <div class="col-md-12">
 
 
-                            <form id="wizard-example-5" action="">
+                            <form id="wizard-example-5" action="" data-parsley-validate>
                                 <fieldset>
                                     <legend id="ab"></legend>
                                     <div class="row">
@@ -164,7 +164,7 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
                     <div id="modal" class="popupContainer" style="display:none;width:500px;">
                         <header class="popupHeader">
                           
-                            <span class="header_title">Add Staff</span>
+                            <span class="header_title">Add APHIAplus Staff </span>
                             <span class="modal_close"><img src="<c:url value="/resources/images/close.png" />" width="24px"></i></span>
                         </header>
 
@@ -174,11 +174,11 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
                                     <table>
                                         <tr><td>First Name</td><td><input class="form-control" type="text" id="fname" name="fname"></td></td>
                                         <tr><td>Last Name</td><td><input class="form-control" type="text" id="mname" name="mname"></td></td>
-                                        <tr><td>Phone Number</td><td><input class="form-control" onkeypress=" return numbers(event);" type="text" id="phone" name="phone"></td></td>
-                                        <tr><td>Category</td><td><select onchange="togglesites();" class="form-control" name="position" id="position"><%=opts%></select></td></td>
+                                        <tr><td>Phone Number</td><td><input placeholder="optional" class="form-control" onkeypress=" return numbers(event);" type="text" id="phone" name="phone"></td></td>
+                                        <tr><td><span id="catlabel">Category</td><td><select onchange="togglesites();" class="form-control" name="position" id="position"><%=opts%></select></td></td>
                                       
-                                        <tr><td><span id="cbolabel">Cbo</span></td><td><select class="form-control" onchange="loadsites();"  name="staffcbo" id="staffcbo" ><%=cbolists%></select></td></td>
-                                        <tr><td><span id="sitelabel">Site</span></td><td><select class="form-control" name="sitecbo" id="sitecbo"></select></td></td>
+                                        <tr><td><span style="display:none;" id="cbolabel">Cbo</span></td><td><select style="display:none;" class="form-control" onchange="loadsites();"  name="staffcbo" id="staffcbo" ><%=cbolists%></select></td></td>
+                                        <tr><td><span style="display:none;" id="sitelabel">Site</span></td><td><select style="display:none;" class="form-control" name="sitecbo" id="sitecbo"></select></td></td>
                                         <tr><td>  <input type="reset" style="height:36px;width:100px;" value="reset fields"></td><td >
                                             
                                         <input type="text" value="Save" id="generate1" class ='generate1' onclick="savestaff();" readonly style=" cursor:pointer;margin-left: 50px; text-transform:uppercase ; height: 50px; width:140px;text-align:center ; color:white ;background:coral; border-style:ridge ;" />
@@ -230,12 +230,15 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
                         document.getElementById("wizard-example-5").innerHTML = data;
 
                       var rfr=  $("#wizard-example-5").stepFormWizard({
-                            height: 'auto',
-                            theme:'circle',
+                            height: '500px',
+                            theme:'sky',
                             nextBtn: $('<a class="next-btn sf-right sf-btn" href="#">NEXT</a>'),
                             prevBtn: $('<a class="prev-btn sf-left sf-btn" href="#">PREVIOUS</a>'),
                             finishBtn: $('<a class="finish-btn sf-right sf-btn" href="#">SAVE</a>'),
-                            onFinish: function (i, wizard) {
+            onNext: function(i, wizard) {
+            return $('form', wizard).parsley().validate('block' + i);
+                                        },                
+            onFinish: function (i, wizard) {
                                 if ($('form', wizard).parsley().validate() == true) {
                                     var form = $('form', wizard).serialize();
            //$.getJSON('savedata', form, function (data) {wizard.html(data.html);});
@@ -283,9 +286,6 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
                                 else {
                                     return false;
                                 }
-                            },
-                            onNext: function (i, wizard) {
-                                return $('form', wizard).parsley().validate('block' + i);
                             }
 
 
@@ -334,8 +334,8 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
     //create a function to push elements only after loading an update form
     function pushelements(allele,allsubmitedvalue){
         
-        elementi=allele.split("%");
-        elementivalues=allsubmitedvalue.split("%");
+        elementi=allele.split("~");
+        elementivalues=allsubmitedvalue.split("~");
         
       //elementi.push(ele);
                     //elementivalues.push(submitedvalue);  
@@ -386,7 +386,7 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
 
                 if (elementi.indexOf(ele) === -1) {
 
-
+           //alert(ele+"  just added now. It didnt exist");
 
                     // alert(elementi);
 
@@ -405,15 +405,20 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
 
                 }
                 else {
+                    
+                   //  alert(ele+"  existed. Its being edited");
+                    
                     //get the index of the element, then update the value that was there previously...  
                     var pos = elementi.indexOf(ele);
                     //if the current option/value and the previous one are differing, then do a subtraction
 
                     if (elementivalues[pos] === submitedvalue || (elementivalues[pos] === "" && submitedvalue === "No") || (elementivalues[pos] === "No" && submitedvalue === "")) {
                         //then dont do anything
-
+//alert("No change::: existing value "+elementivalues[pos]+" __ while __ "+submitedvalue);
                     }
                     else {
+                        
+                        //alert("There is change::: existing value "+elementivalues[pos]+" __ and new value is__ "+submitedvalue);
                         //replace with new value
                         elementivalues[pos] = submitedvalue;
                         //expect a change in here
@@ -469,11 +474,11 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
 
                 //    ;) I just hope the array will be fast while searching
 
-                if (elementi.indexOf(ele) === -1) {
+                if (elementi.indexOf(ele)=== -1) {
 
 
 
-                    // alert(elementi);
+                    
 
 
                     //alert(elementi.indexOf(ele));
@@ -490,6 +495,8 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
 
                 }
                 else {
+                    
+                      
                     //get the index of the element, then update the value that was there previously...  
                     var pos = elementi.indexOf(ele);
                     //if the current option/value and the previous one are differing, then do a subtraction
@@ -696,13 +703,13 @@ return true;
                   showalert("Last name");                    
                     
                                     }
-                  else if(phone===''){
-                      
-                  showerror(phone);  
-                  noerror(phone);
-                  showalert("Phone Number");                    
-                    
-                                    }
+//                  else if(phone===''){
+//                      
+//                  showerror(phone);  
+//                  noerror(phone);
+//                  showalert("Phone Number");                    
+//                    
+//                                    }
                 
 //                 else if(site===''){                      
 //                  showerror(site);  
@@ -789,7 +796,7 @@ return true;
                     dataType: 'html',
                     success: function (data) {
                         
-                        document.getElementById("staffpresent").innerHTML=data;
+                        //document.getElementById("staffpresent").innerHTML=data;
                         document.getElementById("teammembers").innerHTML=data;
                         document.getElementById("teamleader").innerHTML=data;
                      
@@ -878,11 +885,12 @@ year=fulldates[0];
                       var alle=document.getElementById("allelements").value;
                       var alleval=document.getElementById("allelementsvalue").value;
                       pushelements(alle,alleval);
+                      //alert(alle);
                       
                       
                        $("#wizard-example-5").stepFormWizard({
                             height: '500px',
-                            theme:'circle',
+                            theme:'sky',
                             nextBtn: $('<a class="next-btn sf-right sf-btn" href="#">NEXT</a>'),
                             prevBtn: $('<a class="prev-btn sf-left sf-btn" href="#">PREVIOUS</a>'),
                             finishBtn: $('<a class="finish-btn sf-right sf-btn" href="#">UPDATE</a>'),

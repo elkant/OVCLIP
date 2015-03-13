@@ -41,7 +41,8 @@ public class saveStaff extends HttpServlet {
             lname=request.getParameter("mname");
             phone=request.getParameter("phone");
             Category=request.getParameter("category");
-            
+            fname=fname.toUpperCase();
+            lname=lname.toUpperCase();
             //assuming that category 2 is for non-aphiaplus staff and one must have a site
             if(Category.equals("2")){
                 site=request.getParameter("site");

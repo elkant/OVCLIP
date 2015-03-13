@@ -165,7 +165,7 @@
                                       <select required class="form-control" name="reporttype"  onchange="changeAction();" id="reporttype">
                                             <option value="#">Select Report</option>
                                             <option value="basicreports">Basic Report</option>
-                                            <option value="webcharts.htm">Webcharts</option>
+                                            <option disabled value="webcharts.htm">Webcharts</option>
                                                     
                                         </select>
                                         </div>
