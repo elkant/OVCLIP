@@ -355,6 +355,16 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
                 var marks = N(mark,4);
                 var domainid = domain;
 
+//a special case for > , < and such comaprisons in javascript
+//if the selected value begins with a > or a <, then on our arrays that store the pushed elements , we will storte a yes, but in our database, we will save a >..,or <.. or >=..
+
+
+if(submitedvalue.indexOf(">")===0||submitedvalue.indexOf("<")===0){
+    
+  submitedvalue="Yes";  
+    
+}
+
                 //alert(submitedvalue+" "+ele+" "+mark+" "+domain);
                 //if value is a yes , then mark is +ve 1, 
                 //if value is a no, a mark is -ve 1
@@ -422,14 +432,14 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
                         //replace with new value
                         elementivalues[pos] = submitedvalue;
                         //expect a change in here
-                        domainsum(markstosent, domainid);
+                        domainsum(markstosent,domainid);
                         //totalsum(markstosent);
                     }
 
                 }
 
 
-
+              // alert(submitedvalue);
 
 
             }

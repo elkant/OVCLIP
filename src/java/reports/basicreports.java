@@ -88,7 +88,7 @@ public class basicreports extends HttpServlet {
             CellStyle style=wb.createCellStyle();
             style.setFont(font);
             style.setWrapText(true);
-            style.setFillForegroundColor(HSSFColor.ROYAL_BLUE.index);
+            style.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
             
             style.setAlignment(style.ALIGN_CENTER);
             style.setBorderBottom(HSSFCellStyle.BORDER_THIN);
@@ -109,7 +109,7 @@ public class basicreports extends HttpServlet {
             CellStyle style_header=wb.createCellStyle();
             style_header.setFont(font_header);
             style_header.setWrapText(true);
-            style_header.setFillForegroundColor(HSSFColor.LIGHT_BLUE.index);
+            style_header.setFillForegroundColor(HSSFColor.GREY_40_PERCENT.index);
             style_header.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
             style_header.setAlignment(style_header.ALIGN_CENTER);
             
@@ -152,6 +152,20 @@ public class basicreports extends HttpServlet {
 //            innerdata_style.setBorderRight(HSSFCellStyle.BORDER_THIN);
 //            innerdata_style.setBorderLeft(HSSFCellStyle.BORDER_THIN);
             innerdata_style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+            
+ 
+
+            CellStyle lastcellrighborder = wb.createCellStyle();
+            lastcellrighborder.setFont(datafont);
+            lastcellrighborder.setWrapText(true);
+            lastcellrighborder.setAlignment(lastcellrighborder.ALIGN_CENTER);
+            lastcellrighborder.setFillForegroundColor(HSSFColor.WHITE.index);
+            lastcellrighborder.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+//            lastcellrighborder.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+//            lastcellrighborder.setBorderTop(HSSFCellStyle.BORDER_THIN);
+            lastcellrighborder.setBorderRight(HSSFCellStyle.BORDER_THIN);
+//            lastcellrighborder.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+            lastcellrighborder.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);            
             
             
             
@@ -267,7 +281,7 @@ public class basicreports extends HttpServlet {
              header2.setHeightInPoints(28);
              HSSFCell cel2=null;
              for(int b=1;b<=5;b++){
-             cel2=header.createCell(b);
+             cel2=header2.createCell(b);
             cel2.setCellValue("");
             cel2.setCellStyle(style);
             }
@@ -290,6 +304,12 @@ public class basicreports extends HttpServlet {
             HSSFCell cel4=header3.createCell(1);
             cel4.setCellValue(""+cboname);
             cel4.setCellStyle(innerdata_style);
+            //blank cells for purpose of clear worksheet only
+            for(int x=2;x<=3;x++){
+            HSSFCell cel=header3.createCell(x);
+            cel.setCellValue("");
+            cel.setCellStyle(innerdata_style);
+            }
             
             HSSFCell cel5=header3.createCell(4);
             cel5.setCellValue("Site Visited:");
@@ -298,8 +318,20 @@ public class basicreports extends HttpServlet {
             
             HSSFCell cel6=header3.createCell(5);
             cel6.setCellValue(""+sitename);
-            cel6.setCellStyle(innerdata_style);
+            cel6.setCellStyle(lastcellrighborder);
             
+            //create a blank row whose last cell has a border
+            
+            HSSFRow blankrw=shet2.createRow(3);
+            for(int z=0;z<5;z++){
+            
+                HSSFCell cl=blankrw.createCell(z);
+                cl.setCellValue("");
+                cl.setCellStyle(innerdata_style);
+            }
+            HSSFCell cl=blankrw.createCell(5);
+                cl.setCellValue("");
+                cl.setCellStyle(lastcellrighborder);
             //==========DATE OF VISIT
             
             String mywhere="site='"+site+"' and period='"+period+"' and year='"+year+"' ";
@@ -334,6 +366,14 @@ public class basicreports extends HttpServlet {
             cell.setCellValue(""+dateofvisit);
             cell.setCellStyle(innerdata_style);
             
+            
+            //blank cells for purpose of clear worksheet only
+            for(int x=2;x<=3;x++){
+            HSSFCell ceel=header4.createCell(x);
+            ceel.setCellValue("");
+            ceel.setCellStyle(innerdata_style);
+            }
+            
             HSSFCell cell5=header4.createCell(4);
             cell5.setCellValue("Supervision Team Lead:");
             cell5.setCellStyle(innerdata_style2);
@@ -341,7 +381,21 @@ public class basicreports extends HttpServlet {
             
             HSSFCell cell6=header4.createCell(5);
             cell6.setCellValue(""+supervisor);
-            cell6.setCellStyle(innerdata_style);
+            cell6.setCellStyle(lastcellrighborder);
+            
+            
+            
+            //another blank row
+              HSSFRow blankrw2=shet2.createRow(5);
+            for(int z=0;z<5;z++){
+            
+                HSSFCell cl2=blankrw2.createCell(z);
+                cl2.setCellValue("");
+                cl2.setCellStyle(innerdata_style);
+            }
+            HSSFCell cl2=blankrw2.createCell(5);
+                cl2.setCellValue("");
+                cl2.setCellStyle(lastcellrighborder);
             
           //create a header
             
@@ -488,12 +542,12 @@ public class basicreports extends HttpServlet {
                for(int b=1;b<=5;b++){
              cel1=str.createCell(b);
             cel1.setCellValue("");
-            cel1.setCellStyle(innerdata_style2);
+            cel1.setCellStyle(dnamestyle);
                                  }
             
             HSSFCell t1=str.createCell(0);
             t1.setCellValue(""+strengths);
-            t1.setCellStyle(innerdata_style2);    
+            t1.setCellStyle(dnamestyle);    
             shet2.addMergedRegion(new CellRangeAddress(rwcount,rwcount,0,5));  
             //for purpose of merging
          
@@ -526,15 +580,15 @@ public class basicreports extends HttpServlet {
             HSSFRow str2=shet2.createRow(rwcount);
             
             for(int b=1;b<=5;b++){
-             cel1=str.createCell(b);
+             cel1=str2.createCell(b);
             cel1.setCellValue("");
-            cel1.setCellStyle(innerdata_style2);
+            cel1.setCellStyle(dnamestyle);
                                  }
             
             
             HSSFCell t4=str2.createCell(0);
             t4.setCellValue(""+constraints);
-            t4.setCellStyle(innerdata_style2);    
+            t4.setCellStyle(dnamestyle);    
             shet2.addMergedRegion(new CellRangeAddress(rwcount,rwcount,0,5));   
             str2.setHeightInPoints(50); 
               
@@ -544,7 +598,7 @@ public class basicreports extends HttpServlet {
             HSSFRow rwl=shet2.createRow(rwcount);
             HSSFCell ce=rwl.createCell(0);
             ce.setCellValue("CODES");
-            ce.setCellStyle(innerdata_style2);
+            ce.setCellStyle(dnamestyle);
              for(int b=0;b<codes.length;b++){
               ce=rwl.createCell(b+1);
             ce.setCellValue(""+codes[b]);
@@ -559,6 +613,22 @@ public class basicreports extends HttpServlet {
              ce.setCellStyle(R);
                    }
                                  }
+          ce=rwl.createCell(4);
+            ce.setCellValue("");   
+             ce.setCellStyle(dnamestyle); 
+            ce=rwl.createCell(5);
+            ce.setCellValue("");   
+             ce.setCellStyle(dnamestyle); 
+          shet2.addMergedRegion(new CellRangeAddress(rwcount,rwcount,4,5));   
+             
+             
+             
+             
+             
+             
+             
+             
+             
             
             //write it as an excel attachment
             sitename=sitename.replace(" ", "_");
