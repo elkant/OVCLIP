@@ -189,7 +189,7 @@ public class basicreports extends HttpServlet {
             lg.setFont(bolfont);
             lg.setWrapText(true);
             lg.setAlignment(lg.ALIGN_CENTER);
-            lg.setFillForegroundColor(HSSFColor.LIGHT_GREEN.index);
+            lg.setFillForegroundColor(HSSFColor.GREEN.index);
             lg.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
             lg.setBorderBottom(HSSFCellStyle.BORDER_THIN);
             lg.setBorderTop(HSSFCellStyle.BORDER_THIN);
@@ -254,14 +254,13 @@ public class basicreports extends HttpServlet {
             dnamestyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
             
             
-            
             shet2=wb.createSheet("Report");
             shet2.setColumnWidth(0, 10000);
             shet2.setColumnWidth(1, 5000);
             shet2.setColumnWidth(2, 5000);
             shet2.setColumnWidth(3, 5000);
             shet2.setColumnWidth(4, 8000);
-            
+            shet2.setColumnWidth(5, 8000);
             //create header one
             HSSFRow header=shet2.createRow(0);
             header.setHeightInPoints(30);
@@ -319,6 +318,8 @@ public class basicreports extends HttpServlet {
             HSSFCell cel6=header3.createCell(5);
             cel6.setCellValue(""+sitename);
             cel6.setCellStyle(lastcellrighborder);
+            
+            //add the width of this column
             
             //create a blank row whose last cell has a border
             
@@ -602,10 +603,10 @@ public class basicreports extends HttpServlet {
              for(int b=0;b<codes.length;b++){
               ce=rwl.createCell(b+1);
             ce.setCellValue(""+codes[b]);
-            if(b==1){
+            if(b==0){
             ce.setCellStyle(lg);
             }
-            else if(b==2){
+            else if(b==1){
                 
             ce.setCellStyle(Y);
             }

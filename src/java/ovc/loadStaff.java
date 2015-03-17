@@ -33,7 +33,7 @@ public class loadStaff extends HttpServlet {
             conn.rs=conn.st.executeQuery("select * from staff");
             while(conn.rs.next()){
             
-           createdtable+="<option value='"+conn.rs.getString(1)+"'>"+conn.rs.getString(2)+" "+conn.rs.getString(3)+" ("+conn.rs.getString(4)+") </option>"; 
+           createdtable+="<option value='"+conn.rs.getString(1)+"'>"+conn.rs.getString(2)+" "+conn.rs.getString(3)+" "+conn.rs.getString(4)+" </option>"; 
             
             
             }

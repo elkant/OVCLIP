@@ -73,6 +73,18 @@
         <servlet-name>basicreports</servlet-name>
         <servlet-class>reports.basicreports</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>loadreportsites</servlet-name>
+        <servlet-class>ajax.loadreportsites</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>loadrreportcbos</servlet-name>
+        <servlet-class>ajax.loadrreportcbos</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>loaddistrict</servlet-name>
+        <servlet-class>ajax.loaddistrict</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>springapp</servlet-name>
         <url-pattern>*.htm</url-pattern>
@@ -140,6 +152,18 @@
     <servlet-mapping>
         <servlet-name>basicreports</servlet-name>
         <url-pattern>/basicreports</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>loadreportsites</servlet-name>
+        <url-pattern>/loadreportsites</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>loadrreportcbos</servlet-name>
+        <url-pattern>/loadrreportcbos</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>loaddistrict</servlet-name>
+        <url-pattern>/loaddistrict</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>900000</session-timeout>

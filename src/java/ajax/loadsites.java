@@ -33,7 +33,7 @@ public class loadsites extends HttpServlet {
             dbConn conn= new dbConn();
             String createdtable="<option value=''>select site</option>";
             String cbo=request.getParameter("cbo");
-            String getsites="  select * from sites where cbo_id='"+cbo+"'";
+            String getsites="  select * from sites where cbo_id='"+cbo+"' order by site_name";
             conn.rs=conn.st.executeQuery(getsites);
             while(conn.rs.next()){
             

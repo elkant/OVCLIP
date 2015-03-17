@@ -56,7 +56,7 @@
         
 		<div class="wrapper" >
                   
-			<h1><span>OVC LIP SUPERVISION SYSTEM</span></h1>
+			<h1 style="font-size:40px;text-align: center;"><span>OVC LIP SUPERVISION CHECKLIST</span></h1>
 			<br/>
 			<br/>
 			<div class="content">

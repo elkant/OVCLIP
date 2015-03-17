@@ -308,8 +308,8 @@ public class loadform1 extends HttpServlet {
            // System.out.println(" ~~~~~~"+elemarr[0]);
             int blockid=Integer.parseInt(domainid);
             createdelem = " <div class=\"form-group\">"
-                    + "<select onchange=\"domaintotal(this,'"+elemarr[0]+"','"+marks+"','"+domainid+"');"+functionname+"\" class=\"form-control\" name='" + elemarr[0] + "' id='" + elemarr[0] + "'   >\n"
-                    + "" + options  //data-parsley-group=\"block"+domainid+"\" required
+                    + "<select onchange=\"domaintotal(this,'"+elemarr[0]+"','"+marks+"','"+domainid+"');"+functionname+"\" class=\"form-control\" name='" + elemarr[0] + "' id='" + elemarr[0] + "' data-parsley-group=\"block"+domainid+"\" required='true'  >\n"
+                    + "" + options  //
                     + "</select>"
                     + "</div>";
 

@@ -41,7 +41,7 @@ public class loadcbos extends HttpServlet {
             String createdtable="<option value=''>select cbo</option>";
             String cbo=request.getParameter("cbo");
             //String getsites="  select * from cbo where district_id='"+cbo+"'";
-            String getsites="  select * from cbo ";
+            String getsites="  select * from cbo order by cbo";
             conn.rs=conn.st.executeQuery(getsites);
             while(conn.rs.next()){
             

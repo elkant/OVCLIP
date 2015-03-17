@@ -32,20 +32,21 @@
 			Cufon.replace('h2',{textShadow: '1px 1px #fff'});
 			Cufon.replace('h3',{textShadow: '1px 1px #000'});
 			Cufon.replace('.back');
-    
+   
     
      function loadcbos()
             {
                       // var cboname=document.getElementById("lip").value;
-               
+            
+        var year=document.getElementById("year").value;
+        
          $.ajax({
-                    url: "loadcbos",
+                    url: "loadrreportcbos?year="+year,
                     type: 'post',
                     dataType: 'html',
                     success: function (data) {
+                     document.getElementById("staffcbo").innerHTML=data;     
                         
-                    document.getElementById("staffcbo").innerHTML=data;    
-                     document.getElementById("formid").reset();     
                     }
                 });
         
@@ -53,16 +54,17 @@
             }
     
     
-                   loadcbos();
+                   
     
     
     
-                         function loadsites(cboid)
+                         function loadsites()
             {
                        var cboname=document.getElementById("staffcbo").value;
-               
+                         var year=document.getElementById("year").value;
+                         var period=document.getElementById("period").value;
          $.ajax({
-                    url: "loadsites?cbo="+cboname,
+                    url: "loadreportsites?cbo="+cboname+"&year="+year+"&period="+period,
                     type: 'post',
                     dataType: 'html',
                     success: function (data) {
@@ -129,7 +131,7 @@
 				<div id="form_wrapper" class="form_wrapper">
 					
 					<form class="login active" action="#" id="formid" style="width:500px;">
-						<h3>Select all the requirements </h3>
+						<h3>Select all the parameters following the listed order </h3>
 				
                                         
                                         <div class="column">  
@@ -142,15 +144,15 @@
                                            years+="<option value="+a+">"+a+"</option>";
                                             }%>
                                          <div>
-                                        <label><b>Year</b><font color="red">*</font></label>
-                                        <select class="form-control"  name="year" id="year" > 
+                                        <label><b>(1) Year</b><font color="red">  *</font></label>
+                                        <select onchange="loadcbos();loadsites();" class="form-control"  name="year" id="year" > 
                                             <%=years%>
                                         </select>
                                         </div>  
                                             
                                             <div>
-                                        <label><b>Quarter</b><font color="red">*</font></label>
-                                        <select required class="form-control"  name="period" id="period" >
+                                        <label><b>(2) Quarter</b><font color="red">  *</font></label>
+                                        <select required onchange="loadsites();" class="form-control"  name="period" id="period" >
                                             <option value="">Select Period</option>
                                             <option value="1">Oct-Dec</option>
                                             <option value="2">Jan-Mar</option>
@@ -161,8 +163,8 @@
                                         </div> 
                                         
                                          <div>
-                                      <label><b>Report Type</b><font color="red">*</font></label>
-                                      <select required class="form-control" name="reporttype"  onchange="changeAction();" id="reporttype">
+                                      <label><b>(3) Report Type</b><font color="red">  *</font></label>
+                                      <select required class="form-control"  name="reporttype"  onchange="changeAction();" id="reporttype">
                                             <option value="#">Select Report</option>
                                             <option value="basicreports">Basic Report</option>
                                             <option disabled value="webcharts.htm">Webcharts</option>
@@ -173,11 +175,11 @@
                                         </div>
                                         <div class="column">  
                                         <div>
-                                        <label><b>Cbo</b><font color="red">*</font></label>
+                                        <label><b>(4) Cbo</b><font color="red">  *</font></label>
                                        <select required class="form-control" onchange="loadsites();"  name="staffcbo" id="staffcbo" ></select></td></td>
                                         </div>
                                         <div>
-                                        <label><b>Site</b><font color="red">*</font></label>
+                                        <label><b>  (5) Site</b><font color="red">*</font></label>
                                         <select required class="form-control" name="sitecbo" id="sitecbo"></select>
                                         </div>                                            
                                        
@@ -279,6 +281,9 @@
 								//e.preventDefault();
 							 });	
 			});
+                             
+    document.getElementById("formid").reset(); 
+                        
         </script>
         </div>
     </body>

@@ -48,6 +48,7 @@
                                             <a  href="dataentry.htm?t=circle" class="bt-circle btn btn-default">Circle</a>-->
                     <a style="background:#46b8da;" href="#" class="bt-circle btn btn-default"><span id="agg_percentage" style="font-size: 30px">0%</span></a>
                     <a id="modal_trigger" style="color:red;background-color: white;" href="#modal" class="btn"><img src="<c:url value="/resources/images/add.gif" />" /> Add Staff </a>
+                    <a id="modal_trigger1" style="color:red;background-color: white;" href="#sitemodal" class="btn"><img src="<c:url value="/resources/images/add.gif" />" />Add Site</a>
                 </div>
             </div>
         </div>
@@ -193,6 +194,72 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
                         </section>
                     </div>
 
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        <div id="sitemodal" class="popupContainer" style="display:none;width:500px;">
+                        <header class="popupHeader">
+                          
+                            <span class="header_title">Add A Site </span>
+                            <span class="modal_close"><img src="<c:url value="/resources/images/close.png" />" width="24px"></i></span>
+                        </header>
+
+                        <section class="popupBody" style="width:550px;">
+                            <div class="add_staff">
+                                <form name="addSite" id="addSite" action='saveSite' style="width:350px;">
+                                    
+                                    <!---------------------------------------------------->
+                                    <!------------------LOAD COUNTIES--------------------->
+                                    
+                                    <!---------------------------------------------------->
+                                    <%
+                                    String counties="<option value=''>Select County</option>";
+                                    
+                                    String getcounty="select * from county";
+                                    
+                                    conn.rs=conn.st.executeQuery(getcounty);
+                                    while(conn.rs.next()){
+                                    counties+="<option value='"+conn.rs.getString(1)+"'>"+conn.rs.getString(2)+"</option>";
+                                    
+                                    }
+                                    %>
+                                    
+                                    
+                                    <table>
+                                         <tr><td><span id="catlabel">Select County</td><td><select onchange='loaddistricts();' class="form-control" name="county" id="county"><%=counties%></select></td></td>
+                                         <tr><td><span id="catlabel">Select District</td><td><select  class="form-control" name="district" id="district"><%=opts%></select></td></td>
+                                      
+                                        <tr><td><span style="" id="cbolabel">Cbo Name</span></td><td><select style="" class="form-control"   name="addcbo" id="addcbo" ><%=cbolists%></select></td></td>
+                                        
+                                        <tr><td>Site Name</td><td><input class="form-control" type="text" id="fname" name="fname"></td></td>
+                                       <tr><td>  <input type="reset" style="height:36px;width:100px;" value="reset fields"></td><td >
+                                            
+                                        <input type="text" value="Save" id="generate1" class ='generate1' onclick="savestaff();" readonly style=" cursor:pointer;margin-left: 50px; text-transform:uppercase ; height: 50px; width:140px;text-align:center ; color:white ;background:coral; border-style:ridge ;" />
+                        
+                                                        
+                                            </td><td><p id="msg"></p></td></tr>
+                                    </table>   
+
+
+                                </form>
+                            </div>
+                        </section>
+                    </div>
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
                 </div>
             </footer>
 
@@ -601,7 +668,7 @@ function totalsum(){
 }
 
 function disableurl(ids,val,domain){
- 
+ //val is the value of the selected element that controls the others
 var res=ids.split("#"); 
 
 var idnos=res[1].split("_");
@@ -610,31 +677,58 @@ var idnos=res[1].split("_");
   //enable the elements  
    for(a=0;a<idnos.length;a++){
    var curelem="element_"+idnos[a];
-   
+   var curcomment="comment"+idnos[a];
    document.getElementById(curelem).disabled =false;
-   
+   document.getElementById(curcomment).disabled =false;
+   //make required false
      }
             
                       }
 else if(val.value===res[0]){
+    //if the set value is ano, then you have to disable this field
     //No
     
        for(a=0;a<idnos.length;a++){
    var curelem="element_"+idnos[a];
-   
+    var curcomment="comment"+idnos[a];
 
   //deduct a value from the domain if the values were yes
   
   if(document.getElementById(curelem).value==='Yes'){
-     
+      
+      //i hope at this point a deduction will be done automatically because of changing the input field
+     if(document.getElementById(curelem).value==="Yes"){
+         document.getElementById(curelem).value="";
+         $("#"+curelem).change();
+         //JESUS YOU ARE MIGHTY.. THIS CODE WORKED , THATS WHY I LOVE YOU
+         //I WILL PRAISE YOUR NAME FOREVER
+                }
+   document.getElementById(curcomment).value="";
                     //assuming the mark will be one
-                    
-  staticdomaintotal('','element_'+idnos[a],'1',domain);
+ //__________________________________________________________________________                   
+ //__________________________________________________________________________                   
+ //__________________________________________________________________________                   
+ //__________________________________________________________________________                   
+ //__________________________________________________________________________ 
+ 
+  //staticdomaintotal('','element_'+idnos[a],'1',domain);
+  //$("#element_"+idnos[a]).html();
+  //HAPA KUNA SHIDA .. THIS PART SHOUD CHANGE
+   //__________________________________________________________________________                   
+ //__________________________________________________________________________                   
+ //__________________________________________________________________________                   
+ //__________________________________________________________________________                   
+ //__________________________________________________________________________                   
+  //staticdomaintotal('','element_'+idnos[a],'1',domain);
+  
   }
-   document.getElementById(curelem).value="";
+   
   
    document.getElementById(curelem).disabled =true;
-   
+   document.getElementById(curcomment).disabled="disabled";
+   //disable required status for the inpu field
+   document.getElementById(curelem).required=false;
+       //document.getElementById(curelem).removeAttribute("required");
                                  }
                           }
                           
@@ -642,7 +736,11 @@ else if(val.value===res[0]){
     //enable the elements      
        for(a=0;a<idnos.length;a++){
    var curelem="element_"+idnos[a];
-   document.getElementById(curelem).disabled =true;
+   var curcomment="comment"+idnos[a];
+   document.getElementById(curelem).disabled =false;
+   document.getElementById(curcomment).disabled =false;
+
+    document.getElementById(curelem).required=true;
                                    }   
          
                         }
@@ -665,6 +763,7 @@ return true;
 
         <script type="text/javascript">
             $("#modal_trigger").leanModal({top: 200, overlay: 0.6, closeButton: ".modal_close"});
+            $("#modal_trigger1").leanModal({top: 200, overlay: 0.6, closeButton: ".modal_close"});
 
             //	$(function(){
             //		// Calling Login Form
@@ -1027,6 +1126,24 @@ console.log("dont submit");
     }
 
 });
+    
+    
+    function loaddistricts(){
+    var cnt=document.getElementById("county").value;
+    
+    
+        $.ajax({
+                    url: "loaddistricts?county="+cnt,
+                    type: 'post',
+                    dataType: 'html',
+                    success: function (data) {
+                        
+                    document.getElementById("district").innerHTML=data;    
+                        
+                    }
+                }); 
+        
+    }
     
     
         </script>

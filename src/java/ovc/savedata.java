@@ -178,7 +178,9 @@ else{quarters="0";}
              
                  String domainvalue=request.getParameter("domaininput"+c);
                  
-                 
+                 if(domainvalue.equals("")){
+                 domainvalue="0";
+                 }
                  
                  
                  String domainid=""+c;

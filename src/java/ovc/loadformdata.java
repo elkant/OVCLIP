@@ -334,6 +334,11 @@ public class loadformdata extends HttpServlet {
                     while(conn.rs_6.next()){
                     
                     domainvalue=conn.rs_6.getString("value");
+                   
+                    if(conn.rs_6.getString("value").equals("")){
+                    
+                    domainvalue="0";
+                    }
                     
                      domainval=Float.parseFloat(domainvalue);
                  domainval=domainval*100;
