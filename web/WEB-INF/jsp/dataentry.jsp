@@ -48,7 +48,11 @@
                                             <a  href="dataentry.htm?t=circle" class="bt-circle btn btn-default">Circle</a>-->
                     <a style="background:#46b8da;" href="#" class="bt-circle btn btn-default"><span id="agg_percentage" style="font-size: 30px">0%</span></a>
                     <a id="modal_trigger" style="color:red;background-color: white;" href="#modal" class="btn"><img src="<c:url value="/resources/images/add.gif" />" /> Add Staff </a>
+                    <% if(session.getAttribute("level") != null) {
+                        if (session.getAttribute("level").equals("1")) {
+                %>
                     <a id="modal_trigger1" style="color:red;background-color: white;" href="#sitemodal" class="btn"><img src="<c:url value="/resources/images/add.gif" />" />Add Site</a>
+                <%}}%>
                 </div>
             </div>
         </div>
@@ -91,8 +95,7 @@
 
             </div>
 
-            <br/>
-            <br/>
+            
             <div class="container" id="container1">
 
 
@@ -215,7 +218,7 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
 
                         <section class="popupBody" style="width:550px;">
                             <div class="add_staff">
-                                <form name="addSite" id="addSite" action='saveSite' style="width:350px;">
+                                <form name="addsite" id="addsite" action='saveSite' style="width:350px;">
                                     
                                     <!---------------------------------------------------->
                                     <!------------------LOAD COUNTIES--------------------->
@@ -236,14 +239,14 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
                                     
                                     <table>
                                          <tr><td><span id="catlabel">Select County</td><td><select onchange='loaddistricts();' class="form-control" name="county" id="county"><%=counties%></select></td></td>
-                                         <tr><td><span id="catlabel">Select District</td><td><select  class="form-control" name="district" id="district"><%=opts%></select></td></td>
+                                         <tr><td><span id="catlabel">Select District</td><td><select  class="form-control" name="district" id="district">select district</select></td></td>
                                       
                                         <tr><td><span style="" id="cbolabel">Cbo Name</span></td><td><select style="" class="form-control"   name="addcbo" id="addcbo" ><%=cbolists%></select></td></td>
                                         
-                                        <tr><td>Site Name</td><td><input class="form-control" type="text" id="fname" name="fname"></td></td>
+                                        <tr><td>Site Name</td><td><input class="form-control" type="text" id="sitename" name="sitename"></td></td>
                                        <tr><td>  <input type="reset" style="height:36px;width:100px;" value="reset fields"></td><td >
                                             
-                                        <input type="text" value="Save" id="generate1" class ='generate1' onclick="savestaff();" readonly style=" cursor:pointer;margin-left: 50px; text-transform:uppercase ; height: 50px; width:140px;text-align:center ; color:white ;background:coral; border-style:ridge ;" />
+                                        <input type="text" value="Save" id="generate1" class ='generate1' onclick="savesite();" readonly style=" cursor:pointer;margin-left: 50px; text-transform:uppercase ; height: 50px; width:140px;text-align:center ; color:white ;background:coral; border-style:ridge ;" />
                         
                                                         
                                             </td><td><p id="msg"></p></td></tr>
@@ -869,7 +872,109 @@ return true;
                 
             }
             
-           
+       
+    //------------------------------------------------------------------   
+    //------------------------------------------------------------------  
+    //ADD STAFF 
+    //------------------------------------------------------------------   
+    //------------------------------------------------------------------   
+    //------------------------------------------------------------------   
+    
+    
+    
+    
+    
+        function savesite(){
+                var county=document.getElementById("county").value;
+                var district=document.getElementById("district").value;
+                var cbo=document.getElementById("addcbo").value;
+                var site=document.getElementById("sitename").value;
+                
+                if(county===''){
+                  showerror(county);  
+                  noerror(county);
+                showselectalert("County"); 
+                             }
+                             
+              else if(district===''){
+                  showerror(district);  
+                  noerror(district);
+                showselectalert("district"); 
+                             }
+                             
+             else if(cbo===''){
+                  showerror(cbo);  
+                  noerror(cbo);
+                showselectalert("cbo"); 
+                             }
+                             
+                else if(site===''){
+                    showerror(site);  
+                  noerror(site);
+                  showalert("Site Name");                    
+                    
+                                    }
+//                  else if(phone===''){
+//                      
+//                  showerror(phone);  
+//                  noerror(phone);
+//                  showalert("Phone Number");                    
+//                    
+//                                    }
+                
+//                 else if(site===''){                      
+//                  showerror(site);  
+//                  noerror(site);
+//                  showselectalert("Site");                  
+//                    
+//                                    }
+                                    else {
+                                        
+                                        
+                                  $.ajax({
+                    url: "saveSite?county="+county+"&district="+district+"&cbo="+cbo+"&site="+site,
+                    type: 'post',
+                    dataType: 'html',
+                    success: function (data) {
+                        //now reload the staff list
+                  //document.getElementById("msg").innerHTML=data;
+                    var n = noty({text:"<h3>"+data+"</h3>",
+                        layout: 'center',
+                        type: 'Success',
+                        timeout: 2800,
+         animation: {
+        open: {height: 'toggle'}, // jQuery animate function property object
+        close: {height: 'toggle'}, // jQuery animate function property object
+        easing: 'swing', // easing
+        speed: 500 // opening & closing animation speed
+    },
+    callback: {
+   
+        afterShow: function() {
+            
+         document.getElementById("addsite").reset();   
+        }
+    }
+    
+        });
+                  
+                 // loadmembers();
+                    
+                
+                        
+                                          }
+                                          });       
+                                        
+                                        
+                                        
+                                    }
+                
+            }
+    
+    
+    
+    
+    
             
             function showerror(elem){
                 
@@ -1133,7 +1238,7 @@ console.log("dont submit");
     
     
         $.ajax({
-                    url: "loaddistricts?county="+cnt,
+                    url: "loaddistrict?county="+cnt,
                     type: 'post',
                     dataType: 'html',
                     success: function (data) {
@@ -1145,6 +1250,12 @@ console.log("dont submit");
         
     }
     
+    
+    function invokedisable(curelem){
+   //invoke a onchange on the parent element so that previously disabled elements will still be disabled based on the value that has been entered at the parent (controller) element   
+      $("#"+curelem).change();   
+        
+    }
     
         </script>
 

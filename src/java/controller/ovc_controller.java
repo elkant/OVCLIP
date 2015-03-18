@@ -54,8 +54,11 @@ public class ovc_controller {
     public String handlebrGet() {
         return "basicreport"; // forward to view index.jsp
                                    }
-    
-    
+      @RequestMapping("/filtermultiplesitesreport.htm")
+    public String handlemrGet() {
+        return "filtermultiplesitesreport"; // forward to view index.jsp
+                                   }
+   
         @RequestMapping("/webcharts.htm")
     public String handlewcGet() {
         return "webcharts"; // forward to view index.jsp

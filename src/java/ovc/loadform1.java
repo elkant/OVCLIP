@@ -156,7 +156,7 @@ public class loadform1 extends HttpServlet {
                     //dont create a new page/fieldset
                     createnewpage = false;
                     //add the form elements in here
-                    middletable += "<tr><td><b>" + conn.rs.getString("sn") + "</b></td><td style='width:500px;'><h4 style='color:black;'> <b>" + conn.rs.getString("question") +"</b>.</h4> <br/> <font color='red'><h4 >"+conn.rs.getString("comment")+"</h4></font> </td>";
+                    middletable += "<tr><td style='color:green;'><h4 ><b>" + conn.rs.getString("sn") + "</b></h4></td><td style='width:500px;'><h4 style='color:black;'> <b>" + conn.rs.getString("question") +"</b>.</h4> <br/> <font color='red'><h4 >"+conn.rs.getString("comment")+"</h4></font> </td>";
                     String elemname = "element_" + conn.rs.getString("questionid") + "#" + conn.rs.getString("response_type");
                     String marks=conn.rs.getString("marks");
                     String totalperdomain=conn.rs.getString("total");
@@ -197,7 +197,7 @@ public class loadform1 extends HttpServlet {
                 if(conn.rs.getString("quest_no").equalsIgnoreCase("Q1")){
                 legendheader=conn.rs.getString("domain_name");
                 initdomain=conn.rs.getString("domain_id");
-                middletable += "<tr><td><b>" + conn.rs.getString("sn") + "</b></td><td><h4 style='color:black;'>  <b>" + conn.rs.getString("question") +"</b></h4><font color='red'>.<h4> "+ conn.rs.getString("comment")+"</h4></font></td>";
+                middletable += "<tr><td style='color:green;'><h4 ><b>" + conn.rs.getString("sn") + "</b></h4></td><td><h4 style='color:black;'>  <b>" + conn.rs.getString("question") +"</b></h4><font color='red'>.<h4> "+ conn.rs.getString("comment")+"</h4></font></td>";
                 String elemname = "element_" + conn.rs.getString("questionid") + "#" + conn.rs.getString("response_type");
                 String marks=conn.rs.getString("marks");
                  String totalperdomain=conn.rs.getString("total");

@@ -264,7 +264,9 @@ public class loadformdata extends HttpServlet {
             while (conn.rs.next()) {
             //create a new page
                   String functionname="";
+                  String functionname1="";
                     String affectedelem=conn.rs.getString("affected_question");
+                    String dependantquestion=conn.rs.getString("dependant_question");
                     
                        String getquestval="select * from marks where  site_id='"+fsite+"' and quest_id='"+conn.rs.getString("questionid")+"' and year='"+fyear+"' and period='"+fperiod+"'";
                   conn.rs_6=conn.st_6.executeQuery(getquestval);
@@ -282,6 +284,13 @@ public class loadformdata extends HttpServlet {
                      
                     functionname="disableurl('"+affectedelem+"',this,'"+conn.rs.getString("domain_id")+"');";
                                           }
+                   //here am assuming we cant have both elements with 
+                    if(dependantquestion!=null){
+                        
+                     dependantquestion=dependantquestion.trim();
+                     
+                    functionname1="invokedisable('element_"+dependantquestion+"');";
+                                          } 
                 if (conn.rs.getString("domain_id").equals(initdomain)) {
                    // System.out.println(conn.rs.getString("domain_id")+"=="+initdomain);
                     
@@ -296,7 +305,7 @@ public class loadformdata extends HttpServlet {
                     float dcmlmark=(float)conn.rs.getInt("marks")/conn.rs.getInt("total");
                  
                    
-                    middletable += "<td style='width:100px;'>"+elementcreator(questionvalue,questiontableid,functionname,elemname,""+dcmlmark,initdomain) + "</td>"
+                    middletable += "<td style='width:100px;'>"+elementcreator(questionvalue,questiontableid,functionname,functionname1,elemname,""+dcmlmark,initdomain) + "</td>"
                            
                             + "<td style='width:500px;'> <textarea cols='25' rows='2'  class='form-control' name=\"comment"+conn.rs.getString("questionid") + "\" id=\"comment"+ conn.rs.getString("questionid") + "\"  >"+commentvalue+"</textarea>" 
                         + "</td>"
@@ -355,7 +364,7 @@ public class loadformdata extends HttpServlet {
                  String totalperdomain=conn.rs.getString("total");
                  float dcmlmark=(float)conn.rs.getInt("marks")/conn.rs.getInt("total"); 
                  
-                middletable +="<td style='width:100px;'>"+elementcreator(questionvalue,questiontableid,functionname,elemname,""+dcmlmark,initdomain) + "</td>"
+                middletable +="<td style='width:100px;'>"+elementcreator(questionvalue,questiontableid,functionname,functionname1,elemname,""+dcmlmark,initdomain) + "</td>"
                             + "<td style='width:500px;'> <textarea cols='25' rows='2'  class='form-control' name=\"comment" + conn.rs.getString("questionid") + "\" id=\"comment"+ conn.rs.getString("questionid") + "\"  >"+commentvalue+"</textarea>" 
                             + "</td>"
                             + "</tr>";
@@ -437,7 +446,7 @@ public class loadformdata extends HttpServlet {
     }// </editor-fold>
 
     //This function creates 
-    public static String elementcreator(String qvalue,String qtableid,String functionname,String restype,String marks,String domainid) {
+    public static String elementcreator(String qvalue,String qtableid,String functionname,String functionname1,String restype,String marks,String domainid) {
 
         String createdelem = "";
 
@@ -473,7 +482,7 @@ public class loadformdata extends HttpServlet {
                                                  }
            // System.out.println(" ~~~~~~"+elemarr[0]);
             createdelem = "<div class=\"form-group\">"
-                    + "<select onchange=\"domaintotal(this,'"+elemarr[0]+"','"+marks+"','"+domainid+"');"+functionname+"\"  class=\"form-control\" name='" + elemarr[0] + "' id='" + elemarr[0] + "'  >\n"
+                    + "<select onchange=\"domaintotal(this,'"+elemarr[0]+"','"+marks+"','"+domainid+"');"+functionname+"\" onmouseover=\""+functionname1+"\" class=\"form-control\" name='" + elemarr[0] + "' id='" + elemarr[0] + "'  >\n"
                     + "" + options  //data-parsley-group=\"block"+domainid+"\"
                     + "</select><input type='hidden' value='"+qtableid+"' name='qid"+ elemarr[0]+"' id='qid"+ elemarr[0]+"'>"
                     + "</div>";

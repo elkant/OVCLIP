@@ -85,6 +85,18 @@
         <servlet-name>loaddistrict</servlet-name>
         <servlet-class>ajax.loaddistrict</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>saveSite</servlet-name>
+        <servlet-class>ovc.saveSite</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>multiplesitesreport</servlet-name>
+        <servlet-class>reports.multiplesitesreport</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>countyreport</servlet-name>
+        <servlet-class>reports.countyreport</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>springapp</servlet-name>
         <url-pattern>*.htm</url-pattern>
@@ -164,6 +176,18 @@
     <servlet-mapping>
         <servlet-name>loaddistrict</servlet-name>
         <url-pattern>/loaddistrict</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>saveSite</servlet-name>
+        <url-pattern>/saveSite</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>multiplesitesreport</servlet-name>
+        <url-pattern>/multiplesitesreport</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>countyreport</servlet-name>
+        <url-pattern>/countyreport</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>900000</session-timeout>
