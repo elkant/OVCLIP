@@ -59,6 +59,11 @@ public class ovc_controller {
         return "filtermultiplesitesreport"; // forward to view index.jsp
                                    }
    
+    //filtercountyreport
+      @RequestMapping("/filtercountyreport.htm")
+    public String handlecrGet() {
+        return "filtercountyreport"; // forward to view index.jsp
+                                   }
         @RequestMapping("/webcharts.htm")
     public String handlewcGet() {
         return "webcharts"; // forward to view index.jsp

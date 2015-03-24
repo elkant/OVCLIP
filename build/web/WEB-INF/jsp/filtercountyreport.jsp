@@ -6,7 +6,7 @@
 <!DOCTYPE html">
 <html>
     <head>
-        <title>Select Reports</title>
+        <title>County Reports (Excel)</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
        	<link rel="shortcut icon" href="<c:url value="/resources/images/favicon.png" />" type="image/x-icon"/>
         <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/newstyle.css"/>" />
@@ -85,7 +85,7 @@
                 document.getElementById("formid").action = curaction;
 
 
-                            }
+            }
     
                         
 		</script>
@@ -124,72 +124,42 @@
 </div>
 		<div class="wrapper" >
                   
-			<h2 style="text-align: center;"><span>OVC LIP SUPERVISION Reports</span></h2>
+			<h2 style="text-align: center;"><span>OVC LIP SUPERVISION COUNTY REPORT </span></h2>
 			<br/>
 			<br/>
 			<div class="content">
 				<div id="form_wrapper" class="form_wrapper">
 					
-					<form class="login active" action="#" id="formid" style="width:500px;">
-						<h3>Select all the parameters following the listed order </h3>
+					<form class="login active" action="countyreport" id="formid" style="width:400px;">
+						<h3>Enter the start and end date </h3>
 				
                                         
                                         <div class="column">  
                                         
-                                           <%  Calendar cal = Calendar.getInstance();
-               int year= cal.get(Calendar.YEAR); 
-               String years="<option value=''>Select Year</option>";
-                                           for(int a=year;a>=2012;a--){
-                                       
-                                           years+="<option value="+a+">"+a+"</option>";
-                                            }%>
+                                         
                                          <div>
-                                        <label><b>(1) Year</b><font color="red">  *</font></label>
-                                        <select onchange="loadcbos();loadsites();" class="form-control"  name="year" id="year" > 
-                                            <%=years%>
-                                        </select>
+  <label><b>(1) Start Date</b><font color="red">  *</font></label>
+  <input type="text" style="width:280px;" readonly required class="form-control"  name="startdate" id="startdate" > 
+                                        
                                         </div>  
                                             
                                             <div>
-                                        <label><b>(2) Quarter</b><font color="red">  *</font></label>
-                                        <select required onchange="loadsites();" class="form-control"  name="period" id="period" >
-                                            <option value="">Select Period</option>
-                                            <option value="1">Oct-Dec</option>
-                                            <option value="2">Jan-Mar</option>
-                                            <option value="3">Apr-Jun</option>
-                                            <option value="4">Jul-Sep</option>
-                                            
-                                        </select></td></td>
+                                                
+                                        <label><b>(2) End Date</b><font color="red">  *</font></label>
+                                        <input type="text" style="width:280px;" required class="form-control"  name="enddate" id="enddate" >
+                                           <br/>
                                         </div> 
                                         
-                                         <div>
-                                      <label><b>(3) Report Type</b><font color="red">  *</font></label>
-                                      <select required class="form-control"  name="reporttype"  onchange="changeAction();" id="reporttype">
-                                            <option value="#">Select Report</option>
-                                            <option value="basicreports">Basic Report</option>
-                                            <option disabled value="webcharts.htm">Webcharts</option>
-                                                    
-                                        </select>
-                                        </div>
+                                        
                                         
                                         </div>
-                                        <div class="column">  
-                                        <div>
-                                        <label><b>(4) Cbo</b><font color="red">  *</font></label>
-                                       <select required class="form-control" onchange="loadsites();"  name="staffcbo" id="staffcbo" ></select></td></td>
-                                        </div>
-                                        <div>
-                                        <label><b>  (5) Site</b><font color="red">*</font></label>
-                                        <select required class="form-control" name="sitecbo" id="sitecbo"></select>
-                                        </div>                                            
-                                       
-                                     </div>
-						<div class="bottom">
+                                        <div class="bottom">
 							<!--<div class="remember"><input type="checkbox" /><span>Keep me logged in</span></div>-->
 							<input type="submit" value="Generate"></input>
 							<!--<a href="register.jsp.html" rel="register" class="linkform">You don't have an account yet? Register here</a>-->
 							<div class="clear"></div>
 						</div>
+						
 					</form>
 					
 				</div>
@@ -283,7 +253,9 @@
 			});
                              
     document.getElementById("formid").reset(); 
-                        
+      $("#startdate").datepicker({changeMonth: true, changeYear: true, yearRange: '2008:2015', dateFormat: 'yy-mm-dd', maxDate: new Date()});
+      $("#enddate").datepicker({changeMonth: true, changeYear: true, yearRange: '2008:2015', dateFormat: 'yy-mm-dd', maxDate: new Date()});
+                  
         </script>
         </div>
     </body>

@@ -144,7 +144,24 @@ public class loadform1 extends HttpServlet {
             while (conn.rs.next()) {
             //create a new page
                   String functionname="";
+                  
+                  //function two will be used to hold option two that will be used to determine the no. of points that are addable
+                  String functiontwo="";
                     String affectedelem=conn.rs.getString("affected_question");
+                    String non_applicable=conn.rs.getString("non_applicable");
+                    
+                    //=======================SOMETHING WILL BE DONE ON THIS AREA
+                    //=======================SOMETHING WILL BE DONE ON THIS AREA
+                    //=======================SOMETHING WILL BE DONE ON THIS AREA
+                    //=======================SOMETHING WILL BE DONE ON THIS AREA
+                    //=======================SOMETHING WILL BE DONE ON THIS AREA
+                    //=======================SOMETHING WILL BE DONE ON THIS AREA
+                    //=======================SOMETHING WILL BE DONE ON THIS AREA
+                    //=======================SOMETHING WILL BE DONE ON THIS AREA
+                    
+                    
+                    
+                    
                       // System.out.println("~~"+conn.rs.getString("affected_question"));
                    if(affectedelem!=null){
                      
@@ -159,14 +176,23 @@ public class loadform1 extends HttpServlet {
                     middletable += "<tr><td style='color:green;'><h4 ><b>" + conn.rs.getString("sn") + "</b></h4></td><td style='width:500px;'><h4 style='color:black;'> <b>" + conn.rs.getString("question") +"</b>.</h4> <br/> <font color='red'><h4 >"+conn.rs.getString("comment")+"</h4></font> </td>";
                     String elemname = "element_" + conn.rs.getString("questionid") + "#" + conn.rs.getString("response_type");
                     String marks=conn.rs.getString("marks");
+                   // a query for getting total if skippable questions are to be considered
+                   String nusutotalqr=" SELECT count(*) as total FROM ovc_lip.questions where non_applicable is null and domain_id='"+conn.rs.getString("domain_id")+"'";
+                   int nusutotal=1;
+                   conn.rs_4=conn.st_4.executeQuery(nusutotalqr);
+                   
+                   while( conn.rs_4.next()){
+                   nusutotal=conn.rs_4.getInt(1);                   
+                   }
+                   
                     String totalperdomain=conn.rs.getString("total");
                     float dcmlmark=(float)conn.rs.getInt("marks")/conn.rs.getInt("total");
-                  
+                   float partialdcmlmark=(float)conn.rs.getInt("marks")/nusutotal;
                      //System.out.println(conn.rs.getInt("marks")+"/"+conn.rs.getInt("total")+" = "+dcmlmark);      
                 
                   
                    
-                    middletable += "<td style='width:100px;'>"+elementcreator(functionname,elemname,""+dcmlmark,initdomain) + "</td>"
+                    middletable += "<td style='width:100px;'>"+elementcreator(functionname,elemname,""+dcmlmark,""+partialdcmlmark,initdomain) + "</td>"
                            
                             + "<td style='width:500px;'> <textarea cols='25' rows='2'  class='form-control' name=\"comment" + conn.rs.getString("questionid") + "\" id=\"comment"+ conn.rs.getString("questionid") + "\"  ></textarea>" 
                         + "</td>"
@@ -200,11 +226,21 @@ public class loadform1 extends HttpServlet {
                 middletable += "<tr><td style='color:green;'><h4 ><b>" + conn.rs.getString("sn") + "</b></h4></td><td><h4 style='color:black;'>  <b>" + conn.rs.getString("question") +"</b></h4><font color='red'>.<h4> "+ conn.rs.getString("comment")+"</h4></font></td>";
                 String elemname = "element_" + conn.rs.getString("questionid") + "#" + conn.rs.getString("response_type");
                 String marks=conn.rs.getString("marks");
+                String nusutotalqr=" SELECT count(*) as total FROM ovc_lip.questions where non_applicable is null and domain_id='"+conn.rs.getString("domain_id")+"'";
+                   int nusutotal=1;
+                   conn.rs_4=conn.st_4.executeQuery(nusutotalqr);
+                   
+                   while( conn.rs_4.next()){
+                   nusutotal=conn.rs_4.getInt(1);                   
+                   }
+                
+                
                  String totalperdomain=conn.rs.getString("total");
                  float dcmlmark=(float)conn.rs.getInt("marks")/conn.rs.getInt("total");
-                    System.out.println(conn.rs.getInt("marks")+"/"+conn.rs.getInt("total")+" = "+dcmlmark);      
+                  float partialdcmlmark=(float)conn.rs.getInt("marks")/nusutotal;
+                    //System.out.println(conn.rs.getInt("marks")+"/"+conn.rs.getInt("total")+" = "+dcmlmark);      
                    
-                middletable +="<td style='width:100px;'>"+elementcreator(functionname,elemname,""+dcmlmark,initdomain) + "</td>"
+                middletable +="<td style='width:100px;'>"+elementcreator(functionname,elemname,""+dcmlmark,""+partialdcmlmark,initdomain) + "</td>"
                              + "<td style='width:500px;'> <textarea cols='25' rows='2'  class='form-control' name=\"comment" + conn.rs.getString("questionid") + "\" id=\"comment"+ conn.rs.getString("questionid") + "\"  ></textarea>" 
                         + "</td>"
                         + "</tr>";
@@ -280,7 +316,7 @@ public class loadform1 extends HttpServlet {
     }// </editor-fold>
 
     //This function creates 
-    public static String elementcreator(String functionname,String restype,String marks,String domainid) {
+    public static String elementcreator(String functionname,String restype,String marks,String halfmarks,String domainid) {
 
         String createdelem = "";
 

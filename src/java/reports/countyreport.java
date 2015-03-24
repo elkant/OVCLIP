@@ -28,6 +28,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.CellRangeAddress;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.CellStyle;
+import ovc.gen;
 
 /**
  *
@@ -63,8 +64,8 @@ public class countyreport extends HttpServlet {
             String startdate="2015-01-01";
             String enddate="2015-03-30";
             
-            //startdate=request.getParameter("startdate");
-            //enddate=request.getParameter("enddate");
+            startdate=request.getParameter("startdate");
+            enddate=request.getParameter("enddate");
             
             
             String getdistinctsites="SELECT county.county_id as countyid,county_name FROM ovc_lip.backgroundinfor join (sites join (district join county on district.county_id=county.county_id) on sites.districtid=district.district_id) on backgroundinfor.site=sites.site_id where ass_date between '"+startdate+"' and '"+enddate+"' group by county_name ";
@@ -72,7 +73,7 @@ public class countyreport extends HttpServlet {
             ArrayList countyids=new ArrayList();
             ArrayList countynames=new ArrayList();
             countyids.add("1000");
-            countynames.add("OVERALL");
+            countynames.add("OVERALL COUNTIES REPORT");
             //ArrayList years=new ArrayList();
             //ArrayList periods=new ArrayList();
             //ArrayList cbos=new ArrayList();
@@ -80,7 +81,7 @@ public class countyreport extends HttpServlet {
             while(conn.rs.next()){
            
                 countyids.add(conn.rs.getString(1));                
-                countynames.add(conn.rs.getString(2));                
+                countynames.add(conn.rs.getString(2).toUpperCase()+" COUNTY");                
                                
            
              
@@ -158,6 +159,14 @@ public class countyreport extends HttpServlet {
             bolfont.setFontHeightInPoints((short) 12);
             bolfont.setFontName("Cambria");
             
+            
+            //=========================ROW STYLE===============================
+            
+            
+             HSSFCellStyle rowstyle = wb.createCellStyle();
+            rowstyle.setWrapText(true);
+            
+            
             //=======INNER DATA STYLING===========================
 
             CellStyle innerdata_style = wb.createCellStyle();
@@ -206,8 +215,8 @@ public class countyreport extends HttpServlet {
             CellStyle orangestyle = wb.createCellStyle();
             orangestyle.setFont(bolfont);
             orangestyle.setWrapText(true);
-            orangestyle.setAlignment(orangestyle.ALIGN_LEFT);
-            orangestyle.setFillForegroundColor(HSSFColor.WHITE.index);
+            orangestyle.setAlignment(orangestyle.ALIGN_CENTER);
+            orangestyle.setFillForegroundColor(HSSFColor.ORANGE.index);
             orangestyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
 //          innerdata_style.setBorderBottom(HSSFCellStyle.BORDER_THIN);
 //          innerdata_style.setBorderTop(HSSFCellStyle.BORDER_THIN);
@@ -288,7 +297,7 @@ public class countyreport extends HttpServlet {
             dnamestyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
             
             
-            shet2=wb.createSheet(sitename.toUpperCase());
+            shet2=wb.createSheet(countynames.get(u).toString().toUpperCase());
             shet2.setColumnWidth(0, 10000);
             shet2.setColumnWidth(1, 5000);
             shet2.setColumnWidth(2, 5000);
@@ -305,7 +314,7 @@ public class countyreport extends HttpServlet {
              cel1=header.createCell(b);
             cel1.setCellValue("");
             cel1.setCellStyle(style);
-            }
+                                 }
             
             shet2.addMergedRegion(new CellRangeAddress(0,0,0,5));
             
@@ -317,7 +326,7 @@ public class countyreport extends HttpServlet {
              cel2=header2.createCell(b);
             cel2.setCellValue("");
             cel2.setCellStyle(style);
-            }
+                                  }
              
              cel2=header2.createCell(0);
             cel2.setCellValue("OVC LIP SUPPORT SUPERVISION DASH BOARD");
@@ -330,30 +339,31 @@ public class countyreport extends HttpServlet {
             //create header three
             HSSFRow header3=shet2.createRow(2);
             HSSFCell cel3=header3.createCell(0);
-            cel3.setCellValue("Name of LIP/CBO");
-            cel3.setCellStyle(innerdata_style2);
+            cel3.setCellValue(countynames.get(u).toString());
+            cel3.setCellStyle(orangestyle);
             
             
             HSSFCell cel4=header3.createCell(1);
-            cel4.setCellValue(""+cboname);
-            cel4.setCellStyle(innerdata_style);
+            cel4.setCellValue("");
+            cel4.setCellStyle(orangestyle);
             //blank cells for purpose of clear worksheet only
             for(int x=2;x<=3;x++){
             HSSFCell cel=header3.createCell(x);
             cel.setCellValue("");
-            cel.setCellStyle(innerdata_style);
+            cel.setCellStyle(orangestyle);
             }
             
             HSSFCell cel5=header3.createCell(4);
-            cel5.setCellValue("Site Visited:");
-            cel5.setCellStyle(innerdata_style2);
+            cel5.setCellValue("");
+            cel5.setCellStyle(orangestyle);
             
             
             HSSFCell cel6=header3.createCell(5);
-            cel6.setCellValue(""+sitename);
-            cel6.setCellStyle(lastcellrighborder);
+            cel6.setCellValue("");
+            cel6.setCellStyle(orangestyle);
             
-            //add the width of this column
+            //create a merged region
+              shet2.addMergedRegion(new CellRangeAddress(2,2,0,5));
             
             //create a blank row whose last cell has a border
             
@@ -369,7 +379,13 @@ public class countyreport extends HttpServlet {
                 cl.setCellStyle(lastcellrighborder);
             //==========DATE OF VISIT
             
-            String mywhere="site='"+siteids.get(u)+"' and period='"+periods.get(u)+"' and year='"+years.get(u)+"' ";
+            String mywhere=" district.county_id='"+countyids.get(u).toString()+"' and ass_date between '"+startdate+"' and '"+enddate+"' ";
+            //if the current countyid is 0, then the where code should not specify the county name 
+          
+            if(countyids.get(u).toString().equals("1000")){
+            mywhere="  ass_date between '"+startdate+"' and '"+enddate+"' ";
+         
+                                                        }
             
             String supervisor="";
             String dateofvisit="";
@@ -377,28 +393,70 @@ public class countyreport extends HttpServlet {
             String strengths="";
             String constraints="";
             
-            String loadbasicdetails="select * from backgroundinfor join staff on backgroundinfor.supervisor=staff.staff_id where "+mywhere+" ";
-            System.out.println(loadbasicdetails);
+           // String loadbasicdetails="select * from backgroundinfor join staff on backgroundinfor.supervisor=staff.staff_id where "+mywhere+" ";
+            String loadbasicdetails="select strengths,constraints,county_name from backgroundinfor join (sites join (district join county on district.county_id=county.county_id) on sites.districtid=district.district_id) on backgroundinfor.site=sites.site_id where "+mywhere+" order by county_name";
+            
+        
+            
+            //System.out.println("~~~~ "+loadbasicdetails);
             conn.rs=conn.st.executeQuery(loadbasicdetails);
+            
+            
+            
+            
+           //if this is the overal query
+            
+            ArrayList countycomments=new ArrayList();
+            
+                if(countyids.get(u).toString().equals("1000")){
             while(conn.rs.next()){
-            supervisor=conn.rs.getString("fname")+" "+conn.rs.getString("mname");
-            dateofvisit=conn.rs.getString("ass_date");
-            strengths=conn.rs.getString("strengths");
-            constraints=conn.rs.getString("constraints");
-            
+           // supervisor=conn.rs.getString("fname")+" "+conn.rs.getString("mname");
+            //dateofvisit=conn.rs.getString("ass_date");
+              if(!conn.rs.getString("strengths").equals("")){
+                  
+                  //add the county header if it has not been added before only
+                  if(countycomments.contains(conn.rs.getString("county_name"))){}
+                  else{
+              countycomments.add(conn.rs.getString("county_name"));
+              strengths+="________________________________________"+conn.rs.getString("county_name")+" County ________________________________________\n";
+              constraints+="________________________________________"+conn.rs.getString("county_name")+" County ________________________________________\n";
+                  }
+                                                            }
+                
+            strengths+=conn.rs.getString("strengths");
+          
+            constraints+=conn.rs.getString("constraints");
+              if(!conn.rs.getString("strengths").equals("")){
+              strengths+="\n";
+              constraints+="\n";
+              }
             }
-            
+            }
+                else {
+            while(conn.rs.next()){
+           // supervisor=conn.rs.getString("fname")+" "+conn.rs.getString("mname");
+            //dateofvisit=conn.rs.getString("ass_date");
+               
+            strengths+=conn.rs.getString("strengths");
+          
+            constraints+=conn.rs.getString("constraints");
+              if(!conn.rs.getString("strengths").equals("")){
+              strengths+="\n";
+              constraints+="\n";
+              }
+            }
+                }//end of while
             
             //================Create the second header=================
             //create header three
             HSSFRow header4=shet2.createRow(4);
             HSSFCell cel=header4.createCell(0);
-            cel.setCellValue("Date of Visit");
-            cel.setCellStyle(innerdata_style2);
+            cel.setCellValue("");
+            cel.setCellStyle(innerdata_style);
             
             
             HSSFCell cell=header4.createCell(1);
-            cell.setCellValue(""+dateofvisit);
+            cell.setCellValue("");
             cell.setCellStyle(innerdata_style);
             
             
@@ -410,12 +468,12 @@ public class countyreport extends HttpServlet {
             }
             
             HSSFCell cell5=header4.createCell(4);
-            cell5.setCellValue("Supervision Team Lead:");
-            cell5.setCellStyle(innerdata_style2);
+            cell5.setCellValue("");
+            cell5.setCellStyle(innerdata_style);
             
             
             HSSFCell cell6=header4.createCell(5);
-            cell6.setCellValue(""+supervisor);
+            cell6.setCellValue("");
             cell6.setCellStyle(lastcellrighborder);
             
             
@@ -469,7 +527,14 @@ public class countyreport extends HttpServlet {
             
             shet2.addMergedRegion(new CellRangeAddress(7,7,0,5));
             
-            String gettables = "SELECT domain_name,domains.domain_id as domainid,section_name,domains.section_id as secid,value as domainvalue,aggregate_sum,period,year,site FROM domains join sections on domains.section_id=sections.section_id join domain_totals on domains.domain_id=domain_totals.domainid where "+mywhere+" order by domainid";
+           // String gettables = "SELECT domain_name,domains.domain_id as domainid,section_name,domains.section_id as secid,value as domainvalue,aggregate_sum,period,year,site FROM domains join sections on domains.section_id=sections.section_id join domain_totals on domains.domain_id=domain_totals.domainid where "+mywhere+" order by domainid";
+            String gettables= "SELECT domain_name,avg(value) as domainvalue,section_name ,domains.section_id as secid FROM ovc_lip.domain_totals join (sites join (district join county on district.county_id=county.county_id) on sites.districtid=district.district_id) on domain_totals.site=sites.site_id join (domains join sections on domains.section_id=sections.section_id) on domain_totals.domainid=domains.domain_id  where county.county_id='"+countyids.get(u)+"' and date between '"+startdate+"' and '"+enddate+"' group by domain_totals.domainid,county_name order by domainid";
+       //if its the first county, themn skip the county part
+            if(countyids.get(u).toString().equalsIgnoreCase("1000")){
+             
+                gettables= "SELECT domain_name,avg(value) as domainvalue,section_name ,domains.section_id as secid FROM ovc_lip.domain_totals  join (domains join sections on domains.section_id=sections.section_id) on domain_totals.domainid=domains.domain_id  where  date between '"+startdate+"' and '"+enddate+"' group by domain_totals.domainid order by domainid";
+       
+            }
             System.out.println(gettables);
             conn.rs = conn.st.executeQuery(gettables);
             int rwcount=8;
@@ -573,7 +638,7 @@ public class countyreport extends HttpServlet {
               rwcount++;
              
             HSSFRow str=shet2.createRow(rwcount);
-            
+              //str.setRowStyle(rowstyle);
                for(int b=1;b<=5;b++){
              cel1=str.createCell(b);
             cel1.setCellValue("");
@@ -585,8 +650,10 @@ public class countyreport extends HttpServlet {
             t1.setCellStyle(dnamestyle);    
             shet2.addMergedRegion(new CellRangeAddress(rwcount,rwcount,0,5));  
             //for purpose of merging
-         
-               str.setHeightInPoints(60); 
+            gen g=new gen();  
+            int rwheight1=g.countLines(strengths);
+            rwheight1=rwheight1*17;
+            str.setHeightInPoints(rwheight1); 
              rwcount++;
              
              
@@ -613,20 +680,24 @@ public class countyreport extends HttpServlet {
               rwcount++;
              
             HSSFRow str2=shet2.createRow(rwcount);
-            
+            str2.setRowStyle(rowstyle);
             for(int b=1;b<=5;b++){
              cel1=str2.createCell(b);
             cel1.setCellValue("");
             cel1.setCellStyle(dnamestyle);
                                  }
             
-            
+       
             HSSFCell t4=str2.createCell(0);
             t4.setCellValue(""+constraints);
             t4.setCellStyle(dnamestyle);    
-            shet2.addMergedRegion(new CellRangeAddress(rwcount,rwcount,0,5));   
-            str2.setHeightInPoints(50); 
-              
+            shet2.addMergedRegion(new CellRangeAddress(rwcount,rwcount,0,5)); 
+            
+            //count the number of lines then multiply by a certain fixed unit
+            int rwheight=g.countLines(constraints);
+            rwheight=rwheight*17;
+            str2.setHeightInPoints(rwheight); 
+               
             rwcount++;
             //a line of codes
             String codes[]={"LG - Meets Expectations (>=75%); "," Y- Needs Improvement (60%- 74%);","R - Needs Urgent Attention (<=59%);"};
