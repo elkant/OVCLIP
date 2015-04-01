@@ -41,6 +41,12 @@ public class ovc_controller {
         return "logout"; // forward to view index.jsp
                                    } 
     
+    
+     @RequestMapping("/actionpoint.htm")
+    public String handleapGet() {
+        return "actionpoint"; // forward to view index.jsp
+                                   } 
+    
     @RequestMapping("/addstaff.htm")
     public String handleaddstaffGet() {
         return "addstaff"; // forward to view index.jsp

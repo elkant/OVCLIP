@@ -183,7 +183,7 @@ public class loadformdata extends HttpServlet {
             }
             
 
-           formedform="<fieldset>"
+           formedform="<fieldset><input type='hidden' value='partialdomaintotal' id='domainsumfilter' name='domainsumfilter'>"
                     + "<legend> Section A: Background Information </legend>"
                     + "<div class='row'>"
                     + "<div class='col-lg-6'> <input type='hidden' name='backgroundid' value='"+backgroundinforid+"' id='backgroundid' /><input type='hidden' value='"+no_of_elements+"' name='no_of_elements' id='no_of_elements'>"
@@ -206,7 +206,7 @@ public class loadformdata extends HttpServlet {
                     + ""
                     + "<div class=\"form-group\">"
                     + "<label for=\"exampleInputPassword6\">Site Visited</label>\n"
-                    + "<select class=\"form-control\" name=\"site\" id='site' onchange='checkupdate();' data-parsley-group=\"block0\" >\n"
+                    + "<select class=\"form-control\" name=\"site\" id='site' onchange='checkupdate();determinefunction(this);' data-parsley-group=\"block0\" >\n"
                     + ""+sites
                     + "</select>"
                     + "</div>"
@@ -261,14 +261,21 @@ public class loadformdata extends HttpServlet {
             String questionvalue=""; 
             String questiontableid=""; 
             String commentvalue="";
+            String allnon_applicable="";
             while (conn.rs.next()) {
             //create a new page
                   String functionname="";
                   String functionname1="";
                     String affectedelem=conn.rs.getString("affected_question");
                     String dependantquestion=conn.rs.getString("dependant_question");
+                    String non_applicable=conn.rs.getString("non_applicable");
+                    if(non_applicable!=null){
+                        
+                    allnon_applicable+=""+conn.rs.getString("questionid")+"_";
                     
-                       String getquestval="select * from marks where  site_id='"+fsite+"' and quest_id='"+conn.rs.getString("questionid")+"' and year='"+fyear+"' and period='"+fperiod+"'";
+                                            }
+                    
+                  String getquestval="select * from marks where  site_id='"+fsite+"' and quest_id='"+conn.rs.getString("questionid")+"' and year='"+fyear+"' and period='"+fperiod+"'";
                   conn.rs_6=conn.st_6.executeQuery(getquestval);
                   while(conn.rs_6.next()){
                   questionvalue=conn.rs_6.getString("answer");
@@ -301,11 +308,24 @@ public class loadformdata extends HttpServlet {
                     String elemname = "element_" + conn.rs.getString("questionid") + "#" + conn.rs.getString("response_type");
                     String marks=conn.rs.getString("marks");
                     
-                  String totalperdomain=conn.rs.getString("total");
-                    float dcmlmark=(float)conn.rs.getInt("marks")/conn.rs.getInt("total");
-                 
+                    
+                    String nusutotalqr=" SELECT count(*) as total FROM ovc_lip.questions where non_applicable is null and domain_id='"+conn.rs.getString("domain_id")+"'";
+                   int nusutotal=1;
+                   conn.rs_4=conn.st_4.executeQuery(nusutotalqr);
                    
-                    middletable += "<td style='width:100px;'>"+elementcreator(questionvalue,questiontableid,functionname,functionname1,elemname,""+dcmlmark,initdomain) + "</td>"
+                   while( conn.rs_4.next()){
+                   nusutotal=conn.rs_4.getInt(1);                   
+                   }
+                
+                
+                
+                    
+                    String totalperdomain=conn.rs.getString("total");
+                    float dcmlmark=(float)conn.rs.getInt("marks")/conn.rs.getInt("total");
+                     float partialdcmlmark=(float)conn.rs.getInt("marks")/nusutotal;
+                  
+                   
+                    middletable += "<td style='width:100px;'>"+elementcreator(questionvalue,questiontableid,functionname,functionname1,elemname,""+dcmlmark,""+partialdcmlmark,initdomain) + "</td>"
                            
                             + "<td style='width:500px;'> <textarea cols='25' rows='2'  class='form-control' name=\"comment"+conn.rs.getString("questionid") + "\" id=\"comment"+ conn.rs.getString("questionid") + "\"  >"+commentvalue+"</textarea>" 
                         + "</td>"
@@ -361,10 +381,22 @@ public class loadformdata extends HttpServlet {
                 middletable += "<tr><td><b>" + conn.rs.getString("sn") + "</b></td><td> <h4 style='color:black;'> <b>" + conn.rs.getString("question") +"</b>.</h4> <font color='red'><h4 >"+conn.rs.getString("comment")+"</h4></font> </td>";
                 String elemname = "element_" + conn.rs.getString("questionid") + "#" + conn.rs.getString("response_type");
                 String marks=conn.rs.getString("marks");
-                 String totalperdomain=conn.rs.getString("total");
-                 float dcmlmark=(float)conn.rs.getInt("marks")/conn.rs.getInt("total"); 
-                 
-                middletable +="<td style='width:100px;'>"+elementcreator(questionvalue,questiontableid,functionname,functionname1,elemname,""+dcmlmark,initdomain) + "</td>"
+                
+                   String nusutotalqr=" SELECT count(*) as total FROM ovc_lip.questions where non_applicable is null and domain_id='"+conn.rs.getString("domain_id")+"'";
+                   int nusutotal=1;
+                   conn.rs_4=conn.st_4.executeQuery(nusutotalqr);
+                   
+                   while( conn.rs_4.next()){
+                   nusutotal=conn.rs_4.getInt(1);                   
+                   }
+                
+                String totalperdomain=conn.rs.getString("total");
+                float dcmlmark=(float)conn.rs.getInt("marks")/conn.rs.getInt("total"); 
+                 float partialdcmlmark=(float)conn.rs.getInt("marks")/nusutotal;
+                  
+                
+                
+                middletable +="<td style='width:100px;'>"+elementcreator(questionvalue,questiontableid,functionname,functionname1,elemname,""+dcmlmark,""+partialdcmlmark,initdomain) + "</td>"
                             + "<td style='width:500px;'> <textarea cols='25' rows='2'  class='form-control' name=\"comment" + conn.rs.getString("questionid") + "\" id=\"comment"+ conn.rs.getString("questionid") + "\"  >"+commentvalue+"</textarea>" 
                             + "</td>"
                             + "</tr>";
@@ -388,7 +420,7 @@ public class loadformdata extends HttpServlet {
                     + "<table border='1' style='width:1030px;margin:6px;margin-right:2px;'>"
                     + "<tr><th colspan='4'><b>Domain: "+legendheader+"</b></th></tr>"
             + ""+tableheader+middletable+extraqstn+"</table></fieldset>";
-                 formedform+=domaintable;
+                 formedform+=domaintable+"<input type='hidden' name='allskippables' value='"+allnon_applicable+"' id='allskippables'>";
                  //reset the middle table
                  
             
@@ -446,7 +478,7 @@ public class loadformdata extends HttpServlet {
     }// </editor-fold>
 
     //This function creates 
-    public static String elementcreator(String qvalue,String qtableid,String functionname,String functionname1,String restype,String marks,String domainid) {
+    public static String elementcreator(String qvalue,String qtableid,String functionname,String functionname1,String restype,String marks,String halfmarks,String domainid) {
 
         String createdelem = "";
 
@@ -482,7 +514,7 @@ public class loadformdata extends HttpServlet {
                                                  }
            // System.out.println(" ~~~~~~"+elemarr[0]);
             createdelem = "<div class=\"form-group\">"
-                    + "<select onchange=\"domaintotal(this,'"+elemarr[0]+"','"+marks+"','"+domainid+"');"+functionname+"\" onmouseover=\""+functionname1+"\" class=\"form-control\" name='" + elemarr[0] + "' id='" + elemarr[0] + "'  >\n"
+                    + "<select onchange=\"domaintotal(this,'"+elemarr[0]+"','"+marks+"','"+domainid+"'); partialdomaintotal(this,'"+elemarr[0]+"','"+halfmarks+"','"+domainid+"'); "+functionname+"\" onmouseover=\""+functionname1+"\" class=\"form-control\" name='" + elemarr[0] + "' id='" + elemarr[0] + "'  >\n"
                     + "" + options  //data-parsley-group=\"block"+domainid+"\"
                     + "</select><input type='hidden' value='"+qtableid+"' name='qid"+ elemarr[0]+"' id='qid"+ elemarr[0]+"'>"
                     + "</div>";

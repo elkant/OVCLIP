@@ -97,6 +97,18 @@
         <servlet-name>countyreport</servlet-name>
         <servlet-class>reports.countyreport</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>loaddqaform</servlet-name>
+        <servlet-class>ovc.loaddqaform</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>saveDesignation</servlet-name>
+        <servlet-class>ovc.saveDesignation</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>saveactionpoint</servlet-name>
+        <servlet-class>ovc.saveactionpoint</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>springapp</servlet-name>
         <url-pattern>*.htm</url-pattern>
@@ -188,6 +200,18 @@
     <servlet-mapping>
         <servlet-name>countyreport</servlet-name>
         <url-pattern>/countyreport</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>loaddqaform</servlet-name>
+        <url-pattern>/loaddqaform</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>saveDesignation</servlet-name>
+        <url-pattern>/saveDesignation</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>saveactionpoint</servlet-name>
+        <url-pattern>/saveactionpoint</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>900000</session-timeout>

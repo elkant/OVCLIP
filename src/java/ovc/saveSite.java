@@ -9,6 +9,7 @@ import database.dbConn;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -35,6 +36,10 @@ public class saveSite extends HttpServlet {
                 
                 dbConn conn= new dbConn();
                 
+                
+                
+                
+                
                 String result="<font color='red'>Site"+sitename+"  has already been added</font>";
                 String checkexistance="select * from sites where site_name like ? and districtid like ? and cbo_id like ?";
                 
@@ -52,13 +57,45 @@ public class saveSite extends HttpServlet {
                     try {
                         String insert="insert into sites (site_name,districtid,cbo_id) values (?,?,?)";
                         
-                        conn.pst1=conn.conne.prepareStatement(insert);
+                     int num=generateRandomNumber(100, 2000);
+                    String siten=sitename.toUpperCase();
+                     if(sitename.contains("MAIN")){
+                      insert="insert into sites (site_id,site_name,districtid,cbo_id) values (?,?,?,?)";
+                      conn.pst1=conn.conne.prepareStatement(insert);    
+                          
+                        gen g= new gen();
+                        
+                        String id=g.uniqueid().trim();
+                        
+                       String specialsiteid=num+"9999"; 
+                     
+                        conn.pst1.setString(1,specialsiteid);
+                        conn.pst1.setString(2,sitename);
+                        conn.pst1.setString(3,district);
+                        conn.pst1.setString(4,cbo);
+                        
+                        
+                        
+                        if(conn.pst1.executeUpdate()==1){
+                            
+                            result="<font color='green'>Site "+sitename+" has been added succesfully </font>";
+                            
+                        } 
+                     }
+                     else {
+                         
+                         
+                         
+                         //=====THE NORMAL INSTERT WITHOUT MAIN=======================
+                         
+                     conn.pst1=conn.conne.prepareStatement(insert);
                         
                         gen g= new gen();
                         
                         String id=g.uniqueid().trim();
                         
                         
+                     
                         conn.pst1.setString(1,sitename);
                         conn.pst1.setString(2,district);
                         conn.pst1.setString(3,cbo);
@@ -70,6 +107,13 @@ public class saveSite extends HttpServlet {
                             result="<font color='green'>Site "+sitename+" has been added succesfully </font>";
                             
                         }
+                     
+                     
+                     
+                     }
+                        
+                        
+                     
                     } catch (SQLException ex) {
                         Logger.getLogger(saveSite.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -122,4 +166,14 @@ public class saveSite extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    
+    
+      public int generateRandomNumber(int start, int end) {
+        Random random = new Random();
+        long fraction = (long) ((end - start + 1) * random.nextDouble());
+        return ((int) (fraction + start));
+    }
+    
+    
+    
 }

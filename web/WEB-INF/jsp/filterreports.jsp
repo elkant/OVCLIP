@@ -71,7 +71,7 @@
                         
                     document.getElementById("sitecbo").innerHTML=data;    
                         
-                    }
+                                             }
                 });
         
 

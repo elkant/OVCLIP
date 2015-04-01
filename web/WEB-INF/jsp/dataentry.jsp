@@ -376,10 +376,74 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
             //loaddata();
 
 
+      function determinefunction(val){
+ 
+     //if the selected site is main, then set the controller of the input
+     
+     var receivedval=val.value;
+    
+     //main offices end with 9999. This is done during entry of sites.
+     if(receivedval.endsWith("9999")){
+        document.getElementById("domainsumfilter").value="domaintotal";
+        enableskippables();
+    }
+    else {
+      document.getElementById("domainsumfilter").value='partialdomaintotal';   
+        disableskippables();
+         }
+    
+                                  }//end of function for determining the formula to use in adding
+                                  
+                                  
+                                  
+ //==_____________________________________________________________________________________________                                 
+                                  function disableskippables(){
+  var allskips=document.getElementById("allskippables").value;     
+   
+    var skipelems=allskips.split("_");
+    
+     for(a=0;a<skipelems.length;a++){
+         if(skipelems[a]!==""){
+   var curelem="element_"+skipelems[a];
+   var curcomment="comment"+skipelems[a];
+   document.getElementById(curelem).disabled=true;
+   document.getElementById(curcomment).disabled='disabled';  
+   document.getElementById(curelem).required=false;
+   //make required false
+                              }
+                                   }                                  
+                                      
+                                  }
 
 
+ //==_____________________________________________________________________________________________
+            
+    
+    //==_____________________________________________________________________________________________                                 
+        function enableskippables(){
+  var allskips=document.getElementById("allskippables").value;   
+   //alert(allskips);
+    var skipelems=allskips.split("_");    
+     for(a=0;a<skipelems.length;a++){
+         if(skipelems[a]!==""){
+   var curelem="element_"+skipelems[a];
+   var curcomment="comment"+skipelems[a];
+   
+   document.getElementById(curelem).disabled =false;
+   document.getElementById(curcomment).disabled =false;
+   document.getElementById(curelem).required=true;
+         }
+   //make required false
+     }                                  
+                                      
+                                  }
 
-            function loadsites1(cboid)
+
+ //==_____________________________________________________________________________________________
+ 
+    
+    
+    function loadsites1(cboid)
             {
                        var cboname=document.getElementById("lip").value;
                
@@ -424,6 +488,9 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
                 var elementname = ele;
                 var marks = N(mark,4);
                 var domainid = domain;
+//alert(document.getElementById("domainsumfilter").value);
+
+if(document.getElementById("domainsumfilter").value==='domaintotal'){
 
 //a special case for > , < and such comaprisons in javascript
 //if the selected value begins with a > or a <, then on our arrays that store the pushed elements , we will storte a yes, but in our database, we will save a >..,or <.. or >=..
@@ -512,9 +579,156 @@ if(submitedvalue.indexOf(">")===0||submitedvalue.indexOf("<")===0){
               // alert(submitedvalue);
 
 
+            }//end of the most inportant if 
+            }
+//=====================================================================================
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+            function partialdomaintotal(val, ele, mark, domain) {
+                //create two arrays. one to store sent elements and another to store the value.   
+                //add the value together    
+                var submitedvalue = val.value;
+                var elementname = ele;
+                var marks = N(mark,4);
+                var domainid = domain;
+if(document.getElementById("domainsumfilter").value==='partialdomaintotal'  ){
+  
+
+//enable disable for the skippable 
+//$$$$$$$$$$ SOMETHING MUST BE DONE HERE 
+//$$$$$$$$$$ SOMETHING MUST BE DONE HERE 
+//$$$$$$$$$$ SOMETHING MUST BE DONE HERE 
+//$$$$$$$$$$ SOMETHING MUST BE DONE HERE 
+//$$$$$$$$$$ SOMETHING MUST BE DONE HERE 
+//$$$$$$$$$$ SOMETHING MUST BE DONE HERE 
+//$$$$$$$$$$ SOMETHING MUST BE DONE HERE 
+//disable required field for some  
+//a special case for > , < and such comaprisons in javascript
+//if the selected value begins with a > or a <, then on our arrays that store the pushed elements , we will storte a yes, but in our database, we will save a >..,or <.. or >=..
+
+
+if(submitedvalue.indexOf(">")===0||submitedvalue.indexOf("<")===0){
+    
+  submitedvalue="Yes";  
+    
+}
+
+                //alert(submitedvalue+" "+ele+" "+mark+" "+domain);
+                //if value is a yes , then mark is +ve 1, 
+                //if value is a no, a mark is -ve 1
+                //if value is a blank, a mark is 0
+
+                var markstosent = 0;
+                if (submitedvalue ==='Yes') {
+
+                    markstosent = "" + marks;
+                }
+                else if (submitedvalue ==='No') {
+
+                    markstosent = "-" + marks;
+
+                }
+                else {
+                    markstosent = "-" + marks;
+
+                }
+
+
+                //check the value that was previuosly added so as to know how to handle a case of editing
+                //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                //if editing , then you need to load the 2 arrays here with values from the database per domain and question.
+
+                //    ;) I just hope the array will be fast while searching
+
+                if (elementi.indexOf(ele) === -1) {
+
+           //alert(ele+"  just added now. It didnt exist");
+
+                    // alert(elementi);
+
+
+                    //alert(elementi.indexOf(ele));
+                    elementi.push(ele);
+                    elementivalues.push(submitedvalue);
+                    //now call the functions that do the updating of the totals.
+                    //nb Dont update the totals if the selected value is a No..
+                    if (submitedvalue === 'Yes') {
+                        domainsum(markstosent, domainid);
+                        //totalsum(markstosent);
+                    }
+
+
+
+                }
+                else {
+                    
+                   //  alert(ele+"  existed. Its being edited");
+                    
+                    //get the index of the element, then update the value that was there previously...  
+                    var pos = elementi.indexOf(ele);
+                    //if the current option/value and the previous one are differing, then do a subtraction
+
+                    if (elementivalues[pos] === submitedvalue || (elementivalues[pos] === "" && submitedvalue === "No") || (elementivalues[pos] === "No" && submitedvalue === "")) {
+                        //then dont do anything
+//alert("No change::: existing value "+elementivalues[pos]+" __ while __ "+submitedvalue);
+                    }
+                    else {
+                        
+                        //alert("There is change::: existing value "+elementivalues[pos]+" __ and new value is__ "+submitedvalue);
+                        //replace with new value
+                        elementivalues[pos] = submitedvalue;
+                        //expect a change in here
+                        domainsum(markstosent,domainid);
+                        //totalsum(markstosent);
+                    }
+
+                }
+
+
+              // alert(submitedvalue);
+
+}//end of the mother if condition
             }
 
 //=====================================================================================
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
   function staticdomaintotal(val, ele, mark, domain) {
@@ -1256,6 +1470,8 @@ console.log("dont submit");
       $("#"+curelem).change();   
         
     }
+    
+    
     
         </script>
 

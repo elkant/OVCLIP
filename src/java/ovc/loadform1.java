@@ -65,7 +65,7 @@ public class loadform1 extends HttpServlet {
             }
             
 
-           formedform="<fieldset>"
+           formedform="<fieldset><input type='hidden' value='partialdomaintotal' id='domainsumfilter' name='domainsumfilter'>"
                     + "<legend> Section A: Background Information </legend>"
                     + "<div class='row'>"
                     + "<div class='col-lg-6'> <input type='hidden' value='"+no_of_elements+"' name='no_of_elements' id='no_of_elements'>"
@@ -88,7 +88,7 @@ public class loadform1 extends HttpServlet {
                     + ""
                     + "<div class=\"form-group\">"
                     + "<label for=\"exampleInputPassword6\">Site Visited</label>\n"
-                    + "<select class=\"form-control\" name=\"site\" id='site' onchange='checkupdate();' data-parsley-group=\"block0\" >\n"
+                    + "<select class=\"form-control\" name=\"site\" id='site' onchange='checkupdate();determinefunction(this);' data-parsley-group=\"block0\" >\n"
                     + "<option value=''>Select Site</option>"
                     + "</select>"
                     + "</div>"
@@ -140,7 +140,7 @@ public class loadform1 extends HttpServlet {
             String tableheader = "<tr><th>SN</th><th>Assesment Questions</th><th>Response</th><th>Comment</th></tr>";
             String middletable = "";
              String legendheader="";
-             
+             String allnon_applicable="";
             while (conn.rs.next()) {
             //create a new page
                   String functionname="";
@@ -149,7 +149,10 @@ public class loadform1 extends HttpServlet {
                   String functiontwo="";
                     String affectedelem=conn.rs.getString("affected_question");
                     String non_applicable=conn.rs.getString("non_applicable");
-                    
+                    if(non_applicable!=null){
+                        
+                    allnon_applicable+=""+conn.rs.getString("questionid")+"_";
+                                            }
                     //=======================SOMETHING WILL BE DONE ON THIS AREA
                     //=======================SOMETHING WILL BE DONE ON THIS AREA
                     //=======================SOMETHING WILL BE DONE ON THIS AREA
@@ -258,7 +261,7 @@ public class loadform1 extends HttpServlet {
             
             domaintable="<fieldset> <legend>"+legendheader+"  <span style='color:red;font-size:25px;' id='domain"+initdomain+"'></span> </legend><input type='hidden' name='domaininput"+initdomain+"' id='domaininput"+initdomain+"'> <table border='1' style='width:1030px;margin:6px;margin-right:2px;'><tr><th colspan='4'><b>Domain: "+legendheader+"</b></th></tr>"
             + ""+tableheader+middletable+extraqstn+"</table></fieldset>";
-                 formedform+=domaintable;
+                 formedform+=domaintable+"<input type='hidden' name='allskippables' value='"+allnon_applicable+"' id='allskippables'>";
                  //reset the middle table
                  
             
@@ -344,7 +347,7 @@ public class loadform1 extends HttpServlet {
            // System.out.println(" ~~~~~~"+elemarr[0]);
             int blockid=Integer.parseInt(domainid);
             createdelem = " <div class=\"form-group\">"
-                    + "<select onchange=\"domaintotal(this,'"+elemarr[0]+"','"+marks+"','"+domainid+"');"+functionname+"\" class=\"form-control\" name='" + elemarr[0] + "' id='" + elemarr[0] + "' data-parsley-group=\"block"+domainid+"\" required='true'  >\n"
+                    + "<select onchange=\"domaintotal(this,'"+elemarr[0]+"','"+marks+"','"+domainid+"'); partialdomaintotal(this,'"+elemarr[0]+"','"+halfmarks+"','"+domainid+"'); "+functionname+"\" class=\"form-control\" name='" + elemarr[0] + "' id='" + elemarr[0] + "' data-parsley-group=\"block"+domainid+"\" required='true'  >\n"
                     + "" + options  //
                     + "</select>"
                     + "</div>";
