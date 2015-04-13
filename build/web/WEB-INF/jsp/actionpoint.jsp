@@ -47,6 +47,8 @@
                         if (session.getAttribute("level").equals("1")) {
                 %>
                     <a id="modal_trigger1" style="color:red;background-color: white;" href="#sitemodal" class="btn"><img src="<c:url value="/resources/images/add.gif" />" />Add Designation</a>
+                    <a id="d_trigger1" style="color:red;background-color: white;" href="#sitemodal" class="btn"><img src="<c:url value="/resources/images/add.gif" />" />Add Designation</a>
+                    <a id="coutertotal" style="color:red;background-color: white;" href="#" class="btn"><h3><b>3</b> Rows</h3></a>
                 <%}}%>
                 </div>
             </div>
@@ -206,9 +208,71 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
                     </div>
                                         
                                         
+                   <div id="rowsmodal" class="popupContainer" style="display:none;width:500px;">
+                        <header class="popupHeader">
+                          
+                            <span class="header_title">Enter Number of Rows To Add</span>
+                            <span class="submitrows"><img src="<c:url value="/resources/images/close.png" />" width="24px"></i></span>
+                        </header>
+
+                        <section class="popupBody" style="width:550px;">
+                            <div class="add_staff">
+                                <form name="addrowsform" id="addrowsform" action='#' style="width:350px;">
+                                    
+       
+                                    
+                                    
+                                    <table>
                                         
+                                        <tr><td>No of Rows</td><td><input class="form-control" type="text" id="custrows" name="custrows"></td></td>
+                                       <tr><td>  </td><td >
+                                            
+                                        <input type="text" value="ADD" id="submitrows" class ='submitrows' onclick="customrows();" readonly style=" cursor:pointer;margin-left: 50px; text-transform:uppercase ; height: 50px; width:140px;text-align:center ; color:white ;background:coral; border-style:ridge ;" />
+                        
+                                                        
+                                            </td><td><p id="msg"></p></td></tr>
+                                    </table>   
+
+
+                                </form>
+                            </div>
+                        </section>
+                    </div>                      
                                         
+                      
+                        
+                            <div id="delrowsmodal" class="popupContainer" style="display:none;width:500px;">
+                        <header class="popupHeader">
+                          
+                            <span class="header_title">Enter Number of Rows To Delete</span>
+                            <span class="submitrows1"><img src="<c:url value="/resources/images/close.png" />" width="24px"></i></span>
+                        </header>
+
+                        <section class="popupBody" style="width:550px;">
+                            <div class="add_staff">
+                                <form name="delrowsform" id="delrowsform" action='#' style="width:350px;">
+                                    
+       
+                                    
+                                    
+                                    <table>
                                         
+                                        <tr><td>No of Rows</td><td><input class="form-control" type="text" id="delcustrows" name="delcustrows"></td></td>
+                                       <tr><td>  </td><td >
+                                            
+                                        <input type="text" value="DELETE" id="submitrows1" class ='submitrows1' onclick="delcustomrows();" readonly style=" cursor:pointer;margin-left: 50px; text-transform:uppercase ; height: 50px; width:140px;text-align:center ; color:white ;background:coral; border-style:ridge ;" />
+                        
+                                                        
+                                            </td><td><p id="msg"></p></td></tr>
+                                    </table>   
+
+
+                                </form>
+                            </div>
+                        </section>
+                    </div> 
+                        
+                        
                                         
                 </div>
             </footer>
@@ -235,7 +299,7 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
             //$(window).load(function(){
             //    
             //});
-
+ var rfr=null;
             $(function () {
 
                 $('.loading').show();
@@ -244,9 +308,8 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
                     type: 'post',
                     dataType: 'html',
                     success: function (data) {
-                        document.getElementById("wizard-example-5").innerHTML = data;
-
-                      var rfr=  $("#wizard-example-5").stepFormWizard({
+                    document.getElementById("wizard-example-5").innerHTML = data;
+                      rfr=  $("#wizard-example-5").stepFormWizard({
                             height: 'auto',
                             theme:'sky',
                             nextBtn: $('<a class="next-btn sf-right sf-btn" href="#">NEXT</a>'),
@@ -310,6 +373,8 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
 
                         });
 //have a loop that creates many date pickers using a loop
+ $("#modal_trigger").leanModal({top: 200, overlay: 0.6, closeButton: ".submitrows"});
+ $("#delrows_trigger").leanModal({top: 200, overlay: 0.6, closeButton: ".submitrows1"});
 
 var ttl=document.getElementById("counter").value;
 for ( a=1;a<=ttl;a++){
@@ -327,10 +392,104 @@ for ( a=1;a<=ttl;a++){
             //loaddata();
 
 
-        
-                                  
-   
+      function loaddes(rw){
+          
+          
+        $.ajax({
+                    url: "loaddesignation",
+                    type: 'post',
+                    dataType: 'html',
+                    success: function (data) {
+                        
+                  document.getElementById("select"+rw).innerHTML=data;  
+                        
+                    }
+                });
+      }  
+      
+    function customrows(){
+     var noofrows=document.getElementById("custrows").value;
+     createrows(noofrows);
+     document.getElementById("custrows").value="";   
+    }
+    
+    function delcustomrows(){
+     var noofrows=document.getElementById("delcustrows").value;
+     deleteRow(noofrows);
+     document.getElementById("delcustrows").value="";   
+    }
+    
   
+  function createrows(num){
+   for( a=0;a<num;a++){  
+ var allrows=document.getElementById("counter").value;
+allrows=parseInt(allrows)+1;
+ var rws2=allrows;
+
+   document.getElementById("counter").value=rws2;
+document.getElementById("coutertotal").innerHTML="<h3><b>"+rws2+"</b> Rows</h3>";
+var tbl = document.getElementById('actionpointtable');
+var lastRow=tbl.rows.length;
+//alert(lastRow);
+var x=document.getElementById('actionpointtable').insertRow(lastRow);
+//now insert columns
+
+var y=x.insertCell(0);
+var z=x.insertCell(1);
+var v=x.insertCell(2);
+var b=x.insertCell(3);
+var c=x.insertCell(4);
+//var m=x.insertCell(4);
+
+loaddes(rws2);
+y.innerHTML="<h3>"+rws2+"</h3>";
+z.innerHTML="<div class='form-group'><Textarea rows='2' cols='30' class='form-control' name='actionid"+rws2+"' id='actionid"+rws2+"' ></TextArea></div>";
+v.innerHTML="<div class='form-group'><select name='select"+rws2+"' class='form-control' id='select"+rws2+"'></select></div>";
+b.innerHTML="<div class='form-group'><input class='form-control' type='text' id='fdate"+rws2+"' name='fdate"+rws2+"'></div>";
+c.innerHTML="<div class='form-group'><input class='form-control' type='text' id='sdate"+rws2+"' name='sdate"+rws2+"'></div>";
+   
+        $("#fdate"+rws2).datepicker({changeMonth: true, changeYear: true, yearRange: '2008:2015', dateFormat: 'yy-mm-dd', maxDate: new Date()});
+        $("#sdate"+rws2).datepicker({changeMonth: true, changeYear: true, yearRange: '2008:2015', dateFormat: 'yy-mm-dd', maxDate: new Date()});
+                        
+        }
+   
+rfr.refresh();
+//var sfw = $("#wizard_example").stepFormWizard();
+//sfw.refresh();
+   //now call the wizard method again
+
+      
+  }
+  //===================end of Adding Rows====================
+    
+    
+    
+    
+    //delete rows
+    function deleteRow(num)
+{
+    for( a=0;a<num;a++){
+    var all_rows=document.getElementById("counter").value;
+ 
+     if(all_rows==="1"){
+     //dont delete   
+    }
+    else{
+    var rws2=all_rows-1;
+    if(rws2<0){
+        //dont go beyond 0
+       rws2=0 ;
+    }
+document.getElementById('actionpointtable').deleteRow(all_rows);
+document.getElementById("counter").value=rws2;
+document.getElementById("coutertotal").innerHTML="<h3><b>"+rws2+"</b> Rows</h3>";
+}
+
+}
+
+rfr.refresh();
+}
+    
     
     
     function loadsites1(cboid)
@@ -489,7 +648,7 @@ else if(val.value===res[0]){
    document.getElementById(curelem).disabled =false;
    document.getElementById(curcomment).disabled =false;
 
-    document.getElementById(curelem).required=true;
+   document.getElementById(curelem).required=true;
                                    }   
          
                         }
@@ -511,9 +670,8 @@ return true;
 
 
         <script type="text/javascript">
-            $("#modal_trigger").leanModal({top: 200, overlay: 0.6, closeButton: ".modal_close"});
             $("#modal_trigger1").leanModal({top: 200, overlay: 0.6, closeButton: ".modal_close"});
-
+           
             //	$(function(){
             //		// Calling Login Form
             //		$("#login_form").click(function(){

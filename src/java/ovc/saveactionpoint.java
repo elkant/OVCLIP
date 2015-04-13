@@ -32,14 +32,37 @@ public class saveactionpoint extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet saveactionpoint</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet saveactionpoint at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
+          
+            //receive the various fields to be saved 
+            //actionid
+            //responsible person
+            //expecteddate
+            //expecteddate2
+            //sessionofjoiningnumber
+            //controllerofloop
+            
+            
+           String actionid="";
+           String responsibleperson="";
+           String expecteddate="";
+           String expecteddate2="";
+           String joiningnumber="";
+           String counter=request.getParameter("counter");
+           
+           //
+           
+           int cnt=Integer.parseInt(counter);
+            for(int a=0;a<cnt;a++){
+           
+            responsibleperson=request.getParameter("select"+a);   
+            expecteddate=request.getParameter("fdate"+a);   
+            expecteddate2=request.getParameter("2date"+a);   
+            actionid=request.getParameter("actionid"+a);   
+            
+                                  }
+            
+            
+            
             out.println("</html>");
         }
     }

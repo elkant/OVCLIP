@@ -109,6 +109,14 @@
         <servlet-name>saveactionpoint</servlet-name>
         <servlet-class>ovc.saveactionpoint</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>resultspercbo</servlet-name>
+        <servlet-class>reports.resultspercbo</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>loaddesignation</servlet-name>
+        <servlet-class>ajax.loaddesignation</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>springapp</servlet-name>
         <url-pattern>*.htm</url-pattern>
@@ -212,6 +220,14 @@
     <servlet-mapping>
         <servlet-name>saveactionpoint</servlet-name>
         <url-pattern>/saveactionpoint</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>resultspercbo</servlet-name>
+        <url-pattern>/resultspercbo</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>loaddesignation</servlet-name>
+        <url-pattern>/loaddesignation</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>900000</session-timeout>

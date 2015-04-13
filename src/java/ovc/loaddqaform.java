@@ -40,7 +40,13 @@ public class loaddqaform extends HttpServlet {
             
             String createdtable="";
             
-            createdtable="<fieldset><legend>DQA ACTION POINT</legend><div class='row'><table style='width:1030px;margin-left:20px;margin-right:2px;'  border='1'><tr><th><h4>SN</h4></th><th><h4>Follow up Actions recommended</h4></th><th><h4>Responsible person</h4></th><th><h4>First Expected Completion Date</h4></th><th><h4>Second Expected Completion Date</h4></th></tr>";
+            createdtable="<fieldset><legend style='text-align:center;'>DQA ACTION POINT</legend>"
+                    + "<div class='row'><nobr><span><input type=\"text\" value=\"Add 1 Row\" id=\"generate1\" class ='generate1' onclick=\"createrows('1');\" readonly style=\" cursor:pointer;margin-left: 50px; text-transform:uppercase ; height: 40px; width:140px;text-align:center ; color:white ;background:green; border-style:ridge ;\" /></span>"
+                   + "<span><input type=\"text\" value=\"Delete Row\" id=\"generate1\" class ='generate1' onclick=\"deleteRow('1');\" readonly style=\" cursor:pointer;margin-left: 50px; text-transform:uppercase ; height: 40px; width:170px;text-align:center ; color:white ;background:coral; border-style:ridge ;\" /></span>"
+                     + "<a id='modal_trigger' style='page-break-before: avoid;color:red;background-color:white;margin:0px;' href='#rowsmodal' ><input type='text' value='Add Custom No of Rows' id='generate2'   readonly style='cursor:pointer;margin-left: 50px; text-transform:uppercase ; height: 40px; width:180px;text-align:center ; color:white ;background:#00CC00; border-style:ridge ;'/></a></nobr>"
+                     + "<a id='delrows_trigger' style='page-break-before: avoid;color:red;background-color:white;margin:0px;' href='#delrowsmodal' ><input type='text' value='Delete Custom No of Rows' id='generate3'   readonly style='cursor:pointer;margin-left: 50px; text-transform:uppercase ; height: 40px; width:180px;text-align:center ; color:white ;background:#FF0000; border-style:ridge ;'/></a></nobr>"
+                    
+                    + "<table id='actionpointtable' name='actionpointtable'  style='width:1030px;margin-left:20px;margin-right:2px;'  border='1'><tr><th><h4><b>SN</b></h4></th><th><h4><font color='red'><b>*</font>Follow up Actions recommended </b></h4></th><th><h4><font color='red'>*</font><b>Responsible person</b></h4></th><th><h4><font color='red'>*</font> <b>1st Expected <br/>Completion Date</b></h4></th><th><h4>2nd Expected <br/>Completion Date</h4></th></tr>";
            //get the questions from a specified table. 
             
             //summary of 
@@ -69,15 +75,18 @@ public class loaddqaform extends HttpServlet {
                  
                                         }
             
-            conn.rs=conn.st.executeQuery(getactions);
+        
             int counter=0;
-            while(conn.rs.next()){
+            while(counter<3){
             //create the entire table in this page..
              counter++;  
              
              
              
-             createdtable+="<tr><td style='color:green;'><h3>"+conn.rs.getString("sn")+"</h3><input type='hidden' name='actionid"+counter+"' id='actionid"+counter+"' value='"+conn.rs.getString(1)+"'></td><td style='color:black;'><h3>"+conn.rs.getString("action_name")+"</h4></td><td><div class=\"form-group\"><select name='select"+counter+"' class=\"form-control\" id='select"+counter+"'>"+design+"</select></div></td><td><div class=\"form-group\"><input class=\"form-control\" type='text' id='fdate"+counter+"' name='fdate"+counter+"'></div></td><td> <div class=\"form-group\"><input type='text' id='sdate"+counter+"' class=\"form-control\" name='sdate"+counter+"'></div></td></tr>";   
+             createdtable+="<tr><td><h3>"+counter+"</h3></td><td style='color:black;'><div class='form-group'>" +               
+             "<Textarea rows='2' cols='30' class='form-control' name='actionid"+counter+"' id='actionid"+counter+"' >" +
+             "</TextArea>" +
+             "</div></td><td><div class=\"form-group\"><select name='select"+counter+"' class=\"form-control\" id='select"+counter+"'>"+design+"</select></div></td><td><div class=\"form-group\"><input class=\"form-control\"  type='text' id='fdate"+counter+"' name='fdate"+counter+"'></div></td><td> <div class=\"form-group\"><input type='text' id='sdate"+counter+"' class=\"form-control\" name='sdate"+counter+"'></div></td></tr>";   
             
                        
                                   }  

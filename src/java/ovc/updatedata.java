@@ -97,7 +97,10 @@ else if(fulldates[1].equals("04")||fulldates[1].equals("05")||fulldates[1].equal
 else if(fulldates[1].equals("07")||fulldates[1].equals("08")||fulldates[1].equals("09")){ quarters="4";}
 else{quarters="0";}
          
-         
+//        session.setAttribute("period",quarters);
+//        session.setAttribute("year",year);       
+//        session.setAttribute("ass_date",ass_date);       
+//        session.setAttribute("markstableid",markstableid);
          
          String temabmembersstring="";
          if(request.getParameterValues("teammembers")!=null){

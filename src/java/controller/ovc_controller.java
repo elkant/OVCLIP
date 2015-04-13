@@ -41,6 +41,10 @@ public class ovc_controller {
         return "logout"; // forward to view index.jsp
                                    } 
     
+  @RequestMapping("/ipreports.htm")
+    public String handleipGet() {
+        return "ipreports"; // forward to view index.jsp
+                                   } 
     
      @RequestMapping("/actionpoint.htm")
     public String handleapGet() {
