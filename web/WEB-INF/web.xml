@@ -117,6 +117,10 @@
         <servlet-name>loaddesignation</servlet-name>
         <servlet-class>ajax.loaddesignation</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>barchartreport</servlet-name>
+        <servlet-class>reports.barchartreport</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>springapp</servlet-name>
         <url-pattern>*.htm</url-pattern>
@@ -228,6 +232,10 @@
     <servlet-mapping>
         <servlet-name>loaddesignation</servlet-name>
         <url-pattern>/loaddesignation</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>barchartreport</servlet-name>
+        <url-pattern>/barchartreport</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>900000</session-timeout>

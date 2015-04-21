@@ -47,7 +47,7 @@
                         if (session.getAttribute("level").equals("1")) {
                 %>
                     <a id="modal_trigger1" style="color:red;background-color: white;" href="#sitemodal" class="btn"><img src="<c:url value="/resources/images/add.gif" />" />Add Designation</a>
-                    <a id="d_trigger1" style="color:red;background-color: white;" href="#sitemodal" class="btn"><img src="<c:url value="/resources/images/add.gif" />" />Add Designation</a>
+                    <!--<a id="d_trigger1" style="color:red;background-color: white;" href="#sitemodal" class="btn"><img src="<c:url value="/resources/images/add.gif" />" />Add Designation</a>-->
                     <a id="coutertotal" style="color:red;background-color: white;" href="#" class="btn"><h3><b>3</b> Rows</h3></a>
                 <%}}%>
                 </div>
@@ -195,7 +195,7 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
                                         <tr><td>Designation</td><td><input class="form-control" type="text" id="designation" name="designation"></td></td>
                                        <tr><td>  <input type="reset" style="height:36px;width:100px;" value="reset fields"></td><td >
                                             
-                                        <input type="text" value="Save" id="generate1" class ='generate1' onclick="savesite();" readonly style=" cursor:pointer;margin-left: 50px; text-transform:uppercase ; height: 50px; width:140px;text-align:center ; color:white ;background:coral; border-style:ridge ;" />
+                                        <input type="text" value="Save" id="generate1" class ='modal_close' onclick="saveDesignation();" readonly style=" cursor:pointer;margin-left: 50px; text-transform:uppercase ; height: 50px; width:140px;text-align:center ; color:white ;background:coral; border-style:ridge ;" />
                         
                                                         
                                             </td><td><p id="msg"></p></td></tr>
@@ -346,10 +346,10 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
     },
     callback: {
    
-        afterShow: function() {
-            location.reload();
+        afterShow: function()  {
+            location.href='dataentry.htm';
             
-        }
+                               }
     }
     
         }); 
@@ -378,8 +378,8 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
 
 var ttl=document.getElementById("counter").value;
 for ( a=1;a<=ttl;a++){
-                        $("#fdate"+a).datepicker({changeMonth: true, changeYear: true, yearRange: '2008:2015', dateFormat: 'yy-mm-dd', maxDate: new Date()});
-                        $("#sdate"+a).datepicker({changeMonth: true, changeYear: true, yearRange: '2008:2015', dateFormat: 'yy-mm-dd', maxDate: new Date()});
+                        $("#fdate"+a).datepicker({changeMonth: true, changeYear: true, yearRange: '2008:2015', dateFormat: 'yy-mm-dd'});
+                        $("#sdate"+a).datepicker({changeMonth: true, changeYear: true, yearRange: '2008:2015', dateFormat: 'yy-mm-dd'});
                         }
                         $('.loading').hide();
                     }
@@ -735,7 +735,7 @@ return true;
                     dataType: 'html',
                     success: function (data) {
                         //now reload the staff list
-                  //document.getElementById("msg").innerHTML=data;
+                  document.getElementById("designation").value="";
                     var n = noty({text:"<h3>"+data+"</h3>",
                         layout: 'center',
                         type: 'Success',

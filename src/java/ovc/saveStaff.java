@@ -58,10 +58,7 @@ public class saveStaff extends HttpServlet {
              conn.pst2.setString(2,lname);
              conn.pst2.setString(3,phone);
             conn.rs2=conn.pst2.executeQuery();
-            if(!conn.rs2.next()){
-            
-            
-            
+            if(!conn.rs2.next()){          
                              
             
             String insert="insert into staff (staff_id,fname,mname,phone,role_id,userid,site_id) values (?,?,?,?,?,?,?)";

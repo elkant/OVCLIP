@@ -100,11 +100,12 @@ else{quarters="0";}
      
 
 
-//this sessions will be used to save the 
+//this sessions will be used to save the action point details
         session.setAttribute("period",quarters);
         session.setAttribute("year",year);       
         session.setAttribute("ass_date",ass_date);       
         session.setAttribute("markstableid",markstableid);
+        session.setAttribute("site",site);
         
         
         

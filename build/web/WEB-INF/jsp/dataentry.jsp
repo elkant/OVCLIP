@@ -170,6 +170,23 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
                           
                             <span class="header_title">Add APHIAplus Staff </span>
                             <span class="modal_close"><img src="<c:url value="/resources/images/close.png" />" width="24px"></i></span>
+                            
+                             <%
+                            if (session.getAttribute("actionmsg") != null)  { %>
+                                <script type="text/javascript"> 
+                    
+                    var n = noty({text: '<%=session.getAttribute("actionmsg")%>',
+                        layout: 'center',
+                        type: 'Error', 
+                         timeout: 1800});
+                    
+                </script> <%
+                
+                session.removeAttribute("actionmsg");
+                            }
+
+                        %>
+                            
                         </header>
 
                         <section class="popupBody" style="width:550px;">
@@ -324,7 +341,7 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
       
        $('.loading1').hide();
     //alert(data);
-              var n = noty({text:"<h3>"+data+"</h3>",
+              var n = noty({text:"<h3>"+data+".Now proceeding to Dqa action point section.</h3>",
                         layout: 'center',
                         type: 'Success',
                         timeout: 2800,
@@ -337,7 +354,7 @@ cbolists+="<option value='"+conn.rs1.getString(1)+"'>"+conn.rs1.getString(2)+"</
     callback: {
    
         afterShow: function() {
-            location.reload();
+            location.href='actionpoint.htm';
             
         }
     }
