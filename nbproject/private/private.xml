@@ -3,15 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/MANUEL/Documents/NetBeansProjects/OVCLIP/web/WEB-INF/jsp/index.jsp</file>
-            <file>file:/C:/Users/MANUEL/Documents/NetBeansProjects/OVCLIP/src/java/ovc/saveStaff.java</file>
-            <file>file:/C:/Users/MANUEL/Documents/NetBeansProjects/OVCLIP/web/WEB-INF/jsp/dataentry.jsp</file>
-            <file>file:/C:/Users/MANUEL/Documents/NetBeansProjects/OVCLIP/web/WEB-INF/jsp/actionpoint.jsp</file>
-            <file>file:/C:/Users/MANUEL/Documents/NetBeansProjects/OVCLIP/src/java/ovc/savedata.java</file>
-            <file>file:/C:/Users/MANUEL/Documents/NetBeansProjects/OVCLIP/src/java/ovc/saveactionpoint.java</file>
-            <file>file:/C:/Users/MANUEL/Documents/NetBeansProjects/OVCLIP/src/java/ovc/saveDesignation.java</file>
-            <file>file:/C:/Users/MANUEL/Documents/NetBeansProjects/OVCLIP/src/java/ovc/gen.java</file>
-            <file>file:/C:/Users/MANUEL/Documents/NetBeansProjects/OVCLIP/web/WEB-INF/jsp/basicreports.jsp</file>
+            <file>file:/C:/Users/MANUEL/Documents/NetBeansProjects/OVCLIP/src/java/reports/basicreports.java</file>
+            <file>file:/C:/Users/MANUEL/Documents/NetBeansProjects/OVCLIP/src/java/reports/resultspercbo.java</file>
+            <file>file:/C:/Users/MANUEL/Documents/NetBeansProjects/OVCLIP/src/java/reports/multiplesitesreport.java</file>
+            <file>file:/C:/Users/MANUEL/Documents/NetBeansProjects/OVCLIP/src/java/reports/barCharts.java</file>
         </group>
     </open-files>
 </project-private>

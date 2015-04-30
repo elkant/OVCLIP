@@ -36,6 +36,11 @@ public class ovc_controller {
         return "ovc_home"; // forward to view index.jsp
                                    }  
 
+        @RequestMapping("/charts.htm")
+    public String handlecharts() {
+        return "charts"; // forward to view index.jsp
+                                   }  
+    
  @RequestMapping("/logout.htm")
     public String handlelogoutGet() {
         return "logout"; // forward to view index.jsp
