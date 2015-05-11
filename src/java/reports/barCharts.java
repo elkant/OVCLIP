@@ -69,8 +69,8 @@ public class barCharts extends HttpServlet {
             String startdate="2015-01-01";
             String enddate="2015-03-30";
             
-           // startdate=request.getParameter("startdate");
-            //enddate=request.getParameter("enddate");
+            startdate=request.getParameter("startdate");
+            enddate=request.getParameter("enddate");
             
             
           
@@ -285,11 +285,11 @@ public class barCharts extends HttpServlet {
             dnamestyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
             
             
-            shet2=wb.createSheet("LIP_REPORT");
-            shet2.setColumnWidth(0, 8000);
-            shet2.setColumnWidth(1, 5000);
-            shet2.setColumnWidth(2, 5000);
-            shet2.setColumnWidth(3, 5000);
+            shet2=wb.createSheet("Column Charts Per Cbo");
+            shet2.setColumnWidth(0, 12000);
+            shet2.setColumnWidth(1, 12000);
+            shet2.setColumnWidth(2, 4000);
+            shet2.setColumnWidth(3, 10000);
             shet2.setColumnWidth(4, 5000);
             shet2.setColumnWidth(5, 5000);
             shet2.setColumnWidth(6, 5000);
@@ -300,195 +300,201 @@ public class barCharts extends HttpServlet {
             shet2.setColumnWidth(11, 5000);
             shet2.setColumnWidth(12, 5000);
             shet2.setColumnWidth(13, 5000);
+ 
+//11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111           
+ //11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111           
+ //11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111           
+ //11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111  
             
-            //create header one
-            HSSFRow header=shet2.createRow(0);
-            header.setHeightInPoints(30);
-            HSSFCell cel1=header.createCell(0);
-            cel1.setCellValue("Results on LIP Initial conducted from "+startdate+" to "+enddate);
-            cel1.setCellStyle(style);
-            for(int b=1;b<14;b++){
-             cel1=header.createCell(b);
-            cel1.setCellValue("");
-            cel1.setCellStyle(style);
-                                 }
-            
-            shet2.addMergedRegion(new CellRangeAddress(0,0,0,13));
-            
-            //create header two
-            HSSFRow header2=shet2.createRow(1);
-             header2.setHeightInPoints(28);
-             HSSFCell cel2=null;
-             for(int b=1;b<14;b++){
-             cel2=header2.createCell(b);
-            cel2.setCellValue("");
-            cel2.setCellStyle(style);
-                                  }
-             
-             cel2=header2.createCell(0);
-            cel2.setCellValue("Percent Scores Per Domain");
-            cel2.setCellStyle(style);
-             
-            
-            shet2.addMergedRegion(new CellRangeAddress(1,1,0,13));
-            
-            //cbo name
-            //create header three
-            
-            //==========DATE OF VISIT
-            
-            String mywhere=" ass_date between '"+startdate+"' and '"+enddate+"' ";
-            //if the current countyid is 0, then the where code should not specify the county name 
-          
-            
-           
-           
-               
-           //===============================================================================================
-           //===============================================================================================
-           String getdomains="SELECT domain_id,domain_name,section_name FROM domains join sections on domains.section_id=sections.section_id";     
-           conn.rs=conn.st.executeQuery(getdomains);
-           
-           
-            ArrayList domainids=new ArrayList();    
      
             
-            
-            int r=2;
-             HSSFRow theader=shet2.createRow(r);
-             HSSFRow domainshd=shet2.createRow(r+1);
-             
-             
-             //create a row with title lip
-             
-              HSSFCell tce=domainshd.createCell(0);
-            tce.setCellValue("LIP");        
-            tce.setCellStyle(Y);
-            
-            
-            
-            
-             HSSFPatriarch patriarch = shet2.createDrawingPatriarch();
-   HSSFClientAnchor a = new HSSFClientAnchor(0,0,1000,255,(short)1,2, (short) 1, 2 );
-    HSSFSimpleShape shape1 = patriarch.createSimpleShape(a);
-    shape1.setShapeType(HSSFSimpleShape.OBJECT_TYPE_RECTANGLE);
-    shape1.setFillColor(90,10,200);
-         
-    HSSFTextbox textbox1 = patriarch.createTextbox(new HSSFClientAnchor(0,0,700,255,(short)1,4,(short)1,4));
-    textbox1.setString(new HSSFRichTextString("70%") );
-     textbox1.setFillColor(90,10,200);
-         a = new HSSFClientAnchor(0,0,700,255,(short)1,3, (short) 1, 3 );
-    HSSFSimpleShape shape2 = patriarch.createSimpleShape(a);
-    shape2.setShapeType(HSSFSimpleShape.OBJECT_TYPE_RECTANGLE);
-    shape2.setFillColor(90,10,200);   
-            
-             int cnt=1;
-            while(conn.rs.next()){
-                
-            HSSFCell tcel=theader.createCell(cnt);
-            tcel.setCellValue(conn.rs.getString("section_name"));        
-            tcel.setCellStyle(Y);
-             theader.setHeightInPoints(24);
-            HSSFCell tcel1=domainshd.createCell(cnt);
-            tcel1.setCellValue(conn.rs.getString("domain_name"));        
-            tcel1.setCellStyle(Y);
-            domainids.add(conn.rs.getString("domain_id"));            
-            cnt++;
-                                 }
-            
-            //create avarage header
-            
-            
-             HSSFCell tcel=domainshd.createCell(cnt);
-            tcel.setCellValue("Avarage");        
-            tcel.setCellStyle(Y);
-            
-            
-            
-            
-            
-             shet2.addMergedRegion(new CellRangeAddress(r,r,1,5));
-             shet2.addMergedRegion(new CellRangeAddress(r,r,6,12));
-             cnt ++;
-            
-            
-           // shet2.addMergedRegion(new CellRangeAddress(7,7,0,5));
-            
-           // String gettables = "SELECT domain_name,domains.domain_id as domainid,section_name,domains.section_id as secid,value as domainvalue,aggregate_sum,period,year,site FROM domains join sections on domains.section_id=sections.section_id join domain_totals on domains.domain_id=domain_totals.domainid where "+mywhere+" order by domainid";
-            String gettables= "SELECT avg(value) as domainvalue,domain_totals.domainid as domainid,site_name,cbo,avg(aggregate_sum) as aggregate_sum FROM ovc_lip.domain_totals join (sites join cbo on sites.cbo_id=cbo.cboid) on domain_totals.site=sites.site_id where  date between '"+startdate+"' and '"+enddate+"' group by cbo.cboid,domainid order by cbo,domainid";
-       //if its the first county, themn skip the county part
-            
+   String gettables= "SELECT avg(value) as domainvalue,domain_totals.domainid as domainid,domain_name, section_name,cbo,avg(aggregate_sum) as aggregate_sum FROM ovc_lip.domain_totals join (sites join cbo on sites.cbo_id=cbo.cboid) on domain_totals.site=sites.site_id join ( domains join sections on domains.section_id=sections.section_id ) on domain_totals.domainid=domains.domain_id where  date between '"+startdate+"' and '"+enddate+"' group by cbo.cboid,domainid order by cbo,domainid";
+           
             System.out.println(gettables);
             conn.rs = conn.st.executeQuery(gettables);
-            int rwcount=4;
+            int rwcount=0;
+            int rowcountcopy=0;
+            String tableheaders[]={"Section","Domain","% Overall Achievement","Column chart"};
+            
             HSSFRow rwx=null;
-             HSSFCell celx=null;
-             String sectioncopy="";
-             int rowcopy=8;
-            while (conn.rs.next()) {
+            int monitorrows=0;
+            int secAcopy=0;
+            int secBcopy=0;
+            
+            
+            
+            HSSFCell celx=null;
+            int noofcols=3;
+          boolean isrow1=true;
+            while (conn.rs.next()) {                
                 //if the section has changed
-                String domainid=conn.rs.getString("domainid");
-             float domainvalue=conn.rs.getFloat("domainvalue");
-                 domainvalue=domainvalue*100;
-                 //BigDecimal bd=new BigDecimal(domainvalue).setScale(0,RoundingMode.HALF_EVEN);
-                    //domainval=bd.doubleValue();
-             domainvalue=Math.round(domainvalue);
-             float totalsum=conn.rs.getFloat("aggregate_sum");
-            // totalsum=totalsum*100;
-             
-             int dmn=(int)domainvalue;
-             
-             totalsum=Math.round(totalsum);
-             //determine the cell to print data on
-            int ttlsm=(int)totalsum;
-            
-               if(domainid.equals("1")){
-                    rwx=shet2.createRow(rwcount);
-                    rwx.setHeightInPoints(22);
-            HSSFCell celx2=rwx.createCell(0);
-            celx2.setCellValue(""+conn.rs.getString("cbo"));
-            celx2.setCellStyle(dnamestyle);         
-            
-              rwcount++;
-                                       }
-             
-           for(int t=0;t<domainids.size();t++){
+                 monitorrows++;
+                String domainid = conn.rs.getString("domainid");
+                float domainvalue = conn.rs.getFloat("domainvalue");
+                domainvalue = domainvalue * 100;
+                domainvalue = Math.round(domainvalue);
+                float totalsum = conn.rs.getFloat("aggregate_sum");
+                int dmn = (int) domainvalue;
+                totalsum = Math.round(totalsum);
+                //determine the cell to print data on
+                int ttlsm = (int) totalsum;
+                int hearderheight=40;
+                //if its the first row in each 
+                if(isrow1){
+                    isrow1=false;
+                rwx=shet2.createRow(rwcount);
+                
+                HSSFCell headercel=rwx.createCell(0);
+                headercel.setCellValue(conn.rs.getString("cbo"));
+                headercel.setCellStyle(style);
+                rwx.setHeightInPoints(hearderheight);
+                
+                
+                //create a blank
+                 HSSFCell cel=null;
+                
+                for(int b=1;b<tableheaders.length;b++)
+                {
+             cel=rwx.createCell(b);
+             cel.setCellValue("");
+             cel.setCellStyle(style);
+                 }
+                //now merge the header cell
+                shet2.addMergedRegion(new CellRangeAddress(rwcount,rwcount,0,tableheaders.length-1));
+                rwcount++;
+                
+                //now create the header part
+                
+                HSSFRow headerrw=shet2.createRow(rwcount);
+                rwx.setHeightInPoints(hearderheight);
+                for(int b=0;b<tableheaders.length;b++)
+                {
+             HSSFCell cel1=headerrw.createCell(b);
+             cel1.setCellValue(tableheaders[b]);
+             cel1.setCellStyle(style);
+                 }
+                
+                
+                rwcount++;
+                }
                
-               //if row is blank create it
-               if(rwx==null){
-               rwx=shet2.createRow(rwcount);
+                
+                
+                //create the section part
+                
+                HSSFRow rw=shet2.createRow(rwcount);
+       
+                       rw.setHeightInPoints(25); 
+                //column one --- section
+                
+               HSSFCell seccell=rw.createCell(0);
+                seccell.setCellValue(conn.rs.getString("section_name"));
+                seccell.setCellStyle(dnamestyle);
+                
+                HSSFCell domcell=rw.createCell(1);
+                domcell.setCellValue(conn.rs.getString("domain_name"));
+                domcell.setCellStyle(dnamestyle);
+                
+                //values only
+                HSSFCell domval=rw.createCell(2);
+                domval.setCellValue(dmn);
+                domval.setCellStyle(dnamestyle);
+                
+                
+                HSSFCell blank=rw.createCell(3);
+                blank.setCellValue("");
+                blank.setCellStyle(dnamestyle);
+                
+                //now, draw the chart
+                 HSSFPatriarch patriarch = shet2.createDrawingPatriarch();                
+                 HSSFTextbox textbox1 = patriarch.createTextbox(new HSSFClientAnchor(0,0,(dmn*10),255,(short)3,rwcount,(short)3,rwcount));
+                 textbox1.setString(new HSSFRichTextString(""+dmn) );
+                 textbox1.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+    //green 18,174,55
+    //red 250 32 32
+    //yellow 248 255 9
+    if(dmn>=75){        
+     textbox1.setFillColor(18,174,55);     
+    } else if (dmn >59 &&dmn <75 ){
+        
+      textbox1.setFillColor(248,255,9);
+      
+    }
+    
+    else {
+        
+     textbox1.setFillColor(250,32,32);
+  
+    }
+                rwcount++;
+                
+                if(monitorrows==4){
+                   shet2.addMergedRegion(new CellRangeAddress(rwcount-4,rwcount-1,0,0));
+                }
+                
+                if(monitorrows==12){
+                    
+                      shet2.addMergedRegion(new CellRangeAddress(rwcount-8,rwcount-1,0,0));
+                    
+                      HSSFRow lastrw=shet2.createRow(rwcount);
+                       lastrw.setHeightInPoints(25);
+                    //now create a row with average
+                     HSSFCell avcell0=lastrw.createCell(0);
+                avcell0.setCellValue("Average");
+                avcell0.setCellStyle(dnamestyle);
+                    
+                     HSSFCell avcell=lastrw.createCell(1);
+                     avcell.setCellValue("Average");
+                     avcell.setCellStyle(dnamestyle);
+                    
+                     HSSFCell avcell1=lastrw.createCell(2);
+                     avcell1.setCellValue(ttlsm);
+                     avcell1.setCellStyle(dnamestyle);
+                     
+                     HSSFCell blank1=lastrw.createCell(3);
+                blank1.setCellValue("");
+                blank1.setCellStyle(dnamestyle);
+                      HSSFTextbox textbox = patriarch.createTextbox(new HSSFClientAnchor(0,0,(dmn*(10)),255,(short)3,rwcount,(short)3,rwcount));
+    textbox.setString(new HSSFRichTextString(""+ttlsm) );
+     if(dmn>=75){
+        
+     textbox.setFillColor(18,174,55);
+     
+    } else if (dmn >59 &&dmn <75 ){
+        
+      textbox.setFillColor(248,255,9);
+      
+    }
+    
+    else {
+        
+     textbox.setFillColor(250,32,32);
+  
+    }
+            textbox.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+                    
+               isrow1=true;                    
+                monitorrows=0;
+                //dont print anything 
+                rwcount++;
+                
+                //last blank cell
+                
+                HSSFRow blankrow=shet2.createRow(rwcount);
+                blankrow.setHeightInPoints(30);
+                   for(int b=0;b<tableheaders.length;b++)
+                {
+             HSSFCell cel1=blankrow.createCell(b);
+             cel1.setCellValue("");
+             cel1.setCellStyle(innerdata_style);
+                 }
+                   
+                rwcount++;
+                                   }
                
-               }
+                
+              
                
-                   if(domainids.get(t).equals(domainid)){
-               int ct=t+1;       
-            HSSFCell celx1=rwx.createCell(ct);
-            celx1.setCellValue(""+dmn);
-            celx1.setCellStyle(dnamestyle); 
-            rwx.setHeightInPoints(22);
-            
-            //System.out.println("worked in row ============="+rwcount+"__col "+(ct)+"_"+domainvalue);
-             
-                                                        }
-                  
-                                             }
-             //incement if the column is the last
-           if(domainid.equals("12")){
-               //create an avarage
-           //  System.out.println("XXXXX LAST LOOP"); 
-               
-                if(rwx==null){ 
-               rwx=shet2.createRow(rwcount);
-               
-               }
-               
-              celx=rwx.createCell(13);
-              rwx.setHeightInPoints(23);
-              celx.setCellValue(""+ttlsm);
-              celx.setCellStyle(dnamestyle); 
-               
-            // rwcount++;   
-                                     }
                                  } 
             
             ///=========================end of while loop 
@@ -512,7 +518,7 @@ public class barCharts extends HttpServlet {
             response.setContentType("application/ms-excel");
             response.setContentLength(outArray.length);
             response.setHeader("Expires:", "0"); // eliminates browser caching
-            response.setHeader("Content-Disposition", "attachment; filename=OVC_LIP_COUNTY_REPORT_"+startdate+"_"+enddate+".xls");
+            response.setHeader("Content-Disposition", "attachment; filename=OVC_CBO_CHARTS_FROM_"+startdate+"_TO_"+enddate+".xls");
             OutputStream outStream = response.getOutputStream();
             outStream.write(outArray);
             outStream.flush();

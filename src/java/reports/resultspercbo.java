@@ -393,7 +393,7 @@ public class resultspercbo extends HttpServlet {
            // shet2.addMergedRegion(new CellRangeAddress(7,7,0,5));
             
            // String gettables = "SELECT domain_name,domains.domain_id as domainid,section_name,domains.section_id as secid,value as domainvalue,aggregate_sum,period,year,site FROM domains join sections on domains.section_id=sections.section_id join domain_totals on domains.domain_id=domain_totals.domainid where "+mywhere+" order by domainid";
-            String gettables= "SELECT avg(value) as domainvalue,domain_totals.domainid as domainid,site_name,cbo,avg(aggregate_sum) as aggregate_sum FROM ovc_lip.domain_totals join (sites join cbo on sites.cbo_id=cbo.cboid) on domain_totals.site=sites.site_id where  date between '"+startdate+"' and '"+enddate+"' group by cbo.cboid,domainid order by cbo,domainid";
+            String gettables= "SELECT avg(value) as domainvalue,domain_totals.domainid as domainid,cbo,avg(aggregate_sum) as aggregate_sum FROM ovc_lip.domain_totals join (sites join cbo on sites.cbo_id=cbo.cboid) on domain_totals.site=sites.site_id where  date between '"+startdate+"' and '"+enddate+"' group by cbo.cboid,domainid order by cbo,domainid";
        //if its the first county, themn skip the county part
             
             System.out.println(gettables);
